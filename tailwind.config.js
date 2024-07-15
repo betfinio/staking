@@ -4,14 +4,14 @@ module.exports = {
 	content: ['./pages/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './app/**/*.{ts,tsx}', './src/**/*.{ts,tsx}', './@mf-types/**/*.*',],
 	prefix: "",
 	theme: {
-		container: {
-			center: true,
-			padding: "2rem",
-			screens: {
-				"2xl": "1400px",
-			},
-		},
 		extend: {
+			container: {
+				center: true,
+				padding: "2rem",
+				screens: {
+					"2xl": "1400px",
+				},
+			},
 			colors: {
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",
@@ -59,6 +59,9 @@ module.exports = {
 					from: {height: "var(--radix-accordion-content-height)"},
 					to: {height: "0"},
 				},
+			},
+			backgroundImage: {
+				"unstake-background": "url('./assets/unstake-background.png')"
 			},
 			fontFamily: {
 				'sans': ['Rounds', 'sans-serif'],

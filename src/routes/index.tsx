@@ -1,12 +1,8 @@
-import {createFileRoute} from '@tanstack/react-router'
-import {useTranslation} from "react-i18next";
-
+import {createFileRoute, useNavigate, redirect} from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
-	component: () => <Index/>
+	beforeLoad: () => {
+		throw redirect({to: '/conservative', replace: true})
+	}
 })
 
-function Index() {
-	const {t} = useTranslation('', {keyPrefix: 'template'})
-	return <div className={'border border-red-500 px-4 py-2 rounded-md text-white h-full'}>{t('title')}</div>
-}

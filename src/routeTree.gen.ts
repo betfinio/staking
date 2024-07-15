@@ -11,12 +11,30 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as StakingImport } from './routes/staking'
 import { Route as IndexImport } from './routes/index'
+import { Route as DynamicIndexImport } from './routes/dynamic/index'
+import { Route as ConservativeIndexImport } from './routes/conservative/index'
 
 // Create/Update Routes
 
+const StakingRoute = StakingImport.update({
+  path: '/staking',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DynamicIndexRoute = DynamicIndexImport.update({
+  path: '/dynamic/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ConservativeIndexRoute = ConservativeIndexImport.update({
+  path: '/conservative/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -31,12 +49,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/staking': {
+      id: '/staking'
+      path: '/staking'
+      fullPath: '/staking'
+      preLoaderRoute: typeof StakingImport
+      parentRoute: typeof rootRoute
+    }
+    '/conservative/': {
+      id: '/conservative/'
+      path: '/conservative'
+      fullPath: '/conservative'
+      preLoaderRoute: typeof ConservativeIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/dynamic/': {
+      id: '/dynamic/'
+      path: '/dynamic'
+      fullPath: '/dynamic'
+      preLoaderRoute: typeof DynamicIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({ IndexRoute })
+export const routeTree = rootRoute.addChildren({
+  IndexRoute,
+  StakingRoute,
+  ConservativeIndexRoute,
+  DynamicIndexRoute,
+})
 
 /* prettier-ignore-end */
 
@@ -46,11 +90,23 @@ export const routeTree = rootRoute.addChildren({ IndexRoute })
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/staking",
+        "/conservative/",
+        "/dynamic/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/staking": {
+      "filePath": "staking.tsx"
+    },
+    "/conservative/": {
+      "filePath": "conservative/index.tsx"
+    },
+    "/dynamic/": {
+      "filePath": "dynamic/index.tsx"
     }
   }
 }

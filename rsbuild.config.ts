@@ -9,13 +9,14 @@ import {dependencies} from "./package.json";
 export default defineConfig({
 	plugins: [pluginReact()],
 	tools: {
-		rspack: (config, {appendPlugins}) => {
+		rspack: (config, {appendPlugins, addRules}) => {
 			appendPlugins([
 				TanStackRouterRspack(),
 				new ModuleFederationPlugin({
-					name: 'betfinio_template',
+					name: 'betfinio_staking',
 					remotes: {
-						betfinio_app: `betfinio_app@https://betfin-app${process.env.PUBLIC_ENVIRONMENT === 'development' ? '-dev' : ''}.web.app/mf-manifest.json`,
+						// betfinio_app: `betfinio_app@https://betfin-app${process.env.PUBLIC_ENVIRONMENT === 'development' ? '-dev' : ''}.web.app/mf-manifest.json`,
+						betfinio_app: 'betfinio_app@http://localhost:5555/mf-manifest.json',
 					},
 					shared: {
 						'react': {
@@ -53,6 +54,10 @@ export default defineConfig({
 						"tailwindcss": {
 							singleton: true,
 							requiredVersion: dependencies['tailwindcss']
+						},
+						"@supabase/supabase-js": {
+							singleton: true,
+							requiredVersion: dependencies['@supabase/supabase-js']
 						},
 						"wagmi": {
 							singleton: true,

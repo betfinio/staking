@@ -1,6 +1,7 @@
+import "./globals.css";
+import "betfinio_app/TailwindCssGlobal";
 import React from 'react';
 import ReactDOM from 'react-dom/client'
-import "./globals.css";
 import {RouterProvider, createRouter} from '@tanstack/react-router';
 
 import {routeTree} from './routeTree.gen';
