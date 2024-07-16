@@ -1,4 +1,4 @@
-# Template for betfin.io applications
+# Staking for betfin.io application
 
 ## Setup
 
