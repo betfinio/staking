@@ -4,5 +4,5 @@ import instance from "@/src/i18n.ts";
 
 
 export const Route = createRootRoute({
-	component: () => <Root instance={instance}/>,
+	component: () => <Root id={'staking'} instance={instance}/>,
 })

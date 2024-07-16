@@ -24,7 +24,7 @@ const Analytics: FC<{ type: StakingType }> = ({type}) => {
 	
 	const {t} = useTranslation('', {keyPrefix: 'staking'})
 	
-	return <div className={'flex-grow flex-row items-center gap-4 lg:gap-8 justify-end whitespace-nowrap hidden md:!flex'}>
+	return <div className={'flex-grow flex-row items-center gap-4 lg:gap-8 justify-end whitespace-nowrap hidden md:flex'}>
 		<div className={'flex flex-col leading-none'}>
 			<span className={'text-sm'}>{t('stat.tvl')}</span>
 			<div className={cx('font-medium flex flex-row gap-1 items-center')}>

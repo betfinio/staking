@@ -26,9 +26,9 @@ const SingleIngo: FC<SingleIngoProps> = ({
 	const isSoon = label === t('games.soon');
 	return <div className={'relative'}>
 		<div
-			className={cx('bg-primaryLighter border border-gray-800 rounded-md mx-auto col-span-1 w-full bg-top py-5 md:!px-3 bg-no-repeat  flex flex-col items-center text-center justify-center gap-1', {'blur-sm brightness-50': isSoon}, className)}>
-			<span className={'text-xs lg:!text-base font-semibold'}>{isSoon ? "Coming soon" : label}</span>
-			<span className={'flex flex-row items-center gap-1 text-sm md:!text-normal text-yellow-500'}>
+			className={cx('bg-primaryLighter border border-gray-800 rounded-md mx-auto col-span-1 w-full bg-top py-5 md:px-3 bg-no-repeat  flex flex-col items-center text-center justify-center gap-1', {'blur-sm brightness-50': isSoon}, className)}>
+			<span className={'text-xs lg:text-base font-semibold'}>{isSoon ? "Coming soon" : label}</span>
+			<span className={'flex flex-row items-center gap-1 text-sm md:text-normal text-yellow-500'}>
 				<span className={cx('font-medium text-sm', {'animate-pulse blur-sm': isLoading})}>
 					{
 						percent ?
@@ -38,7 +38,7 @@ const SingleIngo: FC<SingleIngoProps> = ({
 					{percent && '%'}
 				</span>
 			</span>
-			<span className={'md:!text-md text-xs text-gray-500'}>{isSoon ? "Coming soon" : subtitle}</span>
+			<span className={'md:text-md text-xs text-gray-500'}>{isSoon ? "Coming soon" : subtitle}</span>
 		</div>
 		{isSoon && (
 			<div className={'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-yellow-400 font-bold'}>

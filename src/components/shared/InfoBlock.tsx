@@ -30,7 +30,7 @@ const InfoBlock: FC<{ type: StakingType }> = ({type}) => {
 	
 	const share = valueToNumber(staked) / (valueToNumber(totalStaked) || 1) * 100
 	
-	return <div className={'col-span-2 md:!col-span-1 flex flex-col gap-2 lg:!gap-4 justify-between'}><SharedGameBlock games={[
+	return <div className={'col-span-2 md:col-span-1 flex flex-col gap-2 lg:gap-4 justify-between'}><SharedGameBlock games={[
 		{amount: staked, label: t('stats.staking'), isLoading: isStakedLoading},
 		{
 			amount: String(share),

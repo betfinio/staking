@@ -10,12 +10,12 @@ export const Route = createFileRoute('/conservative/')({
 
 
 function ConservativeStakingPage() {
-	return <div className={'w-full h-full p-2 md:!p-3 lg:!p-4 gap-2 flex flex-col lg:!gap-4'}>
+	return <div className={'w-full h-full p-2 md:p-3 lg:p-4 gap-2 flex flex-col lg:gap-4'}>
 		<Header type={'conservative'}/>
-		<div className={'grid w-full grid-cols-1 md:!grid-cols-2 gap-y-2 md:!gap-2 lg:!gap-4'}>
-			<div className={'flex flex-col gap-2 lg:!gap-4 w-full'}>
+		<div className={'grid w-full grid-cols-1 md:grid-cols-2 gap-y-2 md:gap-2 lg:gap-4'}>
+			<div className={'flex flex-col gap-2 lg:gap-4 w-full justify-between'}>
 				<Stake type={'conservative'}/>
-				<Claim className={'hidden lg:!flex'}/>
+				<Claim className={'hidden lg:flex'}/>
 			</div>
 			<InfoBlock type={'conservative'}/>
 		</div>

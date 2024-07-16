@@ -11,11 +11,11 @@ const Switcher: FC<{ type: StakingType }> = ({type}) => {
 	const {t} = useTranslation('', {keyPrefix: 'staking'});
 	return <Dialog>
 		<DialogTrigger>
-			<motion.div className={'flex flex-row items-center  gap-2 sm:!gap-4 cursor-pointer'} whileHover={{scale: 1.03}}>
+			<motion.div className={'flex flex-row items-center  gap-2 sm:gap-4 cursor-pointer'} whileHover={{scale: 1.03}}>
 				<Menu className={'text-white'}/>
 				<Bank className={'text-yellow-400'}/>
 				<div className={'flex flex-col leading-none items-start'}>
-					<div className={'font-semibold text-sm lg:!text-lg whitespace-nowrap'}>{t(`title.${type}`)}</div>
+					<div className={'font-semibold text-sm lg:text-lg whitespace-nowrap'}>{t(`title.${type}`)}</div>
 					<div className={'text-xs '}>{t(`subtitle.${type}`)}</div>
 				</div>
 			</motion.div>

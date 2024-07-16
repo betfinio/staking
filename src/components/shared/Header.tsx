@@ -14,7 +14,7 @@ export interface HeaderProps {
 
 const Header: FC<HeaderProps> = ({type}) => {
 	
-	return <div className={'h-[80px] border border-gray-800 bg-primaryLighter rounded-lg p-4 sm:px-6 flex flex-row items-center justify-between gap-10 relative'}>
+	return <div className={'h-[80px] border border-gray-800 bg-primaryLighter rounded-lg p-4 sm:px-6 flex flex-row items-center justify-between gap-2 xl:gap-8 relative'}>
 		<Switcher type={type}/>
 		<Analytics type={type}/>
 		<div className={'flex flex-row items-center gap-4'}>

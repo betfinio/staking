@@ -43,24 +43,24 @@ const StakingInfo: FC = () => {
 		<DialogTrigger asChild>
 			<div className={'bg-primaryLighter border border-gray-800 rounded-lg cursor-pointer'}>
 				<div
-					className={'font-semibold text-center text-sm lg:!text-base whitespace-nowrap lg:!text-left p-4 hidden md:!flex flex-row items-center justify-between'}>
+					className={'font-semibold text-center text-sm lg:text-base whitespace-nowrap lg:text-left p-4 hidden md:flex flex-row items-center justify-between'}>
 					Dynamic games stats
 					<div className={''}>Your revenues:</div>
 				</div>
 				<div className={'rounded-lg flex justify-between font-semibold p-3'}>
-					<div className={'flex items-center justify-center flex-row gap-3 h-full text-sm lg:!text-base'}>
-						<CoinLarge className={'hidden md:!block text-yellow-400'}/>
-						<div className={'flex flex-col gap-[18px] md:!gap-4 justify-between items-start h-full'}>
+					<div className={'flex items-center justify-center flex-row gap-3 h-full text-sm lg:text-base'}>
+						<CoinLarge className={'hidden md:block text-yellow-400'}/>
+						<div className={'flex flex-col gap-[18px] md:gap-4 justify-between items-start h-full'}>
 							<p className={cx('flex flex-row items-center gap-2')}>
-								<CalculatorIcon className={'w-6 h-6 md:!w-5 md:!h-5 text-yellow-400'}/> 1 game
+								<CalculatorIcon className={'w-6 h-6 md:w-5 md:h-5 text-yellow-400'}/> 1 game
 							</p>
 							<p
 								className={cx('flex ml-1 flex-row items-center gap-2 font-semibold', {'animate-pulse blur-sm': isTotalBetsLoading})}>
-								<Blackjack className={'w-6 h-6 md:!w-4 md:!h-4 text-yellow-400'}/>
+								<Blackjack className={'w-6 h-6 md:w-4 md:h-4 text-yellow-400'}/>
 								{t('total.bets', {count: isTotalBetsLoading ? 12345 : totalBets})}
 							</p>
 							<div className={cx('flex flex-row items-center gap-2')}>
-								<Coins className={'w-6 h-6 md:!w-5 md:!h-5 text-yellow-400'}/>
+								<Coins className={'w-6 h-6 md:w-5 md:h-5 text-yellow-400'}/>
 								<MillifyWithTooltip value={valueToNumber(isTotalVolumeLoading ? 123456n * 10n ** 18n : totalVolume)}
 								                    precision={2} withIcon/> volume
 							</div>
@@ -103,9 +103,9 @@ const StakingInfo: FC = () => {
 					<p className={'text-center text-sm mb-4'}>Staking contract</p>
 					<p className={'flex items-center justify-center gap-2 '}>
 						<ShieldCheckIcon className={'text-[#38BB7F] w-4 h-4'}/>
-						<span className={'font-normal sm:!hidden'}>{truncateEthAddress(DYNAMIC_STAKING_ADDRESS)}</span>
+						<span className={'font-normal sm:hidden'}>{truncateEthAddress(DYNAMIC_STAKING_ADDRESS)}</span>
 						<Link to={import.meta.env.VITE_ETHSCAN + `/address/${DYNAMIC_STAKING_ADDRESS}`} target={'_blank'}
-						      className={'font-normal hidden sm:!inline underline'}>{DYNAMIC_STAKING_ADDRESS}</Link>
+						      className={'font-normal hidden sm:inline underline'}>{DYNAMIC_STAKING_ADDRESS}</Link>
 					</p>
 				</div>
 			</motion.div>

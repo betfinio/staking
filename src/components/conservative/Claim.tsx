@@ -25,20 +25,20 @@ const Claim: FC<ClaimProps> = ({className}) => {
 	const handleClaim = () => mutate()
 	
 	return <div
-		className={cx('md:!mx-0 bg-primaryLighter border border-gray-800 bg-cover bg-no-repeat rounded-lg p-3 md:!p-7 lg:!p-8 flex flex-row justify-between md:!items-center', className)}>
+		className={cx('md:mx-0 bg-primaryLighter border border-gray-800 bg-cover bg-no-repeat rounded-lg p-3 md:p-7 lg:p-8 flex flex-row justify-between md:items-center', className)}>
 		<div className={cx({'animate-pulse blur-sm': isStakedLoading || isClaimableLoading})}>
-			{staked === 0n ? <h2 className={'font-semibold whitespace-nowrap md:!text-xl'}>{t('conservative.earn')}</h2> :
+			{staked === 0n ? <h2 className={'font-semibold whitespace-nowrap md:text-xl'}>{t('conservative.earn')}</h2> :
 				<div className={'font-semibold text-lg flex flex-row gap-2 items-center'}>{t('conservative.profitTitle')}
 					<BetValue value={valueToNumber(claimable)} withIcon/>
 				</div>}
 			<div className={'text-gray-400 text-xs mt-2 flex gap-1'}>
 				<div className={'text-yellow-400 font-medium flex flex-row items-center gap-1'}>
 					<BetValue value={(valueToNumber(balance) / 100 * share)} precision={2} withIcon/></div>
-				to be credited next cycle
+				{t('conservative.pending')}
 			</div>
 		</div>
 		<button onClick={handleClaim} disabled={staked === 0n || claimable === 0n}
-		        className={'rounded-lg h-[52px] px-6 py-3 w-[90px] flex flex-row justify-center items-center text-sm md:!text-lg font-medium bg-red-500  disabled:bg-gray-700 disabled:cursor-not-allowed'}>
+		        className={'rounded-lg h-[52px] px-6 py-3 w-[90px] flex flex-row justify-center items-center text-sm md:text-lg font-medium bg-red-500  disabled:bg-gray-700 disabled:cursor-not-allowed'}>
 			{loading ? <ArrowPathIcon className={'h-5 w-5 animate-spin'}/> : t('conservative.unstake')}
 		</button>
 	</div>

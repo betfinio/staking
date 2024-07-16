@@ -36,12 +36,12 @@ const Stake: FC<{ type: StakingType }> = ({type}) => {
 	
 	const allowanceValue = valueToNumber(allowance)
 	const maxAllowed = Math.min(valueToNumber(balance), valueToNumber(allowance))
-	return <div className={'flex w-full  p-3 lg:!p-8 lg:!py-6 bg-unstake-background bg-no-repeat bg-cover rounded-lg flex-col justify-between items relative'}>
+	return <div className={'flex w-full  p-3 lg:p-8 lg:py-6 bg-unstake-background bg-no-repeat bg-cover rounded-lg flex-col justify-between items relative'}>
 		<h2 className={'text-xl font-semibold opacity-90'}>{t('conservative.stakeBet')}</h2>
 		<span className={'text-sm my-1 text-gray-500'}>{t('conservative.stakingPeriod')}</span>
 		<div className={'w-full flex flex-row justify-between gap-3 relative'}>
-			<div className={'w-full px-4 font-semibold border border-gray-800 rounded-lg md:!rounded-xl text-sm sm:text-base text-[#6A6F84] bg-primary flex items-center gap-2'}>
-				<Lock className={' w-5 h-5 md:!w-6 md:!h-6'}/>
+			<div className={'w-full px-4 font-semibold border border-gray-800 rounded-lg md:rounded-xl text-sm sm:text-base text-[#6A6F84] bg-primary flex items-center gap-2'}>
+				<Lock className={' w-5 h-5 md:w-6 md:h-6'}/>
 				<NumericFormat placeholder={t('conservative.placeholder', {count: allowanceValue})} min={0} value={value}
 				               onChange={e => setValue(e.target.value)}
 				               className={"bg-transparent w-full outline-0 py-2 h-[52px] grow"}
@@ -56,7 +56,7 @@ const Stake: FC<{ type: StakingType }> = ({type}) => {
 				</span>
 			</div>
 			<button onClick={handleStake} disabled={temp < 10000 || BigInt(temp) * 10n ** 18n > balance}
-			        className={'rounded-lg px-6 p-2 md:!py-4 min-w-[90px] flex flex-row justify-center items-center text-sm md:!text-base h-[52px] font-semibold bg-green-500  disabled:bg-gray-700 disabled:cursor-not-allowed'}>
+			        className={'rounded-lg px-6 p-2 md:py-4 min-w-[90px] flex flex-row justify-center items-center text-sm md:text-base h-[52px] font-semibold bg-green-500  disabled:bg-gray-700 disabled:cursor-not-allowed'}>
 				{loadingD || loadingC ? <ArrowPathIcon className={'h-4 w-4 animate-spin'}/> : t('conservative.stake')}
 			</button>
 		</div>

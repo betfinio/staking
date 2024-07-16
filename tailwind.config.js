@@ -1,8 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+	important: '#staking',
 	darkMode: ["class"],
-	content: ['./pages/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './app/**/*.{ts,tsx}', './src/**/*.{ts,tsx}', './@mf-types/**/*.*',],
-	prefix: "",
+	content: {
+		relative: true,
+		files: ['./src/**/*', './@mf-types/**/*'],
+	},
 	theme: {
 		extend: {
 			container: {
