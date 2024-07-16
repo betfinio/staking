@@ -1,4 +1,4 @@
-import {DynamicPoolInfo, Earning, Stake, Unstake} from "@/src/lib/types.ts";
+import {ExtendedPoolInfo, Earning, Stake, Unstake} from "@/src/lib/types.ts";
 import {getBlock, multicall, readContract} from "@wagmi/core";
 import {
 	BetsMemoryContract,
@@ -13,7 +13,7 @@ import {Address, decodeEventLog} from "viem";
 import {getContractEvents} from "viem/actions";
 import {Config} from "wagmi";
 
-export const fetchPool = async (pool: Address, config: Config): Promise<DynamicPoolInfo> => {
+export const fetchPool = async (pool: Address, config: Config): Promise<ExtendedPoolInfo> => {
 	console.log('fetching pool dynamic', pool)
 	const data = await multicall(config, {
 		contracts: [
@@ -43,7 +43,7 @@ export const fetchPool = async (pool: Address, config: Config): Promise<DynamicP
 	const realStaked = data[2].result as bigint
 	const balance = data[3].result as bigint
 	const totalProfit = balance - realStaked
-	return {totalStaked: data[0].result, count: Number(data[1].result), totalProfit} as DynamicPoolInfo
+	return {totalStaked: data[0].result, count: Number(data[1].result), totalProfit} as ExtendedPoolInfo
 }
 
 

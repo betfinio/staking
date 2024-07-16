@@ -36,7 +36,7 @@ const Stake: FC<{ type: StakingType }> = ({type}) => {
 	
 	const allowanceValue = valueToNumber(allowance)
 	const maxAllowed = Math.min(valueToNumber(balance), valueToNumber(allowance))
-	return <div className={'flex w-full  p-3 lg:p-8 lg:py-6 bg-unstake-background bg-no-repeat bg-cover rounded-lg flex-col justify-between items relative'}>
+	return <div className={'flex w-full  p-3 md:p-8 md:py-6 bg-unstake-background bg-no-repeat bg-cover rounded-lg flex-col justify-between items relative'}>
 		<h2 className={'text-xl font-semibold opacity-90'}>{t('conservative.stakeBet')}</h2>
 		<span className={'text-sm my-1 text-gray-500'}>{t('conservative.stakingPeriod')}</span>
 		<div className={'w-full flex flex-row justify-between gap-3 relative'}>

@@ -5,7 +5,7 @@ import {Address} from "viem";
 import {getBlockByTimestamp} from "betfinio_app/lib/utils";
 import {useSupabase, SupabaseClient} from "betfinio_app/supabase";
 import {DynamicStakingContract, PartnerContract} from "@betfinio/abi";
-import {DynamicPoolInfo, Earning, Stake, Unstake} from "@/src/lib/types.ts";
+import {ExtendedPoolInfo, Earning, Stake, Unstake} from "@/src/lib/types.ts";
 import {
 	fetchActivePools,
 	fetchClaimed,
@@ -98,7 +98,7 @@ export const useActivePools = () => {
 export function usePool(pool: Address) {
 	const config = useConfig()
 	
-	return useQuery<DynamicPoolInfo>({
+	return useQuery<ExtendedPoolInfo>({
 		queryKey: ['staking', 'dynamic', 'pool', pool],
 		queryFn: () => fetchPool(pool, config)
 	})

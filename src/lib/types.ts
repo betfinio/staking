@@ -1,8 +1,10 @@
+import {Address} from "viem";
+
 export interface Stake {
 	start: number
 	end: number
-	staker: string
-	pool: string
+	staker: Address
+	pool: Address
 	amount: bigint
 	ended: boolean
 	hash?: string,
@@ -14,25 +16,25 @@ export interface Stake {
 }
 
 export interface Claim {
-	staker: string
+	staker: Address
 	amount: bigint,
 	timestamp: number,
-	transaction: string
+	transaction: Address
 }
 
 export interface Earning {
-	staker: string
+	staker: Address
 	amount: bigint,
 	timestamp: number,
-	transaction: string,
+	transaction: Address,
 	pool: string
 }
 
 export interface Unstake {
-	staker: string
+	staker: Address
 	amount: bigint,
 	timestamp: number,
-	transaction: string
+	transaction: Address
 }
 
 export interface PersonalInfo {
@@ -40,18 +42,16 @@ export interface PersonalInfo {
 	profit: bigint
 }
 
-export interface DynamicPoolInfo {
-	totalStaked: bigint
+export interface ExtendedPoolInfo extends PoolInfo {
 	realStaked: bigint
-	count: number,
-	totalProfit: bigint
 	balance: bigint
 }
 
-export interface ConservativePoolInfo {
+export interface PoolInfo {
 	totalStaked: bigint
 	count: number
-	totalProfit: bigint
+	totalProfit: bigint,
+	address: Address
 }
 
 export interface Stat {

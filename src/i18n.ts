@@ -29,7 +29,7 @@ instance
 	.use(ICU)
 	.init({
 		resources: resources,
-		lng: 'ru', // default language
+		lng: 'en', // default language
 		fallbackLng: 'en',
 		interpolation: {escapeValue: false},
 		react: {useSuspense: true},

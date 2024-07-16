@@ -35,6 +35,10 @@ export default defineConfig({
 							singleton: true,
 							requiredVersion: dependencies['@tanstack/react-query']
 						},
+						"@tanstack/react-table": {
+							singleton: true,
+							requiredVersion: dependencies['@tanstack/react-table']
+						},
 						"lucide-react": {
 							singleton: true,
 							requiredVersion: dependencies['lucide-react']

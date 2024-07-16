@@ -1,6 +1,6 @@
 import {Address} from "viem";
 import {Config} from "wagmi";
-import {ConservativePoolInfo, Earning, Stake} from "@/src/lib/types.ts";
+import {PoolInfo, Earning, Stake, ExtendedPoolInfo} from "@/src/lib/types.ts";
 import {multicall, readContract} from "@wagmi/core";
 import {BetsMemoryContract, ConservativeStakingContract, ConservativeStakingPoolContract, defaultMulticall, ZeroAddress} from "@betfinio/abi";
 import arrayFrom from "@betfinio/hooks/dist/utils";
@@ -15,7 +15,7 @@ export const fetchUnstakeLogs = async () => {
 }
 
 
-export const fetchPool = async (pool: Address, config: Config): Promise<ConservativePoolInfo> => {
+export const fetchPool = async (pool: Address, config: Config): Promise<ExtendedPoolInfo> => {
 	console.log('fetching pool conservative', pool)
 	const totalStaked = await readContract(config, {
 		abi: ConservativeStakingPoolContract.abi,
@@ -32,7 +32,7 @@ export const fetchPool = async (pool: Address, config: Config): Promise<Conserva
 		address: pool,
 		functionName: 'totalProfit'
 	}) as bigint
-	return {totalStaked, count: Number(stakersCount), totalProfit} as ConservativePoolInfo
+	return {totalStaked, count: Number(stakersCount), totalProfit, address: pool} as ExtendedPoolInfo
 }
 export const fetchTotalVolume = async (config: Config): Promise<bigint> => {
 	console.log('fetching total volume conservative')
@@ -53,10 +53,11 @@ export const fetchCurrentPool = async (config: Config): Promise<string> => {
 	}) as string
 }
 
-export const fetchConservativePools = async (config: Config): Promise<string[]> => {
+export const fetchConservativePools = async (config: Config): Promise<ExtendedPoolInfo[]> => {
 	console.log('fetching pools conservative')
 	const count = await readContract(config, {
-		abi: ConservativeStakingContract.abi, address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
+		abi: ConservativeStakingContract.abi,
+		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
 		functionName: 'getActivePoolCount'
 	}) as number
 	if (count === 0) {
@@ -69,7 +70,8 @@ export const fetchConservativePools = async (config: Config): Promise<string[]> 
 			args: [i]
 		}))
 	})
-	return pools.map(e => e.result as string).reverse()
+	console.log(pools)
+	return await Promise.all(pools.reverse().map(pool => fetchPool(pool.result as Address, config)))
 }
 export const fetchConservativeEarnings = async (address: Address, config: Config): Promise<Earning[]> => {
 	const pools = await fetchStakersPools(address, config);

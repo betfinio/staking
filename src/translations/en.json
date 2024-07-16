@@ -38,12 +38,14 @@
     "date": "Staking Date",
     "amount": "Amount",
     "profit": "Profit",
+    "capacity": "Capacity",
     "unlockDate": "Unlock Date",
     "pool": "Pool",
     "status": "Status",
     "noData": "There is no data to display",
     "withdraw": "Withdraw",
     "reward": "Rewards",
+    "totalStaked": "Total staked",
     "ended": "Claimed"
   },
   "conservative": {

@@ -2,7 +2,7 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {getBlock, readContract, writeContract, WriteContractReturnType} from "@wagmi/core";
 import {Config, useConfig, useWatchContractEvent} from "wagmi";
 import {Address, decodeEventLog, Log} from "viem";
-import {Claim, ConservativePoolInfo, Earning, Stake} from "@/src/lib/types";
+import {Claim, PoolInfo, Earning, Stake, ExtendedPoolInfo} from "@/src/lib/types";
 import {getContractEvents} from "viem/actions";
 import {
 	ConservativeStakingContract,
@@ -198,7 +198,9 @@ export const useEarnings = (address: Address) => {
 	const config = useConfig()
 	return useQuery<Earning[]>({
 		queryKey: ['staking', 'conservative', 'earnings', address],
-		queryFn: () => fetchConservativeEarnings(address, config)
+		queryFn: () => fetchConservativeEarnings(address, config),
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
 	})
 }
 
@@ -225,6 +227,8 @@ export const useStakes = (address: Address) => {
 	return useQuery<Stake[]>({
 		queryKey: ['staking', 'conservative', 'stakes', address],
 		queryFn: () => fetchStakes(address, config),
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
 	})
 }
 
@@ -252,6 +256,8 @@ export const useClaims = (address: Address) => {
 	return useQuery({
 		queryKey: ['staking', 'conservative', 'claims', address],
 		queryFn: () => fetchClaims(address, config),
+		refetchOnMount: false,
+		refetchOnWindowFocus: false
 	})
 }
 
@@ -274,20 +280,13 @@ export const useCurrentPool = () => {
 
 export const useActivePools = () => {
 	const config = useConfig();
-	return useQuery<string[]>({
+	return useQuery<ExtendedPoolInfo[]>({
 		queryKey: ['staking', 'conservative', 'pools'],
 		queryFn: () => fetchConservativePools(config),
+		refetchOnMount: false,
+		refetchOnWindowFocus: false
 	})
 }
-
-export const usePool = (pool: Address) => {
-	const config = useConfig();
-	return useQuery<ConservativePoolInfo>({
-		queryKey: ['staking', 'conservative', 'pool', pool],
-		queryFn: () => fetchPool(pool, config),
-	})
-}
-
 // mutations
 
 export type StakeParams = {
