@@ -18,18 +18,36 @@ const getApp = () => {
 }
 
 export default defineConfig({
-	plugins: [pluginReact()],
+	server: {
+		port: 3000,
+	},
+	dev: {
+		assetPrefix: 'http://localhost:3000',
+		hmr: false,
+		liveReload: false
+		
+	},
 	html: {
 		title: 'Betfin Staking',
 	},
+	output: {
+		assetPrefix: process.env.PUBLIC_ENVIRONMENT === 'production' ? 'https://staking.betfin.io' : 'https://betfin-staking-dev.web.app'
+	},
 	tools: {
 		rspack: (config, {appendPlugins, addRules}) => {
+			config.output!.uniqueName = 'betfinio_staking';
 			appendPlugins([
 				TanStackRouterRspack(),
 				new ModuleFederationPlugin({
 					name: 'betfinio_staking',
 					remotes: {
 						betfinio_app: getApp()
+					},
+					exposes: {
+						'./lib/api/conservative': './src/lib/api/conservative/index.ts',
+						'./lib/api/dynamic': './src/lib/api/dynamic/index.ts',
+						'./lib/query/conservative': './src/lib/query/conservative/index.ts',
+						'./lib/query/dynamic': './src/lib/query/dynamic/index.ts',
 					},
 					shared: {
 						'react': {
@@ -89,4 +107,5 @@ export default defineConfig({
 			]);
 		},
 	},
+	plugins: [pluginReact()],
 });

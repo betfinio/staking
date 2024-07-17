@@ -5,7 +5,9 @@ import ruJSON from './translations/ru.json';
 import {i18n} from "i18next";
 import ICU from 'i18next-icu';
 
+// @ts-ignore
 import enShared from 'betfinio_app/locales/en';
+// @ts-ignore
 import ruShared from 'betfinio_app/locales/ru';
 
 const resources = {
