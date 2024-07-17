@@ -4,7 +4,7 @@ module.exports = {
 	darkMode: ["class"],
 	content: {
 		relative: true,
-		files: ['./src/**/*', './@mf-types/**/*'],
+		files: ['./src/**/*'],
 	},
 	theme: {
 		extend: {

@@ -19,6 +19,9 @@ const getApp = () => {
 
 export default defineConfig({
 	plugins: [pluginReact()],
+	html: {
+		title: 'Betfin Staking',
+	},
 	tools: {
 		rspack: (config, {appendPlugins, addRules}) => {
 			appendPlugins([

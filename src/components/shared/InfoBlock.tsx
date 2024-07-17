@@ -6,9 +6,12 @@ import {valueToNumber} from "@betfinio/abi";
 import {useStaked as useStakedC, useProfit as useProfitC, useTotalStaked as useTotalStakedC} from "@/src/lib/query/conservative";
 import {useStaked as useStakedD, useTotalStaked as useTotalStakedD, useClaimed} from "@/src/lib/query/dynamic";
 import {useAccount} from "wagmi";
-import {Dialog, DialogContent, DialogTrigger} from "betfinio_app/dialog";
+import {Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger} from "betfinio_app/dialog";
 import ConservativeStakingInfo from "@/src/components/conservative/StakingInfo";
 import DynamicStakingInfo from "@/src/components/dynamic/StakingInfo";
+import StatisticsModal from "@/src/components/conservative/StatisticsModal.tsx";
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
+
 
 const InfoBlock: FC<{ type: StakingType }> = ({type}) => {
 	const {t} = useTranslation('', {keyPrefix: 'staking'})
@@ -30,23 +33,27 @@ const InfoBlock: FC<{ type: StakingType }> = ({type}) => {
 	
 	const share = valueToNumber(staked) / (valueToNumber(totalStaked) || 1) * 100
 	
-	return <div className={'col-span-2 md:col-span-1 flex flex-col gap-2 lg:gap-4 justify-between'}><SharedGameBlock games={[
-		{amount: staked, label: t('stats.staking'), isLoading: isStakedLoading},
-		{
-			amount: String(share),
-			percent: true,
-			label: t('stats.share'),
-			isLoading: isStakedLoading || isTotalLoading
-		},
-		{amount: profit, label: t('stats.earnings'), isLoading: isProfitLoading},
-	]}/>
+	return <div className={'col-span-2 md:col-span-1 flex flex-col gap-2 lg:gap-4 justify-between'}>
+		<SharedGameBlock games={[
+			{amount: staked, label: t('stats.staking'), isLoading: isStakedLoading},
+			{
+				amount: String(share),
+				percent: true,
+				label: t('stats.share'),
+				isLoading: isStakedLoading || isTotalLoading
+			},
+			{amount: profit, label: t('stats.earnings'), isLoading: isProfitLoading},
+		]}/>
 		<Dialog>
 			<DialogTrigger>
 				{type === 'conservative' && <ConservativeStakingInfo/>}
 				{type === 'dynamic' && <DynamicStakingInfo/>}
 			</DialogTrigger>
-			<DialogContent>
-				{/*<StatisticsModal/>*/}
+			<DialogContent className={'w-full min-h-[400px]'} aria-describedby={undefined}>
+				<StatisticsModal/>
+				<VisuallyHidden.Root asChild>
+					<DialogTitle/>
+				</VisuallyHidden.Root>
 			</DialogContent>
 		</Dialog>
 	</div>
