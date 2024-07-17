@@ -25,7 +25,6 @@ export default defineConfig({
 		assetPrefix: 'http://localhost:3000',
 		hmr: false,
 		liveReload: false
-		
 	},
 	html: {
 		title: 'Betfin Staking',

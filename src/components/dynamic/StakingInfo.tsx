@@ -4,7 +4,6 @@ import CoinLarge from "@betfinio/ui/dist/icons/CoinLarge";
 import {Bank, Bet, Blackjack, CloseModal, Coins} from "@betfinio/ui/dist/icons";
 import cx from "clsx";
 import {CalculatorIcon, ShieldCheckIcon} from "@heroicons/react/24/outline";
-import {MillifyWithTooltip} from "@betfinio/ui/dist/shared/atoms/MillifyWithTooltip";
 import {useAccount} from "wagmi";
 import ConservativeStaking from "@betfinio/ui/dist/icons/ConservativeStaking";
 import {motion} from "framer-motion";
@@ -14,6 +13,7 @@ import {ZeroAddress} from "@betfinio/abi";
 import {useStaked, useTotalBets, useTotalProfit, useTotalStaked, useTotalVolume} from "@/src/lib/query/dynamic";
 import {Dialog, DialogClose, DialogContent, DialogTrigger} from "betfinio_app/dialog";
 import SharedGameBlock from "@/src/components/shared/SharedGameBlock.tsx";
+import {BetValue} from "betfinio_app/BetValue";
 
 const DYNAMIC_STAKING_ADDRESS = import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS;
 
@@ -61,8 +61,8 @@ const StakingInfo: FC = () => {
 							</p>
 							<div className={cx('flex flex-row items-center gap-2')}>
 								<Coins className={'w-6 h-6 md:w-5 md:h-5 text-yellow-400'}/>
-								<MillifyWithTooltip value={valueToNumber(isTotalVolumeLoading ? 123456n * 10n ** 18n : totalVolume)}
-								                    precision={2} withIcon/> volume
+								<BetValue value={valueToNumber(isTotalVolumeLoading ? 123456n * 10n ** 18n : totalVolume)}
+								          precision={2} withIcon/> volume
 							</div>
 						</div>
 					</div>
