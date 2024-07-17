@@ -104,7 +104,7 @@ const StakingInfo: FC = () => {
 					<p className={'flex items-center justify-center gap-2 '}>
 						<ShieldCheckIcon className={'text-[#38BB7F] w-4 h-4'}/>
 						<span className={'font-normal sm:hidden'}>{truncateEthAddress(DYNAMIC_STAKING_ADDRESS)}</span>
-						<Link to={import.meta.env.VITE_ETHSCAN + `/address/${DYNAMIC_STAKING_ADDRESS}`} target={'_blank'}
+						<Link to={import.meta.env.PUBLIC_ETHSCAN + `/address/${DYNAMIC_STAKING_ADDRESS}`} target={'_blank'}
 						      className={'font-normal hidden sm:inline underline'}>{DYNAMIC_STAKING_ADDRESS}</Link>
 					</p>
 				</div>
