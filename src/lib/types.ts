@@ -37,11 +37,6 @@ export interface Unstake {
 	transaction: Address
 }
 
-export interface PersonalInfo {
-	staked: bigint
-	profit: bigint
-}
-
 export interface ExtendedPoolInfo extends PoolInfo {
 	realStaked: bigint
 	balance: bigint
@@ -52,11 +47,6 @@ export interface PoolInfo {
 	count: number
 	totalProfit: bigint,
 	address: Address
-}
-
-export interface Stat {
-	time: number,
-	value: number
 }
 
 export type StakingType = 'conservative' | 'dynamic'

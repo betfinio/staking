@@ -47,6 +47,7 @@ export default defineConfig({
 						'./lib/api/dynamic': './src/lib/api/dynamic/index.ts',
 						'./lib/query/conservative': './src/lib/query/conservative/index.ts',
 						'./lib/query/dynamic': './src/lib/query/dynamic/index.ts',
+						'./lib/types': './src/lib/types.ts',
 					},
 					shared: {
 						'react': {
