@@ -67,7 +67,7 @@ const StakingInfo: FC = () => {
 						</div>
 					</div>
 					<div className={'text-center flex flex-col justify-center '}>
-						<ConservativeStaking className={cx('mx-auto w-12 text-[#FFC800] duration-300 ', {"!animate-pulse text-green-400 ": isTotalProfitFetching || glow})}/>
+						<ConservativeStaking className={cx('mx-auto w-12 text-yellow-400 duration-300 ', {"!animate-pulse text-green-400 ": isTotalProfitFetching || glow})}/>
 						<div
 							className={cx('mt-3 flex flex-row items-center gap-1  mx-auto', {'animate-pulse blur-sm': isTotalProfitLoading}, {"text-green-400": isTotalProfitFetching || glow})}>
 							{Math.floor(valueToNumber(isTotalProfitLoading ? 1234567n * 10n ** 18n : totalProfit) * share).toLocaleString()}
@@ -88,7 +88,7 @@ const StakingInfo: FC = () => {
 						</DialogClose>
 					</div>
 					<div className={'mt-7 flex items-center justify-center gap-3'}>
-						<Bank className={'text-[#FFC800]'}/>
+						<Bank className={'text-yellow-400'}/>
 						<div className={'text-2xl flex flex-row items-center gap-2'}>{valueToNumber(tvl).toLocaleString()} <Bet className={'w-5 h-5'}/></div>
 					</div>
 					<div className={'h-[2px] opacity-5 bg-white my-6'}/>

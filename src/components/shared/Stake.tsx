@@ -49,7 +49,7 @@ const Stake: FC<{ type: StakingType }> = ({type}) => {
 				               max={maxAllowed}
 				               decimalScale={0}
 				               thousandSeparator=","/>
-				<span className={'text-xs cursor-pointer text-[#FFC800]'} onClick={() => {
+				<span className={'text-xs cursor-pointer text-yellow-400'} onClick={() => {
 					setValue(Math.floor(maxAllowed).toFixed(0))
 				}}>
 					MAX

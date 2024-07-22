@@ -49,7 +49,7 @@ const InfoBlock: FC<{ type: StakingType }> = ({type}) => {
 				{type === 'conservative' && <ConservativeStakingInfo/>}
 				{type === 'dynamic' && <DynamicStakingInfo/>}
 			</DialogTrigger>
-			<DialogContent className={'w-full min-h-[400px]'} aria-describedby={undefined}>
+			<DialogContent className={'w-full min-h-[400px] staking'} aria-describedby={undefined}>
 				<StatisticsModal/>
 				<VisuallyHidden.Root asChild>
 					<DialogTitle/>

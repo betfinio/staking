@@ -85,7 +85,7 @@ const StakingInfo: FC = () => {
 				</div>
 			</div>
 			<div className={'text-center flex flex-col justify-center '}>
-				<ConservativeStaking className={cx('mx-auto w-12 text-[#FFC800] duration-300 ', {"!animate-pulse text-green-400 ": isTotalProfitFetching || glow})}/>
+				<ConservativeStaking className={cx('mx-auto w-12 text-yellow-400 duration-300 ', {"!animate-pulse text-green-400 ": isTotalProfitFetching || glow})}/>
 				<div className={cx('mt-3 flex flex-row items-center gap-1 text-sm xl:text-base mx-auto', {"text-green-400": isTotalProfitFetching || glow})}>
 					<Counter from={from} to={to}/>
 					<Bet className={'w-4 h-4'}/>

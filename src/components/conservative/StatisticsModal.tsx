@@ -27,7 +27,7 @@ const StatisticsModal: FC = () => {
 				</div>
 			</div>
 			<div className={'mt-7 flex items-center justify-center gap-3'}>
-				<Bank className={'text-[#FFC800]'}/>
+				<Bank className={'text-yellow-400'}/>
 				<div className={'text-2xl flex flex-row items-center gap-2'}>
 					<BetValue value={valueToNumber(totalProfit)} withIcon/>
 				</div>

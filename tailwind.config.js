@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	important: '#staking',
+	important: '.staking',
 	darkMode: ["class"],
 	content: {
 		relative: true,
