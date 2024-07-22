@@ -3,7 +3,7 @@ import {
 	useTotalBets,
 	useTotalStaked,
 	useTotalVolume,
-} from '@/src/lib/query/dynamic';
+} from '@/src/lib/query/conservative';
 import {ZeroAddress} from '@betfinio/abi';
 import {valueToNumber} from '@betfinio/hooks/dist/utils';
 import {Bet, Blackjack, CoinLarge, Coins} from '@betfinio/ui/dist/icons';

@@ -21,9 +21,10 @@ const Pools: FC<{ data: ExtendedPoolInfo[]; isLoading: boolean }> = ({
         className: 'w-[160px]',
       },
       cell: (props) => (
-        <span className={'text-gray-500'}>
+
+        <a target={'_blank'} href={import.meta.env.PUBLIC_ETHSCAN + "/address/" + props.getValue()} className={'text-gray-500'}>
           {truncateEthAddress(props.getValue())}
-        </span>
+        </a>
       ),
     }),
     columnHelper.accessor('count', {
