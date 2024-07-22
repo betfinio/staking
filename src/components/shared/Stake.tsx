@@ -73,7 +73,7 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
             thousandSeparator=","
           />
           <span
-            className={'text-xs cursor-pointer text-[#FFC800]'}
+            className={'text-xs cursor-pointer text-yellow-400'}
             onClick={() => {
               setValue(Math.floor(maxAllowed).toFixed(0));
             }}

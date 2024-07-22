@@ -129,7 +129,7 @@ const StakingInfo: FC = () => {
 				</div>
 				<div className={'text-center flex flex-col justify-center '}>
 					<ConservativeStaking
-						className={cx('mx-auto w-12 text-[#FFC800] duration-300 ', {
+						className={cx('mx-auto w-12 text-yellow-400 duration-300 ', {
 							'!animate-pulse text-green-400 ': isTotalProfitFetching || glow,
 						})}
 					/>

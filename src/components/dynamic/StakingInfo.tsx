@@ -125,7 +125,7 @@ const StakingInfo: FC = () => {
             </div>
             <div className={'text-center flex flex-col justify-center '}>
               <ConservativeStaking
-                className={cx('mx-auto w-12 text-[#FFC800] duration-300 ', {
+                className={cx('mx-auto w-12 text-yellow-400 duration-300 ', {
                   '!animate-pulse text-green-400 ':
                     isTotalProfitFetching || glow,
                 })}
@@ -167,7 +167,7 @@ const StakingInfo: FC = () => {
               </DialogClose>
             </div>
             <div className={'mt-7 flex items-center justify-center gap-3'}>
-              <Bank className={'text-[#FFC800]'} />
+              <Bank className={'text-yellow-400'} />
               <div className={'text-2xl flex flex-row items-center gap-2'}>
                 {valueToNumber(tvl).toLocaleString()}{' '}
                 <Bet className={'w-5 h-5'} />

@@ -222,14 +222,14 @@ const NewStakes: FC<{ cycleStart: number }> = ({ cycleStart }) => {
       <TooltipTrigger>
         <div
           className={
-            'shrink-0 border border-[#FFC800] py-4 px-3 rounded-md bg-primary text-sm text-[#6A6F84]'
+            'shrink-0 border border-yellow-400 py-4 px-3 rounded-md bg-primary text-sm text-[#6A6F84]'
           }
         >
           <div className={'font-semibold text-center leading-[10px]'}>
             New stakes
           </div>
           <div className={'mt-5'}>
-            <div className={'flex justify-center text-[#FFC800]'}>
+            <div className={'flex justify-center text-yellow-400'}>
               +<BetValue value={valueToNumber(newStaked[0])} withIcon={true} />
             </div>
             <div className={'text-center '}>

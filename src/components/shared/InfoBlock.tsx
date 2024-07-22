@@ -95,7 +95,7 @@ const InfoBlock: FC<{ type: StakingType }> = ({ type }) => {
           {type === 'dynamic' && <DynamicStakingInfo />}
         </DialogTrigger>
         <DialogContent
-          className={'w-full min-h-[400px]'}
+          className={'w-full min-h-[400px] staking'}
           aria-describedby={undefined}
         >
           {type === 'conservative' ? <StatisticsModal/>: <DynamicStatisticsModal />}
