@@ -1,4 +1,4 @@
-import {FC, useEffect} from "react";
+import {FC} from "react";
 import {motion} from "framer-motion";
 import {Bank, Menu, MoneyHand} from "@betfinio/ui/dist/icons";
 import {Dialog, DialogContent, DialogDescription, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger} from "betfinio_app/dialog";
@@ -22,7 +22,7 @@ const Switcher: FC<{ type: StakingType }> = ({type}) => {
 		</DialogTrigger>
 		<DialogPortal>
 			<DialogOverlay/>
-			<DialogContent>
+			<DialogContent className={'staking'}>
 				<DialogDescription className={'hidden'}/>
 				<DialogTitle className={'hidden'}/>
 				<SwitcherModal type={type}/>
