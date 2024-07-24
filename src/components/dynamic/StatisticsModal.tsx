@@ -1,29 +1,27 @@
 import SharedGameBlock from '@/src/components/shared/SharedGameBlock.tsx';
-import {
-  usePredictContribution,
-  useTotalProfitWithBalance,
-} from '@/src/lib/query/conservative';
-import { valueToNumber } from '@betfinio/abi';
-import { Bank, CloseModal } from '@betfinio/ui/dist/icons';
-import { Link } from '@tanstack/react-router';
-import { BetValue } from 'betfinio_app/BetValue';
-import { DialogClose } from 'betfinio_app/dialog';
+import {usePredictContribution,} from '@/src/lib/query/conservative';
+import {valueToNumber} from '@betfinio/abi';
+import {Bank, CloseModal} from '@betfinio/ui/dist/icons';
+import {Link} from '@tanstack/react-router';
+import {BetValue} from 'betfinio_app/BetValue';
+import {DialogClose} from 'betfinio_app/dialog';
 import cx from 'clsx';
-import { ShieldCheckIcon } from 'lucide-react';
-import type { FC } from 'react';
-import { useTranslation } from 'react-i18next';
+import {ShieldCheckIcon} from 'lucide-react';
+import type {FC} from 'react';
+import {useTranslation} from 'react-i18next';
+import {useTotalProfit} from "@/src/lib/query/dynamic";
 
 const DYNAMIC_STAKING_ADDRESS = import.meta.env
   .PUBLIC_DYNAMIC_STAKING_ADDRESS;
 
 const StatisticsModal: FC = () => {
-  const { t } = useTranslation('staking');
-  const { data: totalProfit = 0n } = useTotalProfitWithBalance();
+  const { t } =  useTranslation('', { keyPrefix: 'staking' });
+  const { data: totalProfit = 0n } = useTotalProfit();
   const { data: predictContribution } = usePredictContribution();
   return (
     <div
       className={cx(
-        'rounded-lg bg-primaryLighter z-10 border border-gray-800 font-semibold text-white w-full h-[400px] max-w-[600px] mx-auto',
+        'rounded-lg bg-primaryLighter z-10 border border-gray-800 font-semibold text-white w-full mx-auto',
       )}
     >
 

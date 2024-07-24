@@ -8,24 +8,14 @@ import {
   useStaked as useStakedC,
   useTotalStaked as useTotalStakedC,
 } from '@/src/lib/query/conservative';
-import {
-  useClaimed,
-  useStaked as useStakedD,
-  useTotalStaked as useTotalStakedD,
-} from '@/src/lib/query/dynamic';
-import type { StakingType } from '@/src/lib/types.ts';
-import { valueToNumber } from '@betfinio/abi';
+import {useClaimed, useStaked as useStakedD, useTotalStaked as useTotalStakedD,} from '@/src/lib/query/dynamic';
+import type {StakingType} from '@/src/lib/types.ts';
+import {valueToNumber} from '@betfinio/abi';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from 'betfinio_app/dialog';
-import type { FC } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useAccount } from 'wagmi';
+import {Dialog, DialogContent, DialogTitle, DialogTrigger,} from 'betfinio_app/dialog';
+import type {FC} from 'react';
+import {useTranslation} from 'react-i18next';
+import {useAccount} from 'wagmi';
 
 const InfoBlock: FC<{ type: StakingType }> = ({ type }) => {
   const { t } = useTranslation('', { keyPrefix: 'staking' });

@@ -3,6 +3,11 @@
     "conservative": "Conservative staking",
     "dynamic": "Dynamic staking"
   },
+  "games": {
+    "predict": "Crypto Predict",
+    "roulette": "Roulette",
+    "soon": "Soon"
+  },
   "subtitle": {
     "conservative": "Shared betting",
     "dynamic": "Lotto betting"

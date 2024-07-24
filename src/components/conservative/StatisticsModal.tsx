@@ -1,7 +1,7 @@
 import SharedGameBlock from '@/src/components/shared/SharedGameBlock.tsx';
 import {
-  usePredictContribution,
-  useTotalProfitWithBalance,
+  usePredictContribution, useTotalProfit,
+  useTotalProfitWithBalance, useTotalStaked,
 } from '@/src/lib/query/conservative';
 import { valueToNumber } from '@betfinio/abi';
 import { Bank, CloseModal } from '@betfinio/ui/dist/icons';
@@ -17,13 +17,14 @@ const CONSERVATIVE_STAKING_ADDRESS = import.meta.env
   .PUBLIC_CONSERVATIVE_STAKING_ADDRESS;
 
 const StatisticsModal: FC = () => {
-  const { t } = useTranslation('staking');
-  const { data: totalProfit = 0n } = useTotalProfitWithBalance();
+  const { t } = useTranslation('', { keyPrefix: 'staking' });
+  console.log()
+  const {data: totalProfit} = useTotalProfit();
   const { data: predictContribution } = usePredictContribution();
   return (
     <div
       className={cx(
-        'rounded-lg bg-primaryLighter z-10 border border-gray-800 font-semibold text-white w-full h-[400px] max-w-[600px] mx-auto',
+        'rounded-lg bg-primaryLighter z-10 border border-gray-800 font-semibold text-white w-full mx-auto',
       )}
     >
       <div className={'py-5 px-7'}>
