@@ -76,7 +76,7 @@ const Claim: FC<ClaimProps> = ({ className }) => {
         onClick={handleClaim}
         disabled={staked === 0n || claimable === 0n}
         className={
-          'rounded-lg h-[52px] px-6 py-3 w-[90px] flex flex-row justify-center items-center text-sm md:text-lg font-medium bg-red-500  disabled:bg-gray-700 disabled:cursor-not-allowed'
+          'rounded-lg h-[52px] px-6 py-3 w-[90px] flex flex-row justify-center items-center text-sm md:text-lg font-medium bg-red-roulette  disabled:bg-gray-700 disabled:cursor-not-allowed'
         }
       >
         {loading ? (

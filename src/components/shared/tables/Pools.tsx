@@ -18,7 +18,7 @@ const Pools: FC<{ data: ExtendedPoolInfo[]; isLoading: boolean }> = ({
     columnHelper.accessor('address', {
       header: t('table.pool'),
       meta: {
-        className: 'w-[160px]',
+        className: 'lg:w-[160px]',
       },
       cell: (props) => (
 
@@ -50,7 +50,7 @@ const Pools: FC<{ data: ExtendedPoolInfo[]; isLoading: boolean }> = ({
     columnHelper.accessor('totalStaked', {
       header: t('table.totalStaked'),
       meta: {
-        className: 'w-[160px]',
+        className: 'lg:w-[160px]',
       },
       cell: (props) => (
         <div className={'flex flex-row items-center'}>

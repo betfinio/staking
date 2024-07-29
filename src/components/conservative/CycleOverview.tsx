@@ -292,14 +292,14 @@ const EndingStakes = () => {
   return (
     <div
       className={
-        'border border-red-500 py-4 px-3 rounded-md bg-primary text-sm text-[#6A6F84]'
+        'border border-red-roulette py-4 px-3 rounded-md bg-primary text-sm text-[#6A6F84]'
       }
     >
       <div className={'font-semibold text-center leading-[10px]'}>
         Ending stakes
       </div>
       <div className={'mt-5'}>
-        <div className={'flex justify-center text-red-500'}>
+        <div className={'flex justify-center text-red-roulette'}>
           <BetValue value={0} withIcon={true} />
         </div>
         <div className={'text-center '}>0 stakers</div>
