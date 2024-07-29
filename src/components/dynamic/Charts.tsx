@@ -47,7 +47,7 @@ const Charts = () => {
 						color={'#facc15'}
 						values={totalStaked.map((e) => e.value)}
 						labels={totalStaked.map((e) =>
-							DateTime.fromMillis(e.time * 1000).toFormat('dd.MM'),
+							DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'),
 						)}
 					/>
 				</TabsContent>
@@ -57,7 +57,7 @@ const Charts = () => {
 						color={'#6A6A9F'}
 						values={totalStakers.map((e) => e.value)}
 						labels={totalStakers.map((e) =>
-							DateTime.fromMillis(e.time * 1000).toFormat('dd.MM'),
+							DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'),
 						)}
 					/>
 				</TabsContent>
@@ -66,7 +66,7 @@ const Charts = () => {
 						label={'Total revenue'}
 						values={totalProfit.map((e) => e.value)}
 						labels={totalProfit.map((e) =>
-							DateTime.fromMillis(e.time * 1000).toFormat('dd.MM'),
+							DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'),
 						)}
 					/>
 				</TabsContent>
