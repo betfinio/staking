@@ -1,20 +1,5 @@
 import type { Address } from 'viem';
 
-export interface Stake {
-  start: number;
-  end: number;
-  staker: Address;
-  pool: Address;
-  amount: bigint;
-  ended: boolean;
-  hash?: string;
-  staking?: string;
-  reward?: bigint;
-  block?: number;
-  username?: string;
-  customUsername?: string;
-}
-
 export interface Claim {
   staker: Address;
   amount: bigint;

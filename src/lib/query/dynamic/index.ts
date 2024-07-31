@@ -7,8 +7,6 @@ import {
 	fetchStaked,
 	fetchStakes,
 	fetchTotalBets,
-	fetchTotalProfit,
-	fetchTotalStaked,
 	fetchTotalStakers,
 	fetchTotalVolume,
 	fetchUnstakes,
@@ -16,8 +14,7 @@ import {
 import type {StakeParams, UnstakeParams} from '@/src/lib/query/conservative';
 import type {
 	Earning,
-	ExtendedPoolInfo,
-	Stake,
+	ExtendedPoolInfo, PoolInfo,
 	Unstake,
 } from '@/src/lib/types.ts';
 import {DynamicStakingContract, PartnerContract} from '@betfinio/abi';
@@ -27,7 +24,12 @@ import {getBlockByTimestamp} from 'betfinio_app/lib/utils';
 import {type SupabaseClient, useSupabase} from 'betfinio_app/supabase';
 import {useTranslation} from 'react-i18next';
 import type {Address} from 'viem';
-import {type Config, useConfig, useWatchContractEvent} from 'wagmi';
+import {type Config, useConfig} from 'wagmi';
+import {waitForTransactionReceipt} from "viem/actions";
+import {toast} from "betfinio_app/use-toast";
+import {getTransactionLink} from 'betfinio_app/helpers'
+import {fetchTotalStaked} from "betfinio_app/lib/api/dynamic";
+import {Stake} from 'betfinio_app/lib/types';
 
 const starts = [1715601600];
 
@@ -65,30 +67,6 @@ export const fetchTotalStakedDiff = async (
 	}
 };
 
-export const useTotalStaked = () => {
-	const queryClient = useQueryClient();
-	const config = useConfig();
-	useWatchContractEvent({
-		abi: DynamicStakingContract.abi,
-		address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
-		eventName: 'Staked',
-		onLogs: async () => {
-			await queryClient.invalidateQueries({queryKey: ['staking', 'dynamic']});
-		},
-	});
-	return useQuery<bigint>({
-		queryKey: ['staking', 'dynamic', 'totalStaked'],
-		queryFn: () => fetchTotalStaked(config),
-	});
-};
-
-export const useTotalProfit = () => {
-	const config = useConfig();
-	return useQuery<bigint>({
-		queryKey: ['staking', 'dynamic', 'totalProfit'],
-		queryFn: () => fetchTotalProfit(config),
-	});
-};
 
 export const useCurrentPool = () => {
 	const config = useConfig();
@@ -101,7 +79,7 @@ export const useCurrentPool = () => {
 
 export const useActivePools = () => {
 	const config = useConfig();
-	return useQuery<string[]>({
+	return useQuery<ExtendedPoolInfo[]>({
 		queryKey: ['staking', 'dynamic', 'pools'],
 		queryFn: () => fetchActivePools(config),
 		refetchOnMount: false,
@@ -185,18 +163,38 @@ export const useStakes = (address: Address) => {
 // mutations
 
 export const useStake = () => {
-	const t = useTranslation('', {keyPrefix: 'errors'});
+	const {t} = useTranslation('', {keyPrefix: 'errors'});
+	const config = useConfig()
 	return useMutation<WriteContractReturnType, any, StakeParams>({
 		mutationKey: ['staking', 'dynamic', 'stake'],
 		mutationFn: stake,
 		onError: (e) => {
-			console.error(e);
+			// @ts-ignore
+			const error = e.cause && e.cause['reason'] || "unknown"
+			toast({
+				title: "An error occurred",
+				description: t(error),
+				variant: "destructive"
+			})
+			return t(e.message);
 		},
-		onMutate: () => console.log('staking'),
-		onSuccess: (data) => {
-			console.log(data);
+		onSuccess: async (data) => {
+			const {update} = toast({
+				title: "Stake is in progress",
+				description: "Transaction is being processed",
+				variant: "loading",
+				duration: 10000,
+				action: getTransactionLink(data)
+			})
+			await waitForTransactionReceipt(config.getClient(), {hash: data})
+			update({
+				title: "Staked successful",
+				variant: "default",
+				description: "Transaction has been executed",
+				duration: 5000
+			})
+			console.log('staked', data);
 		},
-		onSettled: () => console.log('staking settled'),
 	});
 };
 
