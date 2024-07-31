@@ -1,7 +1,6 @@
 import {
 	useStaked,
 	useTotalBets,
-	useTotalStaked,
 	useTotalVolume,
 } from '@/src/lib/query/conservative';
 import {ZeroAddress} from '@betfinio/abi';
@@ -10,6 +9,7 @@ import {Bet, Blackjack, CoinLarge, Coins} from '@betfinio/ui/dist/icons';
 import ConservativeStaking from '@betfinio/ui/dist/icons/ConservativeStaking';
 import {CalculatorIcon} from '@heroicons/react/24/outline';
 import {BetValue} from 'betfinio_app/BetValue';
+import {useTotalStaked} from 'betfinio_app/lib/query/conservative';
 import {useBalance} from 'betfinio_app/lib/query/token';
 import cx from 'clsx';
 import {animate} from 'framer-motion';
@@ -19,10 +19,10 @@ import {useAccount} from 'wagmi';
 
 const Counter: FC<{ from: number; to: number }> = ({from, to}) => {
 	const nodeRef = useRef<HTMLDivElement>(null);
-
+	
 	useEffect(() => {
 		const node = nodeRef.current;
-
+		
 		const controls = animate(from, to, {
 			duration: 1,
 			onUpdate(value) {
@@ -31,19 +31,18 @@ const Counter: FC<{ from: number; to: number }> = ({from, to}) => {
 				}
 			},
 		});
-
+		
 		return () => controls.stop();
 	}, [from, to]);
-
+	
 	return <div ref={nodeRef}/>;
 };
 
 const StakingInfo: FC = () => {
 	const {t} = useTranslation('', {keyPrefix: 'staking.total'});
 	const {address = ZeroAddress} = useAccount();
-	const {data: totalVolume = 0n, isLoading: isTotalStakedLoading} =
-		useTotalVolume();
-	const {data: totalBets = 0, isLoading: isTotalBetsLoading} = useTotalBets();
+	const {data: totalVolume = 0n} = useTotalVolume();
+	const {data: totalBets = 0} = useTotalBets();
 	const {
 		data: currentBalance = 0n,
 		isFetching: isTotalProfitFetching,
@@ -63,9 +62,9 @@ const StakingInfo: FC = () => {
 		}, 1000);
 		return value;
 	}, [isTotalProfitLoading, currentBalance, share]);
-
+	
 	const [glow, setGlow] = useState(false);
-
+	
 	useEffect(() => {
 		setGlow(true);
 		setTimeout(() => {
@@ -75,7 +74,7 @@ const StakingInfo: FC = () => {
 	const cycleId = Math.floor(
 		(Date.now() - 1000 * 60 * 60 * 36) / 1000 / 60 / 60 / 24 / 7,
 	);
-
+	
 	return (
 		<div
 			className={

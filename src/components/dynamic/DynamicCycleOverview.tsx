@@ -7,7 +7,8 @@ import {motion} from 'framer-motion';
 import {CircleHelp} from 'lucide-react';
 import {DateTime} from 'luxon';
 import type {FC} from 'react';
-import {useTotalProfit, useTotalStaked, useTotalStakedDiff} from "@/src/lib/query/dynamic";
+import {useTotalStakedDiff} from "@/src/lib/query/dynamic";
+import {useTotalProfit, useTotalStaked} from 'betfinio_app/lib/query/dynamic';
 
 const starts = [
 	1715601600
