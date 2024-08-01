@@ -1,14 +1,5 @@
-import {
-	type Earning,
-	type ExtendedPoolInfo,
-} from '@/src/lib/types.ts';
-import {
-	BetsMemoryContract,
-	ConservativeStakingContract,
-	ConservativeStakingPoolContract,
-	ZeroAddress,
-	defaultMulticall,
-} from '@betfinio/abi';
+import {type Earning, type ExtendedPoolInfo,} from '@/src/lib/types.ts';
+import {BetsMemoryContract, ConservativeStakingContract, ConservativeStakingPoolContract, defaultMulticall, valueToNumber, ZeroAddress,} from '@betfinio/abi';
 import arrayFrom from '@betfinio/hooks/dist/utils';
 import type {SupabaseClient} from '@supabase/supabase-js';
 import {multicall, readContract} from '@wagmi/core';
@@ -18,7 +9,8 @@ import type {Address} from 'viem';
 import {getContractEvents} from 'viem/actions';
 import type {Config} from 'wagmi';
 import {fetchTotalStaked} from "betfinio_app/lib/api/conservative";
-import {Stake} from 'betfinio_app/lib/types';
+import {Options, Stake, Stat} from 'betfinio_app/lib/types';
+import {DateTime} from "luxon";
 
 export const fetchPool = async (
 	pool: Address,
@@ -332,3 +324,42 @@ export const fetchStakes = async (
 		})
 		.reverse();
 };
+
+
+export const fetchCalculationsStat = async (options: Options): Promise<Stat[]> => {
+	console.log('fetching calculations conservative');
+	const fridays = getTenFridaysFrom(getLastFriday()).map((f) => f.toISO());
+	return await Promise.all(fridays.map((f) => fetchOneStat(f!, options.supabase!)));
+}
+
+const fetchOneStat = async (time: string, supabase: SupabaseClient): Promise<Stat> => {
+	const data = await supabase
+		.from('staking_statistics')
+		.select('timestamp::timestamp, revenues::text')
+		.eq('staking', import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS.toLowerCase())
+		.gt('timestamp', time)
+		.order('timestamp', {ascending: true})
+		.limit(1)
+	if (data.error || !data.data) {
+		return {time: DateTime.fromISO(time).toSeconds(), value: 0}
+	}
+	return {time: Math.floor(DateTime.fromISO(data.data[0].timestamp).toSeconds()), value: valueToNumber(BigInt(data.data[0].revenues))};
+}
+
+const getLastFriday = () => {
+	let lastFriday = DateTime.now().setZone('utc').set({weekday: 5, hour: 12, minute: 0, second: 0, millisecond: 0});
+	
+	// If it's Friday today, adjust to get the *previous* Friday
+	if (lastFriday > DateTime.now()) {
+		lastFriday = lastFriday.minus({weeks: 1});
+	}
+	return lastFriday;
+}
+
+const getTenFridaysFrom = (friday: DateTime) => {
+	const fridays = [];
+	for (let i = 0; i < 10; i++) {
+		fridays.push(friday.minus({weeks: i}));
+	}
+	return fridays;
+}
