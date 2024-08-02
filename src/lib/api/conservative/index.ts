@@ -1,5 +1,5 @@
 import {type Earning, type ExtendedPoolInfo,} from '@/src/lib/types.ts';
-import {BetsMemoryContract, ConservativeStakingContract, ConservativeStakingPoolContract, defaultMulticall, valueToNumber, ZeroAddress,} from '@betfinio/abi';
+import {BetsMemoryContract, ConservativeStakingContract, ConservativeStakingPoolContract, defaultMulticall, TokenContract, valueToNumber, ZeroAddress,} from '@betfinio/abi';
 import arrayFrom from '@betfinio/hooks/dist/utils';
 import type {SupabaseClient} from '@supabase/supabase-js';
 import {multicall, readContract} from '@wagmi/core';
@@ -11,6 +11,7 @@ import type {Config} from 'wagmi';
 import {fetchTotalStaked} from "betfinio_app/lib/api/conservative";
 import {Options, Stake, Stat} from 'betfinio_app/lib/types';
 import {DateTime} from "luxon";
+import {Timeframe} from "betfinio_app/compiled-types/lib/types/staking";
 
 export const fetchPool = async (
 	pool: Address,
@@ -326,9 +327,19 @@ export const fetchStakes = async (
 };
 
 
-export const fetchCalculationsStat = async (options: Options): Promise<Stat[]> => {
+export const fetchCalculationsStat = async (timeframe: Timeframe, options: Options): Promise<Stat[]> => {
 	console.log('fetching calculations conservative');
-	const fridays = getTenFridaysFrom(getLastFriday()).map((f) => f.toISO());
+	const fridays = getTenFridaysFrom(getLastFriday()).filter(f => {
+		if (timeframe === 'hour' && f.toSeconds() > DateTime.now().toSeconds() - 60 * 60 * 24) {
+			return true
+		}
+		if (timeframe === 'day' && f.toSeconds() > DateTime.now().toSeconds() - 60 * 60 * 24 * 30) {
+			return true
+		}
+		if (timeframe === 'week' && f.toSeconds() > DateTime.now().toSeconds() - 60 * 60 * 24 * 30 * 12) {
+			return true
+		}
+	}).map((f) => f.toISO());
 	return await Promise.all(fridays.map((f) => fetchOneStat(f!, options.supabase!)));
 }
 

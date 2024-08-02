@@ -14,9 +14,8 @@ const Revenues = () => {
 	const [timeframe, setTimeframe] = useState<Timeframe>('day');
 	const {data: conservative = []} = useTotalProfitStatConservative(timeframe)
 	const {data: dynamic = []} = useTotalProfitStatDynamic(timeframe)
+	const {data: calcConservative = []} = useCalculationsStatConservative(timeframe);
 	
-	const {data: calcConservative = []} = useCalculationsStatConservative();
-	console.log(calcConservative)
 	const conservativeData = useMemo(() => {
 		return [...conservative.map((item: Stat) => {
 			return {
@@ -60,7 +59,7 @@ const Revenues = () => {
 		{
 			"id": "Dynamic",
 			"color": "#6A6A9F",
-			"data": dynamicData
+			"data": dynamicData.sort((a, b) => a.x - b.x)
 		}
 	]
 	
@@ -105,7 +104,7 @@ const Revenues = () => {
 				tickRotation: 45,
 			}}
 			yScale={{
-				min, max,
+				// min, max,
 				type: 'linear'
 			}}
 			animate={true}

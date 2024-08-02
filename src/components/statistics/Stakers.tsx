@@ -1,11 +1,10 @@
-import {PointTooltipProps, ResponsiveLine, SliceTooltipProps} from '@nivo/line'
+import {ResponsiveLine, SliceTooltipProps} from '@nivo/line'
 import {useTotalStakersStat as useTotalStakersStatConservative} from "betfinio_app/lib/query/conservative";
 import {useTotalStakersStat as useTotalStakersStatDynamic} from "betfinio_app/lib/query/dynamic";
 import {useMemo, useState} from "react";
 import {Stat, Timeframe} from "betfinio_app/lib/types";
 import {DateTime} from "luxon";
 import millify from "millify";
-import {Bet} from "@betfinio/ui/dist/icons";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "betfinio_app/select";
 import {UserIcon} from "lucide-react";
 import cx from "clsx";

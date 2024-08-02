@@ -1,4 +1,4 @@
-import {PointTooltipProps, ResponsiveLine, SliceTooltipProps} from '@nivo/line'
+import {ResponsiveLine, SliceTooltipProps} from '@nivo/line'
 import {useTotalStakedStat as useTotalStakedStatConservative} from "betfinio_app/lib/query/conservative";
 import {useTotalStakedStat as useTotalStakedStatDynamic} from "betfinio_app/lib/query/dynamic";
 import {useMemo, useState} from "react";
@@ -91,7 +91,7 @@ const Staked = () => {
 				tickRotation: 45,
 			}}
 			yScale={{
-				min, max,
+				// min, max,
 				type: 'linear'
 			}}
 			animate={true}

@@ -43,6 +43,7 @@ import {getContractEvents, waitForTransactionReceipt} from 'viem/actions';
 import {type Config, useConfig, useWatchContractEvent} from 'wagmi';
 import {fetchTotalStaked} from "betfinio_app/lib/api/conservative";
 import {Stake, Stat} from 'betfinio_app/lib/types';
+import {Timeframe} from "betfinio_app/compiled-types/lib/types/staking";
 
 
 export const useTotalProfitWithBalance = () => {
@@ -473,11 +474,11 @@ export const fetchClaims = async (address: Address, config: Config) => {
 };
 
 
-export const useCalculationsStat = () => {
+export const useCalculationsStat = (timeframe: Timeframe) => {
 	const config = useConfig();
 	const {client: supabase} = useSupabase();
 	return useQuery<Stat[]>({
-		queryKey: ['staking', 'conservative', 'calculations', 'stat'],
-		queryFn: () => fetchCalculationsStat({config, supabase}),
+		queryKey: ['staking', 'conservative', 'calculations', 'stat', timeframe],
+		queryFn: () => fetchCalculationsStat(timeframe, {config, supabase}),
 	})
 }
