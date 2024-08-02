@@ -1,7 +1,7 @@
 import {
 	fetchCalculationsStat,
-	fetchClaimable,
-	fetchConservativeEarnings,
+	fetchClaimable, fetchClaims,
+	fetchEarnings,
 	fetchConservativePools,
 	fetchPredictContribution,
 	fetchProfit,
@@ -15,7 +15,6 @@ import {
 	fetchTotalVolume,
 } from '@/src/lib/api/conservative';
 import {
-	type Claim,
 	type Earning,
 	type ExtendedPoolInfo,
 } from '@/src/lib/types';
@@ -182,10 +181,10 @@ export const useProfit = (address: Address) => {
 };
 
 export const useEarnings = (address: Address) => {
-	const config = useConfig();
+	const {client: supabase} = useSupabase()
 	return useQuery<Earning[]>({
 		queryKey: ['staking', 'conservative', 'earnings', address],
-		queryFn: () => fetchConservativeEarnings(address, config),
+		queryFn: () => fetchEarnings(address, {supabase}),
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 	});
@@ -222,7 +221,7 @@ export const useStakes = (address: Address) => {
 
 export const useClaims = (address: Address) => {
 	const queryClient = useQueryClient();
-	const config = useConfig();
+	const {client: supabase} = useSupabase();
 	useWatchContractEvent({
 		abi: ConservativeStakingContract.abi,
 		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
@@ -247,9 +246,7 @@ export const useClaims = (address: Address) => {
 	
 	return useQuery({
 		queryKey: ['staking', 'conservative', 'claims', address],
-		queryFn: () => fetchClaims(address, config),
-		refetchOnMount: false,
-		refetchOnWindowFocus: false,
+		queryFn: () => fetchClaims(address, {supabase}),
 	});
 };
 
@@ -304,30 +301,44 @@ export const useStake = () => {
 				description: "Transaction has been executed",
 				duration: 5000
 			})
-			console.log('staked', data);
 		},
 	});
 };
 
 export const useClaim = () => {
-	const t = useTranslation('', {keyPrefix: 'staking.errors'});
+	const {t} = useTranslation('', {keyPrefix: 'shared.errors'});
 	const config = useConfig();
 	const queryClient = useQueryClient();
 	return useMutation<WriteContractReturnType>({
 		mutationKey: ['staking', 'conservative', 'claim'],
 		mutationFn: () => claimAll({config}),
 		onError: (e) => {
-			console.error(e);
-			return t.t(e.message);
+			// @ts-ignore
+			const error = e.cause && e.cause['reason'] || "unknown"
+			toast({
+				title: "An error occurred",
+				description: t(error),
+				variant: "destructive"
+			})
+			return t(e.message);
 		},
-		onMutate: () => console.log('claim'),
 		onSuccess: async (data) => {
-			console.log('claimed', data);
-			await queryClient.invalidateQueries({
-				queryKey: ['staking', 'conservative'],
-			});
+			const {update} = toast({
+				title: "Claim is in progress",
+				description: "Transaction is being processed",
+				variant: "loading",
+				duration: 10000,
+				action: getTransactionLink(data)
+			})
+			await waitForTransactionReceipt(config.getClient(), {hash: data})
+			await queryClient.invalidateQueries({queryKey: ['staking', 'conservative']})
+			update({
+				title: "Claimed successfully",
+				variant: "default",
+				description: "Transaction has been executed",
+				duration: 5000
+			})
 		},
-		onSettled: () => console.log('claim settled'),
 	});
 };
 
@@ -335,7 +346,6 @@ export const stake = async ({
 	amount,
 	config,
 }: StakeParams): Promise<WriteContractReturnType> => {
-	console.log('staking', amount);
 	return await writeContract(config, {
 		abi: PartnerContract.abi,
 		address: import.meta.env.PUBLIC_PARTNER_ADDRESS as Address,
@@ -354,34 +364,6 @@ export const claimAll = async ({
 		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
 		functionName: 'claimAll',
 	});
-};
-
-export const fetchClaims = async (address: Address, config: Config) => {
-	const logss = await getContractEvents(config.getClient(), {
-		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-		eventName: 'Claimed',
-		fromBlock: 0n,
-		toBlock: 'latest',
-		args: {
-			staker: address,
-		},
-	});
-	console.log(logss);
-	// todo all events
-	return await Promise.all(
-		logss.map(async (e) => {
-			const block = await getBlock(config, {blockNumber: e.blockNumber});
-			return {
-				// @ts-ignore
-				amount: BigInt(e.args['amount']),
-				timestamp: Number(block.timestamp),
-				// @ts-ignore
-				staker: e.args['staker'],
-				transaction: e.transactionHash,
-			} as Claim;
-		}),
-	);
 };
 
 
@@ -432,7 +414,6 @@ export const useDistributeProfit = () => {
 				description: "Transaction has been executed",
 				duration: 5000
 			})
-			console.log('staked', data);
 		},
 	})
 }

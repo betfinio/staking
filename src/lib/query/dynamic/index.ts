@@ -1,25 +1,9 @@
-import {
-	fetchActivePools,
-	fetchClaimed,
-	fetchCurrentPool,
-	fetchEarnings,
-	fetchPool,
-	fetchStaked,
-	fetchStakes,
-	fetchTotalBets,
-	fetchTotalStakers,
-	fetchTotalVolume,
-	fetchUnstakes,
-} from '@/src/lib/api/dynamic';
-import type {StakeParams, UnstakeParams} from '@/src/lib/query/conservative';
-import type {
-	Earning,
-	ExtendedPoolInfo, PoolInfo,
-	Unstake,
-} from '@/src/lib/types.ts';
-import {DynamicStakingContract, PartnerContract} from '@betfinio/abi';
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {type WriteContractReturnType, writeContract} from '@wagmi/core';
+import {fetchActivePools, fetchClaimed, fetchEarnings, fetchStaked, fetchStakes, fetchTotalBets, fetchTotalStakers, fetchTotalVolume,} from '@/src/lib/api/dynamic';
+import type {StakeParams} from '@/src/lib/query/conservative';
+import type {Earning, ExtendedPoolInfo,} from '@/src/lib/types.ts';
+import {DynamicStakingPoolContract, PartnerContract} from '@betfinio/abi';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {writeContract, type WriteContractErrorType, type WriteContractReturnType} from '@wagmi/core';
 import {getBlockByTimestamp} from 'betfinio_app/lib/utils';
 import {type SupabaseClient, useSupabase} from 'betfinio_app/supabase';
 import {useTranslation} from 'react-i18next';
@@ -68,15 +52,6 @@ export const fetchTotalStakedDiff = async (
 };
 
 
-export const useCurrentPool = () => {
-	const config = useConfig();
-	
-	return useQuery<string>({
-		queryKey: ['staking', 'dynamic', 'currentPool'],
-		queryFn: () => fetchCurrentPool(config),
-	});
-};
-
 export const useActivePools = () => {
 	const config = useConfig();
 	return useQuery<ExtendedPoolInfo[]>({
@@ -87,14 +62,6 @@ export const useActivePools = () => {
 	});
 };
 
-export function usePool(pool: Address) {
-	const config = useConfig();
-	
-	return useQuery<ExtendedPoolInfo>({
-		queryKey: ['staking', 'dynamic', 'pool', pool],
-		queryFn: () => fetchPool(pool, config),
-	});
-}
 
 export const useTotalStakers = () => {
 	const config = useConfig();
@@ -122,25 +89,20 @@ export const useClaimed = (address: Address) => {
 };
 
 export const useEarnings = (address: Address) => {
-	const config = useConfig();
+	const {client: supabase} = useSupabase();
 	return useQuery<Earning[]>({
 		queryKey: ['staking', 'dynamic', 'earnings', address],
-		queryFn: () => fetchEarnings(address, config),
+		queryFn: () => fetchEarnings(address, {supabase}),
 		refetchOnWindowFocus: false,
 		refetchOnMount: false,
 		refetchOnReconnect: false,
 	});
 };
 
-export const useUnstakes = (address: Address) =>
-	useQuery<Unstake[]>({
-		queryKey: ['staking', 'dynamic', 'unstakes', address],
-		queryFn: () => fetchUnstakes(),
-	});
 export const useTotalVolume = () => {
 	const config = useConfig();
 	return useQuery<bigint>({
-		queryKey: ['staking', 'conservative', 'totalVolume'],
+		queryKey: ['staking', 'dynamic', 'totalVolume'],
 		queryFn: () => fetchTotalVolume(config),
 	});
 };
@@ -169,8 +131,9 @@ export const useStake = () => {
 		mutationKey: ['staking', 'dynamic', 'stake'],
 		mutationFn: stake,
 		onError: (e) => {
+			console.log(e, e.cause, e.cause.reason)
 			// @ts-ignore
-			const error = e.cause && e.cause['reason'] || "unknown"
+			const error = e.cause && e.cause.reason || "unknown"
 			toast({
 				title: "An error occurred",
 				description: t(error),
@@ -198,35 +161,6 @@ export const useStake = () => {
 	});
 };
 
-export const useUnstake = () => {
-	const t = useTranslation('', {keyPrefix: 'errors'});
-	return useMutation<WriteContractReturnType, any, UnstakeParams>({
-		mutationKey: ['staking', 'dynamic', 'unstake'],
-		mutationFn: unstake,
-		onError: (e) => {
-			console.error(e);
-		},
-		onMutate: () => console.log('unstaking'),
-		onSuccess: (data) => {
-			console.log(data);
-		},
-		onSettled: () => console.log('unstaking settled'),
-	});
-};
-
-const unstake = async ({
-	pool,
-	config,
-}: UnstakeParams): Promise<WriteContractReturnType> => {
-	console.log('unstaking', pool);
-	return await writeContract(config, {
-		abi: DynamicStakingContract.abi,
-		address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
-		functionName: 'withdraw',
-		args: [pool],
-	});
-};
-
 export const stake = async ({
 	amount,
 	config,
@@ -239,3 +173,47 @@ export const stake = async ({
 		args: [import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS, amount],
 	});
 };
+
+
+export const useDistributeProfit = () => {
+	const config = useConfig();
+	const {t} = useTranslation('', {keyPrefix: 'shared.errors'});
+	
+	return useMutation<WriteContractReturnType, WriteContractErrorType, Address>({
+		mutationKey: ['staking', 'dynamic', 'distributeProfit'],
+		mutationFn: async (pool: Address) => {
+			return await writeContract(config, {
+				abi: DynamicStakingPoolContract.abi,
+				address: pool,
+				functionName: 'distributeProfit',
+			});
+		},
+		onError: (e) => {
+			// @ts-ignore
+			const error = e.cause && e.cause['reason'] || "unknown"
+			toast({
+				title: "An error occurred",
+				description: t(error),
+				variant: "destructive"
+			})
+			return t(e.message);
+		},
+		onSuccess: async (data) => {
+			const {update} = toast({
+				title: "Distribution is in progress",
+				description: "Transaction is being processed",
+				variant: "loading",
+				duration: 10000,
+				action: getTransactionLink(data)
+			})
+			await waitForTransactionReceipt(config.getClient(), {hash: data})
+			update({
+				title: "Distributed successfully",
+				variant: "default",
+				description: "Transaction has been executed",
+				duration: 5000
+			})
+			console.log('staked', data);
+		},
+	})
+}

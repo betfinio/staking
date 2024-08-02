@@ -5,7 +5,6 @@ import {
 } from '@/src/lib/query/conservative';
 import {ZeroAddress} from '@betfinio/abi';
 import {valueToNumber} from '@betfinio/hooks/dist/utils';
-import {ArrowPathIcon} from '@heroicons/react/24/outline';
 import {BetValue} from 'betfinio_app/BetValue';
 import {useTotalStaked} from 'betfinio_app/lib/query/conservative';
 import {useBalance} from 'betfinio_app/lib/query/token';
@@ -13,6 +12,7 @@ import cx from 'clsx';
 import type {FC} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useAccount} from 'wagmi';
+import {Loader} from "lucide-react";
 
 interface ClaimProps {
 	className: string;
@@ -80,7 +80,7 @@ const Claim: FC<ClaimProps> = ({className}) => {
 				}
 			>
 				{loading ? (
-					<ArrowPathIcon className={'h-5 w-5 animate-spin'}/>
+					<Loader className={'h-5 w-5 animate-spin'}/>
 				) : (
 					t('conservative.unstake')
 				)}

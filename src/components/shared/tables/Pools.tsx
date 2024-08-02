@@ -11,6 +11,7 @@ import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
 import {MoreHorizontal} from "lucide-react";
 import {Address} from "viem";
 import {useDistributeProfit as useDistributeProfitConservative} from "@/src/lib/query/conservative";
+import {useDistributeProfit as useDistributeProfitDynamic} from "@/src/lib/query/dynamic";
 
 const columnHelper = createColumnHelper<ExtendedPoolInfo>();
 
@@ -22,9 +23,12 @@ const Pools: FC<{ data: ExtendedPoolInfo[]; isLoading: boolean, type: StakingTyp
 	const {t} = useTranslation('', {keyPrefix: 'staking'});
 	
 	const {mutate: distributeConservative} = useDistributeProfitConservative();
+	const {mutate: distributeDynamic} = useDistributeProfitDynamic();
 	const handleCalculate = (pool: Address) => {
 		if (type === 'conservative') {
 			distributeConservative(pool);
+		} else {
+			distributeDynamic(pool);
 		}
 	}
 	const columns = [
