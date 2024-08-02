@@ -59,8 +59,8 @@ const StatisticsModal: FC = () => {
 				<div className={'text-center text-sm mb-4'}>Staking contract</div>
 				<div className={'flex items-center justify-center gap-2 '}>
 					<ShieldCheckIcon className={'text-[#38BB7F] w-4 h-4'}/>
-					<Link
-						to={
+					<a
+						href={
 							import.meta.env.PUBLIC_ETHSCAN +
 							`/address/${CONSERVATIVE_STAKING_ADDRESS}`
 						}
@@ -68,7 +68,7 @@ const StatisticsModal: FC = () => {
 						className={'font-normal text-xs md:text-base underline'}
 					>
 						{CONSERVATIVE_STAKING_ADDRESS}
-					</Link>
+					</a>
 				</div>
 			</div>
 		</div>

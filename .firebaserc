@@ -10,6 +10,9 @@
         ],
         "staking-dev": [
           "betfin-staking-dev"
+        ],
+        "staking-ua": [
+          "betfin-staking-ua"
         ]
       }
     }

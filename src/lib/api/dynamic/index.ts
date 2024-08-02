@@ -1,7 +1,6 @@
 import type {
 	Earning,
-	ExtendedPoolInfo, PoolInfo,
-	Unstake,
+	ExtendedPoolInfo
 } from '@/src/lib/types.ts';
 import {
 	BetsMemoryContract,
@@ -12,10 +11,9 @@ import {
 	defaultMulticall,
 } from '@betfinio/abi';
 import arrayFrom from '@betfinio/hooks/dist/utils';
-import {getBlock, multicall, readContract} from '@wagmi/core';
-import {Stake} from 'betfinio_app/lib/types';
+import {multicall, readContract} from '@wagmi/core';
+import {Options, Stake} from 'betfinio_app/lib/types';
 import {type Address} from 'viem';
-import {getContractEvents} from 'viem/actions';
 import type {Config} from 'wagmi';
 
 export const fetchPool = async (
@@ -151,51 +149,6 @@ export const fetchStakes = async (
 		.reverse();
 };
 
-export const fetchEarnings = async (
-	address: Address,
-	config: Config,
-): Promise<Earning[]> => {
-	console.log('fetching earnings dynamic', address);
-	const pools = await fetchStakersPools(address, config);
-	console.log(pools);
-	const logs = await Promise.all(
-		pools.map(async (pool) =>
-			getContractEvents(config.getClient(), {
-				abi: DynamicStakingPoolContract.abi,
-				address: pool,
-				eventName: 'NewProfit',
-				toBlock: 'latest',
-				fromBlock: import.meta.env.PUBLIC_FIRST_BLOCK,
-				args: {
-					staker: address,
-				},
-			}),
-		),
-	);
-	console.log(logs.flat());
-	return await Promise.all(
-		logs.flat().map(
-			async (e) =>
-				({
-					transaction: e.transactionHash,
-					// @ts-ignore
-					staker: e.args.staker,
-					// @ts-ignore
-					amount: e.args.amount,
-					pool: e.address,
-					timestamp: await getBlock(config, {
-						blockNumber: BigInt(e.blockNumber || 0n),
-					}).then((e) => Number(e.timestamp)),
-				}) as Earning,
-		),
-	);
-};
-
-export const fetchUnstakes = async (): Promise<Unstake[]> => {
-	// todo
-	return [];
-};
-
 export const fetchActivePools = async (config: Config): Promise<ExtendedPoolInfo[]> => {
 	console.log('fetching active pools dynamic');
 	const activePoolsCount = (await readContract(config, {
@@ -270,4 +223,21 @@ export const fetchCurrentPool = async (config: Config): Promise<string> => {
 		address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
 		functionName: 'currentPool',
 	})) as string;
+};
+
+export const fetchEarnings = async (address: Address, options: Options): Promise<Earning[]> => {
+	const data = await options.supabase!
+		.from('dynamic_earnings')
+		.select("amount::text, timestamp::text, transaction, member, pool")
+		.eq("member", address.toLowerCase())
+		.gt("amount", 0);
+	
+	return (data.data || []).map((e) => ({
+		pool: e.pool,
+		timestamp: Number(e.timestamp),
+		staker: e.member,
+		transaction: e.transaction,
+		amount: BigInt(e.amount),
+	} as Earning))
+	
 };

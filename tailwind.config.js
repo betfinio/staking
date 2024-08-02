@@ -27,6 +27,14 @@ module.exports = {
 				secondary: '#201C40',
 				secondaryLight: '#292546',
 				secondaryLighter: '#201C4080',
+				"purple": {
+					"box": '#6A6A9F',
+					"table": '#201C40'
+				},
+				"red": {
+					600: "#B80042",
+					"roulette": "#dd375f"
+				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
 					foreground: 'hsl(var(--destructive-foreground))',

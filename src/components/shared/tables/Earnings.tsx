@@ -24,7 +24,7 @@ const Earnings: FC<{ data: Earning[]; isLoading: boolean }> = ({
     columnHelper.accessor('timestamp', {
       header: 'Date',
       cell: (props) => (
-        <span className={'text-gray-400 text-xs md:text-base'}>
+        <span className={'text-gray-400 text-xs md:text-sm'}>
           {DateTime.fromMillis(props.getValue() * 1000).toFormat('DD, T')}
         </span>
       ),
@@ -34,7 +34,7 @@ const Earnings: FC<{ data: Earning[]; isLoading: boolean }> = ({
       cell: (props) => (
         <div
           className={
-            'font-semibold text-yellow-400 text-xs md:text-base flex flex-row items-center gap-1 '
+            'font-semibold text-yellow-400 text-xs md:text-sm flex flex-row items-center gap-1 '
           }
         >
           <BetValue
@@ -49,7 +49,7 @@ const Earnings: FC<{ data: Earning[]; isLoading: boolean }> = ({
       header: 'Transaction',
       cell: (props) => (
         <a
-          className={' text-xs md:text-base'}
+          className={' text-xs md:text-sm'}
           href={ETHSCAN + '/tx/' + props.getValue()}
         >
           {truncateEthAddress(props.getValue())}
@@ -63,7 +63,7 @@ const Earnings: FC<{ data: Earning[]; isLoading: boolean }> = ({
       },
       cell: (props) => (
         <a
-          className={' text-xs md:text-base'}
+          className={' text-xs md:text-sm'}
           href={ETHSCAN + '/address/' + props.getValue()}
         >
           {truncateEthAddress(props.getValue())}

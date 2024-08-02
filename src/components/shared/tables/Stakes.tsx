@@ -49,12 +49,12 @@ const Stakes: FC<{ data: Stake[]; isLoading: boolean }> = ({
 				className: 'hidden md:table-cell',
 			},
 			cell: (props) => (
-				<Link
+				<a
 					target={'_blank'}
-					to={import.meta.env.PUBLIC_ETHSCAN + '/address/' + props.getValue()}
+					href={import.meta.env.PUBLIC_ETHSCAN + '/address/' + props.getValue()}
 				>
 					{truncateEthAddress(props.getValue())}
-				</Link>
+				</a>
 			),
 		}),
 		columnHelper.accessor('amount', {

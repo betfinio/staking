@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as StakingImport } from './routes/staking'
 import { Route as IndexImport } from './routes/index'
+import { Route as StatisticsIndexImport } from './routes/statistics/index'
 import { Route as DynamicIndexImport } from './routes/dynamic/index'
 import { Route as ConservativeIndexImport } from './routes/conservative/index'
 
@@ -25,6 +26,11 @@ const StakingRoute = StakingImport.update({
 
 const IndexRoute = IndexImport.update({
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const StatisticsIndexRoute = StatisticsIndexImport.update({
+  path: '/statistics/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -70,6 +76,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DynamicIndexImport
       parentRoute: typeof rootRoute
     }
+    '/statistics/': {
+      id: '/statistics/'
+      path: '/statistics'
+      fullPath: '/statistics'
+      preLoaderRoute: typeof StatisticsIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -80,6 +93,7 @@ export const routeTree = rootRoute.addChildren({
   StakingRoute,
   ConservativeIndexRoute,
   DynamicIndexRoute,
+  StatisticsIndexRoute,
 })
 
 /* prettier-ignore-end */
@@ -93,7 +107,8 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/staking",
         "/conservative/",
-        "/dynamic/"
+        "/dynamic/",
+        "/statistics/"
       ]
     },
     "/": {
@@ -107,6 +122,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/dynamic/": {
       "filePath": "dynamic/index.tsx"
+    },
+    "/statistics/": {
+      "filePath": "statistics/index.tsx"
     }
   }
 }

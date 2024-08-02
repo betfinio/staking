@@ -1,24 +1,17 @@
-import {
-	type Earning,
-	type ExtendedPoolInfo,
-} from '@/src/lib/types.ts';
-import {
-	BetsMemoryContract,
-	ConservativeStakingContract,
-	ConservativeStakingPoolContract,
-	ZeroAddress,
-	defaultMulticall,
-} from '@betfinio/abi';
+import {type Earning, type ExtendedPoolInfo,} from '@/src/lib/types.ts';
+import {BetsMemoryContract, ConservativeStakingContract, ConservativeStakingPoolContract, defaultMulticall, valueToNumber, ZeroAddress,} from '@betfinio/abi';
 import arrayFrom from '@betfinio/hooks/dist/utils';
 import type {SupabaseClient} from '@supabase/supabase-js';
 import {multicall, readContract} from '@wagmi/core';
 import {fetchBalance} from 'betfinio_app/lib/api/token';
-import {getBlockByTimestamp, getTimeByBlock} from 'betfinio_app/lib/utils';
+import {getBlockByTimestamp} from 'betfinio_app/lib/utils';
 import type {Address} from 'viem';
-import {getContractEvents} from 'viem/actions';
 import type {Config} from 'wagmi';
 import {fetchTotalStaked} from "betfinio_app/lib/api/conservative";
-import {Stake} from 'betfinio_app/lib/types';
+import {Options, Stake, Stat} from 'betfinio_app/lib/types';
+import {DateTime} from "luxon";
+import {Timeframe} from "betfinio_app/compiled-types/lib/types/staking";
+import {Claim} from "betfinio_app/compiled-types/lib/types/affiliate";
 
 export const fetchPool = async (
 	pool: Address,
@@ -90,45 +83,37 @@ export const fetchConservativePools = async (
 		pools.reverse().map((pool) => fetchPool(pool.result as Address, config)),
 	);
 };
-export const fetchConservativeEarnings = async (
-	address: Address,
-	config: Config,
-): Promise<Earning[]> => {
-	const pools = await fetchStakersPools(address, config);
-	console.log('fetching earnings conservative', address);
-	return (
-		await Promise.all(
-			pools.map(async (pool) => {
-				const logs = await getContractEvents(config.getClient(), {
-					...ConservativeStakingPoolContract,
-					address: pool,
-					eventName: 'NewClaimable',
-					toBlock: 'latest',
-					strict: true,
-					fromBlock: 0n,
-					args: {
-						staker: [address],
-					},
-				});
-				return await Promise.all(
-					logs.map(async (log) => {
-						const timestamp = await getTimeByBlock(log.blockNumber, config);
-						return {
-							staker: address,
-							timestamp: timestamp,
-							pool: pool,
-							transaction: log.transactionHash,
-							// @ts-ignore
-							amount: BigInt(log.args.amount),
-						} as Earning;
-					}),
-				);
-			}),
-		)
-	)
-		.flat()
-		.sort((a, b) => b.timestamp - a.timestamp)
-		.filter((e) => e.amount !== 0n);
+export const fetchEarnings = async (address: Address, options: Options): Promise<Earning[]> => {
+	const data = await options.supabase!
+		.from('conservative_earnings')
+		.select("amount::text, timestamp::text, transaction, member, pool")
+		.eq("member", address.toLowerCase())
+		.gt("amount", 0);
+	
+	return (data.data || []).map((e) => ({
+		pool: e.pool,
+		timestamp: Number(e.timestamp),
+		staker: e.member,
+		transaction: e.transaction,
+		amount: BigInt(e.amount),
+	} as Earning))
+	
+};
+
+
+export const fetchClaims = async (address: Address, options: Options): Promise<Claim[]> => {
+	const data = await options.supabase!
+		.from('conservative_claims')
+		.select("amount::text, timestamp::text, transaction, member")
+		.eq("member", address.toLowerCase())
+	
+	return (data.data || []).map((e) => ({
+		timestamp: Number(e.timestamp),
+		staker: e.member,
+		transaction: e.transaction,
+		amount: BigInt(e.amount),
+	} as Claim))
+	
 };
 
 export const fetchProfit = async (
@@ -332,3 +317,52 @@ export const fetchStakes = async (
 		})
 		.reverse();
 };
+
+
+export const fetchCalculationsStat = async (timeframe: Timeframe, options: Options): Promise<Stat[]> => {
+	console.log('fetching calculations conservative');
+	const fridays = getTenFridaysFrom(getLastFriday()).filter(f => {
+		if (timeframe === 'hour' && f.toSeconds() > DateTime.now().toSeconds() - 60 * 60 * 24) {
+			return true
+		}
+		if (timeframe === 'day' && f.toSeconds() > DateTime.now().toSeconds() - 60 * 60 * 24 * 30) {
+			return true
+		}
+		if (timeframe === 'week' && f.toSeconds() > DateTime.now().toSeconds() - 60 * 60 * 24 * 30 * 12) {
+			return true
+		}
+	}).map((f) => f.toISO());
+	return await Promise.all(fridays.map((f) => fetchOneStat(f!, options.supabase!)));
+}
+
+const fetchOneStat = async (time: string, supabase: SupabaseClient): Promise<Stat> => {
+	const data = await supabase
+		.from('staking_statistics')
+		.select('timestamp::timestamp, revenues::text')
+		.eq('staking', import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS.toLowerCase())
+		.gt('timestamp', time)
+		.order('timestamp', {ascending: true})
+		.limit(1)
+	if (data.error || !data.data) {
+		return {time: DateTime.fromISO(time).toSeconds(), value: 0}
+	}
+	return {time: Math.floor(DateTime.fromISO(data.data[0].timestamp).toSeconds()), value: valueToNumber(BigInt(data.data[0].revenues))};
+}
+
+const getLastFriday = () => {
+	let lastFriday = DateTime.now().setZone('utc').set({weekday: 5, hour: 12, minute: 0, second: 0, millisecond: 0});
+	
+	// If it's Friday today, adjust to get the *previous* Friday
+	if (lastFriday > DateTime.now()) {
+		lastFriday = lastFriday.minus({weeks: 1});
+	}
+	return lastFriday;
+}
+
+const getTenFridaysFrom = (friday: DateTime) => {
+	const fridays = [];
+	for (let i = 0; i < 10; i++) {
+		fridays.push(friday.minus({weeks: i}));
+	}
+	return fridays;
+}

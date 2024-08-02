@@ -7,7 +7,6 @@ import {ZeroAddress} from '@betfinio/abi';
 import {valueToNumber} from '@betfinio/hooks/dist/utils';
 import {Bet, Blackjack, CoinLarge, Coins} from '@betfinio/ui/dist/icons';
 import ConservativeStaking from '@betfinio/ui/dist/icons/ConservativeStaking';
-import {CalculatorIcon} from '@heroicons/react/24/outline';
 import {BetValue} from 'betfinio_app/BetValue';
 import {useTotalProfit, useTotalStaked} from 'betfinio_app/lib/query/dynamic';
 import cx from 'clsx';
@@ -15,6 +14,7 @@ import {animate} from 'framer-motion';
 import {type FC, useEffect, useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useAccount} from 'wagmi';
+import {CalculatorIcon} from "lucide-react";
 
 const Counter: FC<{ from: number; to: number }> = ({from, to}) => {
 	const nodeRef = useRef<HTMLDivElement>(null);
