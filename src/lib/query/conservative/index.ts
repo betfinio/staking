@@ -20,17 +20,14 @@ import {
 	type ExtendedPoolInfo,
 } from '@/src/lib/types';
 import {
-	ConservativeStakingContract,
+	ConservativeStakingContract, ConservativeStakingPoolContract,
 	GameContract,
 	PartnerContract,
-	TokenContract,
-	ZeroAddress,
 } from '@betfinio/abi';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {
 	type WriteContractReturnType,
 	getBlock,
-	readContract,
 	writeContract,
 } from '@wagmi/core';
 import {useSupabase} from 'betfinio_app/supabase';
@@ -41,28 +38,10 @@ import {useTranslation} from 'react-i18next';
 import {type Address, type Log, decodeEventLog} from 'viem';
 import {getContractEvents, waitForTransactionReceipt} from 'viem/actions';
 import {type Config, useConfig, useWatchContractEvent} from 'wagmi';
-import {fetchTotalStaked} from "betfinio_app/lib/api/conservative";
 import {Stake, Stat} from 'betfinio_app/lib/types';
 import {Timeframe} from "betfinio_app/compiled-types/lib/types/staking";
 
 
-export const useTotalProfitWithBalance = () => {
-	const config = useConfig();
-	return useQuery<bigint>({
-		queryKey: ['staking', 'conservative', 'totalProfitWithBalance'],
-		queryFn: async () => {
-			const profit = await fetchTotalProfit(config);
-			const staked = await fetchTotalStaked(config);
-			const balance = (await readContract(config, {
-				abi: TokenContract.abi,
-				address: import.meta.env.PUBLIC_TOKEN_ADDRESS as Address,
-				functionName: 'balanceOf',
-				args: [import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address],
-			})) as bigint;
-			return profit + balance - staked;
-		},
-	});
-};
 export const usePredictContribution = () => {
 	const config = useConfig();
 	return useQuery<bigint>({
@@ -352,61 +331,6 @@ export const useClaim = () => {
 	});
 };
 
-export const useUnstake = () => {
-	const t = useTranslation('', {keyPrefix: 'staking.errors'});
-	return useMutation<WriteContractReturnType, any, UnstakeParams>({
-		mutationKey: ['staking', 'conservative', 'unstake'],
-		mutationFn: unstake,
-		onError: (e) => {
-			console.error(e);
-			return t.t(e.message);
-		},
-		onMutate: () => console.log('unstaking'),
-		onSuccess: (data) => {
-			console.log('unstaked', data);
-		},
-		onSettled: () => console.log('unstaking settled'),
-	});
-};
-
-export const useCalculateProfit = () => {
-	const t = useTranslation('', {keyPrefix: 'staking.errors'});
-	const config = useConfig();
-	return useMutation<WriteContractReturnType, any, { old: boolean }>({
-		mutationKey: ['staking', 'conservative', 'calculateProfit'],
-		mutationFn: (e) => calculateProfit({...e, config: config}),
-		onError: (e) => {
-			console.error(e);
-		},
-		onMutate: () => console.log('calculating profit'),
-		onSuccess: (data) => {
-			console.log('profit calculated', data);
-		},
-		onSettled: () => console.log('profit calculation settled'),
-	});
-};
-
-export async function calculateProfit({
-	old,
-	config,
-}: { old: boolean; config: Config }): Promise<WriteContractReturnType> {
-	if (old) {
-		return await writeContract(config, {
-			abi: ConservativeStakingContract.abi,
-			address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-			functionName: 'calculateProfit',
-			args: [0n, 100n],
-		});
-	}
-	// return await writeContract(config, {
-	// 	abi: HelpersContract.abi,
-	// 	functionName: 'calculateAndDistribute',
-	// 	args: [import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address, 0n, 100n]
-	// })
-	// todo add helpers contract to abi
-	return ZeroAddress;
-}
-
 export const stake = async ({
 	amount,
 	config,
@@ -429,19 +353,6 @@ export const claimAll = async ({
 		abi: ConservativeStakingContract.abi,
 		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
 		functionName: 'claimAll',
-	});
-};
-
-const unstake = async ({
-	pool,
-	config,
-}: UnstakeParams): Promise<WriteContractReturnType> => {
-	console.log('unstaking', pool);
-	return await writeContract(config, {
-		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-		functionName: 'withdraw',
-		args: [pool],
 	});
 };
 
@@ -480,5 +391,48 @@ export const useCalculationsStat = (timeframe: Timeframe) => {
 	return useQuery<Stat[]>({
 		queryKey: ['staking', 'conservative', 'calculations', 'stat', timeframe],
 		queryFn: () => fetchCalculationsStat(timeframe, {config, supabase}),
+	})
+}
+
+export const useDistributeProfit = () => {
+	const config = useConfig();
+	const {t} = useTranslation('', {keyPrefix: 'shared.errors'});
+	
+	return useMutation<WriteContractReturnType, WriteContractErrorType, Address>({
+		mutationKey: ['staking', 'conservative', 'distributeProfit'],
+		mutationFn: async (pool: Address) => {
+			return await writeContract(config, {
+				abi: ConservativeStakingPoolContract.abi,
+				address: pool,
+				functionName: 'distributeProfit',
+			});
+		},
+		onError: (e) => {
+			// @ts-ignore
+			const error = e.cause && e.cause['reason'] || "unknown"
+			toast({
+				title: "An error occurred",
+				description: t(error),
+				variant: "destructive"
+			})
+			return t(e.message);
+		},
+		onSuccess: async (data) => {
+			const {update} = toast({
+				title: "Distribution is in progress",
+				description: "Transaction is being processed",
+				variant: "loading",
+				duration: 10000,
+				action: getTransactionLink(data)
+			})
+			await waitForTransactionReceipt(config.getClient(), {hash: data})
+			update({
+				title: "Distributed successfully",
+				variant: "default",
+				description: "Transaction has been executed",
+				duration: 5000
+			})
+			console.log('staked', data);
+		},
 	})
 }
