@@ -9,8 +9,8 @@
     "soon": "Soon"
   },
   "subtitle": {
-    "conservative": "Shared betting",
-    "dynamic": "Lotto betting"
+    "conservative": "Gains fees from shared betting",
+    "dynamic": "Liquidity for lotto games payouts"
   },
   "stat": {
     "tvl": "Total locked",
