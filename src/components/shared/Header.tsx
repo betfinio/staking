@@ -47,13 +47,14 @@ const Header: FC<HeaderProps> = ({type}) => {
 					</a>
 				</Button>
 				<Button
+					onClick={handleReport}
 					variant={'link'}
 					className={
 						'text-white md:hover:text-yellow-400 md:text-yellow-400 flex flex-col items-center justify-center p-0'
 					}
 				>
 					<CircleAlert className={'w-6'}/>
-					<span className={'hidden lg:inline text-xs whitespace-nowrap'} onClick={handleReport}>
+					<span className={'hidden lg:inline text-xs whitespace-nowrap'}>
             Report
           </span>
 				</Button>

@@ -38,7 +38,7 @@ const Switcher: FC<{ type: StakingType }> = ({type}) => {
 						>
 							{t(`title.${type}`)}
 						</div>
-						<div className={'text-xs '}>{t(`subtitle.${type}`)}</div>
+						<div className={'text-xs text-gray-400 '}>{t(`subtitle.${type}`)}</div>
 					</div>
 				</motion.div>
 			</DialogTrigger>
