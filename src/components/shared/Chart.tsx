@@ -14,13 +14,7 @@ const Chart: FC<{
 	className?: string;
 	label?: string;
 	color?: string;
-}> = ({
-	labels = initialLabels,
-	color = '#22c55e',
-	values,
-	className = '',
-	label = 'value',
-}) => {
+}> = ({ labels = initialLabels, color = '#22c55e', values, className = '', label = 'value' }) => {
 	const options = {
 		plugins: {
 			legend: {

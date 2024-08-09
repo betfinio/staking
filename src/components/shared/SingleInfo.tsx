@@ -13,14 +13,7 @@ export interface SingleIngoProps {
 	isLoading?: boolean;
 }
 
-const SingleIngo: FC<SingleIngoProps> = ({
-	className = '',
-	label,
-	amount,
-	subtitle = '',
-	percent = false,
-	isLoading = false,
-}) => {
+const SingleIngo: FC<SingleIngoProps> = ({ className = '', label, amount, subtitle = '', percent = false, isLoading = false }) => {
 	const amountNumber = Number(amount);
 	const { t } = useTranslation('', { keyPrefix: 'staking' });
 	const isSoon = label === t('games.soon');
@@ -33,14 +26,8 @@ const SingleIngo: FC<SingleIngoProps> = ({
 					className,
 				)}
 			>
-				<span className={'text-xs lg:text-base font-semibold'}>
-					{isSoon ? 'Coming soon' : label}
-				</span>
-				<span
-					className={
-						'flex flex-row items-center gap-1 text-sm md:text-normal text-yellow-500'
-					}
-				>
+				<span className={'text-xs lg:text-base font-semibold'}>{isSoon ? 'Coming soon' : label}</span>
+				<span className={'flex flex-row items-center gap-1 text-sm md:text-normal text-yellow-500'}>
 					<span
 						className={cx('font-medium text-sm', {
 							'animate-pulse blur-sm': isLoading,
@@ -53,7 +40,7 @@ const SingleIngo: FC<SingleIngoProps> = ({
 								0
 							) : amountNumber < 1 ? (
 								amountNumber < 0.0001 ? (
-									`< 0.0000`
+									'< 0.0000'
 								) : (
 									amountNumber.toFixed(4)
 								)
@@ -61,28 +48,14 @@ const SingleIngo: FC<SingleIngoProps> = ({
 								amountNumber.toFixed(2)
 							)
 						) : (
-							<BetValue
-								value={valueToNumber(amount as bigint)}
-								precision={2}
-								withIcon
-							/>
+							<BetValue value={valueToNumber(amount as bigint)} precision={2} withIcon />
 						)}
 						{percent && '%'}
 					</span>
 				</span>
-				<span className={'md:text-md text-xs text-gray-500'}>
-					{isSoon ? 'Coming soon' : subtitle}
-				</span>
+				<span className={'md:text-md text-xs text-gray-500'}>{isSoon ? 'Coming soon' : subtitle}</span>
 			</div>
-			{isSoon && (
-				<div
-					className={
-						'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-yellow-400 font-bold'
-					}
-				>
-					Soon
-				</div>
-			)}
+			{isSoon && <div className={'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-yellow-400 font-bold'}>Soon</div>}
 		</div>
 	);
 };

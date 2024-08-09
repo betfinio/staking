@@ -10,9 +10,7 @@ export const Route = createFileRoute('/statistics/')({
 function StatisticsPage() {
 	return (
 		<div className={'p-2 md:p-3 lg:p-4 flex flex-col gap-2 md:gap-3 lg:gap-4'}>
-			<div
-				className={'grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-3 lg:gap-4'}
-			>
+			<div className={'grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-3 lg:gap-4'}>
 				<Staked />
 				<Stakers />
 			</div>

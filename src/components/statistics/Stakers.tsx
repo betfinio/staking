@@ -1,14 +1,8 @@
-import { ResponsiveLine, type SliceTooltipProps } from '@nivo/line';
+import { ResponsiveLine, type Serie, type SliceTooltipProps } from '@nivo/line';
 import { useTotalStakersStat as useTotalStakersStatConservative } from 'betfinio_app/lib/query/conservative';
 import { useTotalStakersStat as useTotalStakersStatDynamic } from 'betfinio_app/lib/query/dynamic';
 import type { Stat, Timeframe } from 'betfinio_app/lib/types';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from 'betfinio_app/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'betfinio_app/select';
 import cx from 'clsx';
 import { UserIcon } from 'lucide-react';
 import { DateTime } from 'luxon';
@@ -17,8 +11,7 @@ import { useMemo, useState } from 'react';
 
 const Stakers = () => {
 	const [timeframe, setTimeframe] = useState<Timeframe>('day');
-	const { data: conservative = [] } =
-		useTotalStakersStatConservative(timeframe);
+	const { data: conservative = [] } = useTotalStakersStatConservative(timeframe);
 	const { data: dynamic = [] } = useTotalStakersStatDynamic(timeframe);
 
 	const conservativeData = useMemo(() => {
@@ -31,7 +24,7 @@ const Stakers = () => {
 	}, [conservative]);
 
 	const dynamicData = useMemo(() => {
-		return dynamic.map((item: any) => {
+		return dynamic.map((item: Stat) => {
 			return {
 				x: item.time,
 				y: item.value,
@@ -41,18 +34,12 @@ const Stakers = () => {
 
 	const { min, max } = useMemo(() => {
 		return {
-			min: Math.min(
-				...conservativeData.map((e) => e.y),
-				...dynamicData.map((e) => e.y),
-			),
-			max: Math.max(
-				...conservativeData.map((e) => e.y),
-				...dynamicData.map((e) => e.y),
-			),
+			min: Math.min(...conservativeData.map((e) => e.y), ...dynamicData.map((e) => e.y)),
+			max: Math.max(...conservativeData.map((e) => e.y), ...dynamicData.map((e) => e.y)),
 		};
 	}, [conservativeData, dynamicData]);
 
-	const data: any[] = [
+	const data: Serie[] = [
 		{
 			id: 'Conservative',
 			color: '#facc15',
@@ -65,7 +52,7 @@ const Stakers = () => {
 		},
 	];
 
-	const handleChange = (val: any) => {
+	const handleChange = (val: Timeframe) => {
 		setTimeframe(val);
 	};
 
@@ -97,10 +84,7 @@ const Stakers = () => {
 					format: (value) => millify(value, { precision: 2 }),
 				}}
 				axisBottom={{
-					format: (value) =>
-						DateTime.fromSeconds(value).toFormat(
-							timeframe === 'hour' ? 'HH:mm' : 'dd.MM',
-						),
+					format: (value) => DateTime.fromSeconds(value).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'),
 					tickRotation: 45,
 				}}
 				yScale={{
@@ -151,21 +135,10 @@ export default Stakers;
 
 const Tooltip = ({ slice }: SliceTooltipProps) => {
 	return (
-		<div
-			className={
-				'flex flex-col gap-1 bg-primaryLighter rounded-lg text-white px-2 py-1 text-sm '
-			}
-		>
-			<div className={'text-xs'}>
-				{DateTime.fromSeconds(Number(slice.points[0].data.x)).toFormat(
-					'dd.MM HH:mm',
-				)}
-			</div>
+		<div className={'flex flex-col gap-1 bg-primaryLighter rounded-lg text-white px-2 py-1 text-sm '}>
+			<div className={'text-xs'}>{DateTime.fromSeconds(Number(slice.points[0].data.x)).toFormat('dd.MM HH:mm')}</div>
 			{slice.points.map((point, id) => (
-				<div
-					className={'flex flex-row items-center  justify-between gap-3'}
-					key={id}
-				>
+				<div className={'flex flex-row items-center  justify-between gap-3'} key={id}>
 					<div className={cx('opacity-50')} style={{ color: point.color }}>
 						{point.serieId}
 					</div>

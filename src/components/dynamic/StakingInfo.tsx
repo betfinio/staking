@@ -1,8 +1,4 @@
-import {
-	useStaked,
-	useTotalBets,
-	useTotalVolume,
-} from '@/src/lib/query/dynamic';
+import { useStaked, useTotalBets, useTotalVolume } from '@/src/lib/query/dynamic';
 import { ZeroAddress } from '@betfinio/abi';
 import { valueToNumber } from '@betfinio/hooks/dist/utils';
 import { Bet, Blackjack, CoinLarge, Coins } from '@betfinio/ui/dist/icons';
@@ -42,21 +38,14 @@ const StakingInfo: FC = () => {
 	const { address = ZeroAddress } = useAccount();
 	const { data: totalVolume = 0n } = useTotalVolume();
 	const { data: totalBets = 0 } = useTotalBets();
-	const {
-		data: totalProfit = 0n,
-		isLoading: isTotalProfitLoading,
-		isFetching: isTotalProfitFetching,
-	} = useTotalProfit();
+	const { data: totalProfit = 0n, isLoading: isTotalProfitLoading, isFetching: isTotalProfitFetching } = useTotalProfit();
 
 	const { data: totalStaked = 0n } = useTotalStaked();
 	const { data: playerStaked = 0n } = useStaked(address);
 	const share = valueToNumber(playerStaked) / valueToNumber(totalStaked || 1n);
 	const [from, setFrom] = useState(0);
 	const to = useMemo(() => {
-		const value = Math.floor(
-			valueToNumber(isTotalProfitLoading ? 0n : totalProfit) *
-				(isNaN(share) ? 0 : share),
-		);
+		const value = Math.floor(valueToNumber(isTotalProfitLoading ? 0n : totalProfit) * (Number.isNaN(share) ? 0 : share));
 
 		setTimeout(() => {
 			setFrom(value);
@@ -72,58 +61,28 @@ const StakingInfo: FC = () => {
 			setGlow(false);
 		}, 1000);
 	}, [totalProfit]);
-	const cycleId = Math.floor(
-		(Date.now() - 1000 * 60 * 60 * 36) / 1000 / 60 / 60 / 24 / 28,
-	);
+	const cycleId = Math.floor((Date.now() - 1000 * 60 * 60 * 36) / 1000 / 60 / 60 / 24 / 28);
 
 	return (
-		<div
-			className={
-				'cursor-pointer bg-primaryLighter border border-gray-800 rounded-lg'
-			}
-		>
-			<div
-				className={
-					'font-semibold text-center text-sm lg:text-base whitespace-nowrap lg:text-left p-4 hidden md:flex flex-row items-center justify-between'
-				}
-			>
+		<div className={'cursor-pointer bg-primaryLighter border border-gray-800 rounded-lg'}>
+			<div className={'font-semibold text-center text-sm lg:text-base whitespace-nowrap lg:text-left p-4 hidden md:flex flex-row items-center justify-between'}>
 				Dynamic games stats
 				<div className={''}>Your revenues:</div>
 			</div>
 			<div className={'rounded-lg flex justify-between font-semibold p-3'}>
-				<div
-					className={
-						'flex items-center justify-center flex-row gap-3 h-full text-sm lg:text-base'
-					}
-				>
+				<div className={'flex items-center justify-center flex-row gap-3 h-full text-sm lg:text-base'}>
 					<CoinLarge className={'hidden md:block text-yellow-400 w-20 h-20'} />
-					<div
-						className={
-							'flex flex-col gap-[18px] md:gap-4 lg:text-sm xl:text-base justify-between items-start h-full'
-						}
-					>
+					<div className={'flex flex-col gap-[18px] md:gap-4 lg:text-sm xl:text-base justify-between items-start h-full'}>
 						<div className={cx(' flex flex-row items-center gap-2')}>
-							<CalculatorIcon
-								className={'w-6 h-6 md:w-5 md:h-5 text-yellow-400'}
-							/>{' '}
-							1 game
+							<CalculatorIcon className={'w-6 h-6 md:w-5 md:h-5 text-yellow-400'} /> 1 game
 						</div>
-						<div
-							className={cx(
-								'flex ml-1 flex-row items-center gap-2 font-semibold',
-							)}
-						>
+						<div className={cx('flex ml-1 flex-row items-center gap-2 font-semibold')}>
 							<Blackjack className={'w-6 h-6 md:w-4 md:h-4 text-yellow-400'} />
 							{t('bets', { count: totalBets })}
 						</div>
 						<div className={cx('flex flex-row items-center gap-2')}>
 							<Coins className={'w-6 h-6 md:w-5 md:h-5 text-yellow-400'} />
-							<BetValue
-								value={valueToNumber(totalVolume)}
-								precision={2}
-								withIcon
-							/>{' '}
-							volume
+							<BetValue value={valueToNumber(totalVolume)} precision={2} withIcon /> volume
 						</div>
 					</div>
 				</div>
@@ -133,12 +92,7 @@ const StakingInfo: FC = () => {
 							'!animate-pulse text-green-400 ': isTotalProfitFetching || glow,
 						})}
 					/>
-					<div
-						className={cx(
-							'mt-3 flex flex-row items-center gap-1 text-sm xl:text-base mx-auto',
-							{ 'text-green-400': isTotalProfitFetching || glow },
-						)}
-					>
+					<div className={cx('mt-3 flex flex-row items-center gap-1 text-sm xl:text-base mx-auto', { 'text-green-400': isTotalProfitFetching || glow })}>
 						<Counter from={from} to={to} />
 						<Bet className={'w-4 h-4'} />
 					</div>

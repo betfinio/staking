@@ -7,12 +7,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { BetValue } from 'betfinio_app/BetValue';
 import { DataTable } from 'betfinio_app/DataTable';
 import { Button } from 'betfinio_app/button';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from 'betfinio_app/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from 'betfinio_app/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -43,12 +38,7 @@ const Pools: FC<{
 				className: 'lg:w-[160px]',
 			},
 			cell: (props) => (
-				<a
-					target={'_blank'}
-					href={import.meta.env.PUBLIC_ETHSCAN + '/address/' + props.getValue()}
-					className={'text-gray-500'}
-					rel="noreferrer"
-				>
+				<a target={'_blank'} href={`${import.meta.env.PUBLIC_ETHSCAN}/address/${props.getValue()}`} className={'text-gray-500'} rel="noreferrer">
 					{truncateEthAddress(props.getValue())}
 				</a>
 			),
@@ -57,18 +47,9 @@ const Pools: FC<{
 			header: t('table.capacity'),
 			cell: (props) => (
 				<div className={'flex flex-col flex-grow'}>
-					<span className={'text-gray-500 text-sm'}>
-						({props.getValue()}/100)
-					</span>
-					<div
-						className={
-							'relative rounded-full bg-secondaryLight w-full mt-2 md:mt-3  overflow-hidden h-[5px]'
-						}
-					>
-						<div
-							className={'bg-green-600 absolute top-0 left-0 h-[5px]'}
-							style={{ width: props.getValue() + '%' }}
-						></div>
+					<span className={'text-gray-500 text-sm'}>({props.getValue()}/100)</span>
+					<div className={'relative rounded-full bg-secondaryLight w-full mt-2 md:mt-3  overflow-hidden h-[5px]'}>
+						<div className={'bg-green-600 absolute top-0 left-0 h-[5px]'} style={{ width: `${props.getValue()}%` }} />
 					</div>
 				</div>
 			),
@@ -99,11 +80,7 @@ const Pools: FC<{
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end">
-							<DropdownMenuItem
-								onClick={() => handleCalculate(row.original.address)}
-							>
-								Distribute Profit
-							</DropdownMenuItem>
+							<DropdownMenuItem onClick={() => handleCalculate(row.original.address)}>Distribute Profit</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				);

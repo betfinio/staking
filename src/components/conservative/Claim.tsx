@@ -1,8 +1,4 @@
-import {
-	useClaim,
-	useClaimable,
-	useStaked,
-} from '@/src/lib/query/conservative';
+import { useClaim, useClaimable, useStaked } from '@/src/lib/query/conservative';
 import { ZeroAddress } from '@betfinio/abi';
 import { valueToNumber } from '@betfinio/hooks/dist/utils';
 import { BetValue } from 'betfinio_app/BetValue';
@@ -22,15 +18,11 @@ const Claim: FC<ClaimProps> = ({ className }) => {
 	const { t } = useTranslation('', { keyPrefix: 'staking' });
 	const { address = ZeroAddress } = useAccount();
 	const { data: staked = 0n, isLoading: isStakedLoading } = useStaked(address);
-	const { data: claimable = 0n, isLoading: isClaimableLoading } =
-		useClaimable(address);
-	const { data: balance = 0n } = useBalance(
-		import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS,
-	);
+	const { data: claimable = 0n, isLoading: isClaimableLoading } = useClaimable(address);
+	const { data: balance = 0n } = useBalance(import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS);
 	const { mutate, isPending: loading } = useClaim();
 	const { data: totalStaked = 0n } = useTotalStaked();
-	const share =
-		(valueToNumber(staked) / (valueToNumber(totalStaked) || 1)) * 100;
+	const share = (valueToNumber(staked) / (valueToNumber(totalStaked) || 1)) * 100;
 	const handleClaim = () => mutate();
 
 	return (
@@ -46,44 +38,29 @@ const Claim: FC<ClaimProps> = ({ className }) => {
 				})}
 			>
 				{staked === 0n ? (
-					<h2 className={'font-semibold whitespace-nowrap md:text-xl'}>
-						{t('conservative.earn')}
-					</h2>
+					<h2 className={'font-semibold whitespace-nowrap md:text-xl'}>{t('conservative.earn')}</h2>
 				) : (
-					<div
-						className={'font-semibold text-lg flex flex-row gap-2 items-center'}
-					>
+					<div className={'font-semibold text-lg flex flex-row gap-2 items-center'}>
 						{t('conservative.profitTitle')}
 						<BetValue value={valueToNumber(claimable)} withIcon />
 					</div>
 				)}
 				<div className={'text-gray-400 text-xs mt-2 flex gap-1'}>
-					<div
-						className={
-							'text-yellow-400 font-medium flex flex-row items-center gap-1'
-						}
-					>
-						<BetValue
-							value={(valueToNumber(balance) / 100) * share}
-							precision={2}
-							withIcon
-						/>
+					<div className={'text-yellow-400 font-medium flex flex-row items-center gap-1'}>
+						<BetValue value={(valueToNumber(balance) / 100) * share} precision={2} withIcon />
 					</div>
 					{t('conservative.pending')}
 				</div>
 			</div>
 			<button
+				type={'button'}
 				onClick={handleClaim}
 				disabled={staked === 0n || claimable === 0n}
 				className={
 					'rounded-lg h-[52px] px-6 py-3 w-[90px] flex flex-row justify-center items-center text-sm md:text-lg font-medium bg-red-roulette  disabled:bg-gray-800 disabled:cursor-not-allowed'
 				}
 			>
-				{loading ? (
-					<Loader className={'h-5 w-5 animate-spin'} />
-				) : (
-					t('conservative.unstake')
-				)}
+				{loading ? <Loader className={'h-5 w-5 animate-spin'} /> : t('conservative.unstake')}
 			</button>
 		</div>
 	);

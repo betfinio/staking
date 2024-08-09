@@ -1,16 +1,6 @@
 import Chart from '@/src/components/shared/Chart';
-import {
-	useTotalProfitStat,
-	useTotalStakedStat,
-	useTotalStakersStat,
-} from 'betfinio_app/lib/query/dynamic';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from 'betfinio_app/select';
+import { useTotalProfitStat, useTotalStakedStat, useTotalStakersStat } from 'betfinio_app/lib/query/dynamic';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'betfinio_app/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
 import { DateTime } from 'luxon';
 import { useState } from 'react';
@@ -22,7 +12,7 @@ const Charts = () => {
 	const { data: totalStaked = [], error } = useTotalStakedStat(timeframe);
 	const { data: totalStakers = [] } = useTotalStakersStat(timeframe);
 	const { data: totalProfit = [] } = useTotalProfitStat(timeframe);
-	const handleChange = (val: any) => {
+	const handleChange = (val: Timeframe) => {
 		setTimeframe(val);
 	};
 	return (
@@ -52,11 +42,7 @@ const Charts = () => {
 						className={'h-full'}
 						color={'#facc15'}
 						values={totalStaked.map((e) => e.value)}
-						labels={totalStaked.map((e) =>
-							DateTime.fromMillis(e.time * 1000).toFormat(
-								timeframe === 'hour' ? 'HH:mm' : 'dd.MM',
-							),
-						)}
+						labels={totalStaked.map((e) => DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'))}
 					/>
 				</TabsContent>
 				<TabsContent value={'stakers'} className={'grow'}>
@@ -64,22 +50,14 @@ const Charts = () => {
 						label={'Total stakers'}
 						color={'#6A6A9F'}
 						values={totalStakers.map((e) => e.value)}
-						labels={totalStakers.map((e) =>
-							DateTime.fromMillis(e.time * 1000).toFormat(
-								timeframe === 'hour' ? 'HH:mm' : 'dd.MM',
-							),
-						)}
+						labels={totalStakers.map((e) => DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'))}
 					/>
 				</TabsContent>
 				<TabsContent value={'revenues'} className={'grow'}>
 					<Chart
 						label={'Total revenue'}
 						values={totalProfit.map((e) => e.value)}
-						labels={totalProfit.map((e) =>
-							DateTime.fromMillis(e.time * 1000).toFormat(
-								timeframe === 'hour' ? 'HH:mm' : 'dd.MM',
-							),
-						)}
+						labels={totalProfit.map((e) => DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'))}
 					/>
 				</TabsContent>
 			</Tabs>

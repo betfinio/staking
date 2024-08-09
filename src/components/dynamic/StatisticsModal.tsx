@@ -17,21 +17,13 @@ const StatisticsModal: FC = () => {
 	const { t } = useTranslation('', { keyPrefix: 'staking' });
 	const { data: totalProfit = 0n } = useTotalProfit();
 	return (
-		<div
-			className={cx(
-				'rounded-lg bg-primaryLighter z-10 border border-gray-800 font-semibold text-white w-full mx-auto',
-			)}
-		>
+		<div className={cx('rounded-lg bg-primaryLighter z-10 border border-gray-800 font-semibold text-white w-full mx-auto')}>
 			<div className={'py-5 px-7'}>
 				<div className={'flex justify-between items-center'}>
 					<p className={'text-sm '}>Dynamic staking</p>
 					<div>
 						<DialogClose>
-							<CloseModal
-								className={
-									'cursor-pointer hover:text-[#DD375F] transition-all duration-300'
-								}
-							/>
+							<CloseModal className={'cursor-pointer hover:text-[#DD375F] transition-all duration-300'} />
 						</DialogClose>
 					</div>
 				</div>
@@ -42,9 +34,7 @@ const StatisticsModal: FC = () => {
 					</div>
 				</div>
 				<div className={'h-[2px] opacity-5 bg-white my-6'} />
-				<p className={'mb-3 text-center text-sm'}>
-					Games contribution statistics
-				</p>
+				<p className={'mb-3 text-center text-sm'}>Games contribution statistics</p>
 				<SharedGameBlock
 					games={[
 						{ amount: 0n, label: t('games.roulette') },
@@ -58,10 +48,7 @@ const StatisticsModal: FC = () => {
 				<div className={'flex items-center justify-center gap-2 '}>
 					<ShieldCheckIcon className={'text-[#38BB7F] w-4 h-4'} />
 					<a
-						href={
-							import.meta.env.PUBLIC_ETHSCAN +
-							`/address/${DYNAMIC_STAKING_ADDRESS}`
-						}
+						href={`${import.meta.env.PUBLIC_ETHSCAN}/address/${DYNAMIC_STAKING_ADDRESS}`}
 						target={'_blank'}
 						className={'font-normal text-xs md:text-base underline'}
 						rel="noreferrer"

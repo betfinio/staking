@@ -1,15 +1,9 @@
 import { Bet } from '@betfinio/ui/dist/icons';
-import { ResponsiveLine, type SliceTooltipProps } from '@nivo/line';
+import { ResponsiveLine, type Serie, type SliceTooltipProps } from '@nivo/line';
 import { useTotalStakedStat as useTotalStakedStatConservative } from 'betfinio_app/lib/query/conservative';
 import { useTotalStakedStat as useTotalStakedStatDynamic } from 'betfinio_app/lib/query/dynamic';
 import type { Stat, Timeframe } from 'betfinio_app/lib/types';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from 'betfinio_app/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'betfinio_app/select';
 import cx from 'clsx';
 import { DateTime } from 'luxon';
 import millify from 'millify';
@@ -30,7 +24,7 @@ const Staked = () => {
 	}, [conservative]);
 
 	const dynamicData = useMemo(() => {
-		return dynamic.map((item: any) => {
+		return dynamic.map((item: Stat) => {
 			return {
 				x: item.time,
 				y: item.value,
@@ -38,20 +32,7 @@ const Staked = () => {
 		});
 	}, [dynamic]);
 
-	const { min, max } = useMemo(() => {
-		return {
-			min: Math.min(
-				...conservativeData.map((e) => e.y),
-				...dynamicData.map((e) => e.y),
-			),
-			max: Math.max(
-				...conservativeData.map((e) => e.y),
-				...dynamicData.map((e) => e.y),
-			),
-		};
-	}, [conservativeData, dynamicData]);
-
-	const data: any[] = [
+	const data: Serie[] = [
 		{
 			id: 'Conservative',
 			color: '#facc15',
@@ -64,7 +45,7 @@ const Staked = () => {
 		},
 	];
 
-	const handleChange = (val: any) => {
+	const handleChange = (val: Timeframe) => {
 		setTimeframe(val);
 	};
 
@@ -97,10 +78,7 @@ const Staked = () => {
 					format: (value) => millify(value, { precision: 2 }),
 				}}
 				axisBottom={{
-					format: (value) =>
-						DateTime.fromSeconds(value).toFormat(
-							timeframe === 'hour' ? 'HH:mm' : 'dd.MM',
-						),
+					format: (value) => DateTime.fromSeconds(value).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'),
 					tickRotation: 45,
 				}}
 				yScale={{
@@ -150,21 +128,10 @@ export default Staked;
 
 const Tooltip = ({ slice }: SliceTooltipProps) => {
 	return (
-		<div
-			className={
-				'flex flex-col gap-1 bg-primaryLighter rounded-lg text-white px-2 py-1 text-sm '
-			}
-		>
-			<div className={'text-xs'}>
-				{DateTime.fromSeconds(Number(slice.points[0].data.x)).toFormat(
-					'dd.MM HH:mm',
-				)}
-			</div>
+		<div className={'flex flex-col gap-1 bg-primaryLighter rounded-lg text-white px-2 py-1 text-sm '}>
+			<div className={'text-xs'}>{DateTime.fromSeconds(Number(slice.points[0].data.x)).toFormat('dd.MM HH:mm')}</div>
 			{slice.points.map((point, id) => (
-				<div
-					className={'flex flex-row items-center  justify-between gap-3'}
-					key={id}
-				>
+				<div className={'flex flex-row items-center  justify-between gap-3'} key={id}>
 					<div className={cx('opacity-50')} style={{ color: point.color }}>
 						{point.serieId}
 					</div>

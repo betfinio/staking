@@ -1,20 +1,10 @@
 import { useCalculationsStat as useCalculationsStatConservative } from '@/src/lib/query/conservative';
 import { Bet } from '@betfinio/ui/dist/icons';
-import {
-	type PointSymbolProps,
-	ResponsiveLine,
-	type SliceTooltipProps,
-} from '@nivo/line';
+import { type PointSymbolProps, ResponsiveLine, type Serie, type SliceTooltipProps } from '@nivo/line';
 import { useTotalProfitStat as useTotalProfitStatConservative } from 'betfinio_app/lib/query/conservative';
 import { useTotalProfitStat as useTotalProfitStatDynamic } from 'betfinio_app/lib/query/dynamic';
 import type { Stat, Timeframe } from 'betfinio_app/lib/types';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from 'betfinio_app/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'betfinio_app/select';
 import cx from 'clsx';
 import { DateTime } from 'luxon';
 import millify from 'millify';
@@ -24,8 +14,7 @@ const Revenues = () => {
 	const [timeframe, setTimeframe] = useState<Timeframe>('day');
 	const { data: conservative = [] } = useTotalProfitStatConservative(timeframe);
 	const { data: dynamic = [] } = useTotalProfitStatDynamic(timeframe);
-	const { data: calcConservative = [] } =
-		useCalculationsStatConservative(timeframe);
+	const { data: calcConservative = [] } = useCalculationsStatConservative(timeframe);
 
 	const conservativeData = useMemo(() => {
 		return [
@@ -47,7 +36,7 @@ const Revenues = () => {
 	}, [conservative, calcConservative]);
 
 	const dynamicData = useMemo(() => {
-		return dynamic.map((item: any) => {
+		return dynamic.map((item: Stat) => {
 			return {
 				x: item.time,
 				y: Math.floor(item.value),
@@ -55,21 +44,8 @@ const Revenues = () => {
 		});
 	}, [dynamic]);
 
-	const { min, max } = useMemo(() => {
-		return {
-			min: Math.min(
-				...conservativeData.map((e) => e.y),
-				...dynamicData.map((e) => e.y),
-			),
-			max: Math.max(
-				...conservativeData.map((e) => e.y),
-				...dynamicData.map((e) => e.y),
-			),
-		};
-	}, [conservativeData, dynamicData]);
-
 	console.log(conservativeData);
-	const data: any[] = [
+	const data: Serie[] = [
 		{
 			id: 'Conservative',
 			color: '#facc15',
@@ -82,15 +58,11 @@ const Revenues = () => {
 		},
 	];
 
-	const handleChange = (val: any) => {
+	const handleChange = (val: Timeframe) => {
 		setTimeframe(val);
 	};
 	return (
-		<div
-			className={
-				'border border-gray-800 rounded-lg p-2 w-full h-[400px] pb-[40px]'
-			}
-		>
+		<div className={'border border-gray-800 rounded-lg p-2 w-full h-[400px] pb-[40px]'}>
 			<div className={'text-lg flex flex-row justify-between'}>
 				<div className={'px-1'}>Total Revenues</div>
 				<Select defaultValue={'day'} onValueChange={handleChange}>
@@ -112,14 +84,7 @@ const Revenues = () => {
 				enableGridX={false}
 				enableGridY={false}
 				pointSymbol={(props: PointSymbolProps) => {
-					return (
-						<circle
-							r={props.datum.calc ? '5' : '0'}
-							cx="0"
-							cy="0"
-							fill={props.color}
-						/>
-					);
+					return <circle r={props.datum.calc ? '5' : '0'} cx="0" cy="0" fill={props.color} />;
 				}}
 				axisTop={null}
 				isInteractive={true}
@@ -128,10 +93,7 @@ const Revenues = () => {
 					format: (value) => millify(value, { precision: 2 }),
 				}}
 				axisBottom={{
-					format: (value) =>
-						DateTime.fromSeconds(value).toFormat(
-							timeframe === 'hour' ? 'HH:mm' : 'dd.MM',
-						),
+					format: (value) => DateTime.fromSeconds(value).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'),
 					tickRotation: 45,
 				}}
 				yScale={{
@@ -180,21 +142,10 @@ export default Revenues;
 
 const Tooltip = ({ slice }: SliceTooltipProps) => {
 	return (
-		<div
-			className={
-				'flex flex-col gap-1 bg-primaryLighter rounded-lg text-white px-2 py-1 text-sm '
-			}
-		>
-			<div className={'text-xs'}>
-				{DateTime.fromSeconds(Number(slice.points[0].data.x)).toFormat(
-					'dd.MM HH:mm',
-				)}
-			</div>
+		<div className={'flex flex-col gap-1 bg-primaryLighter rounded-lg text-white px-2 py-1 text-sm '}>
+			<div className={'text-xs'}>{DateTime.fromSeconds(Number(slice.points[0].data.x)).toFormat('dd.MM HH:mm')}</div>
 			{slice.points.map((point, id) => (
-				<div
-					className={'flex flex-row items-center  justify-between gap-3'}
-					key={id}
-				>
+				<div className={'flex flex-row items-center  justify-between gap-3'} key={id}>
 					<div className={cx('opacity-50')} style={{ color: point.color }}>
 						{point.serieId}
 					</div>

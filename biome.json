@@ -4,7 +4,7 @@
 		"enabled": true
 	},
 	"files": {
-		"ignore": ["@mf-types/**"]
+		"ignore": ["@mf-types/**", "**/*.gen.ts"]
 	},
 	"vcs": {
 		"enabled": true,
@@ -12,7 +12,10 @@
 		"useIgnoreFile": true
 	},
 	"formatter": {
-		"indentStyle": "tab"
+		"indentStyle": "tab",
+		"lineWidth": 160,
+		"indentWidth": 2,
+		"enabled": true
 	},
 	"javascript": {
 		"formatter": {
@@ -22,6 +25,15 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
+			"suspicious": {
+				"noArrayIndexKey": "off"
+			},
+			"a11y": {
+				"useKeyWithClickEvents": "off"
+			},
+			"correctness": {
+				"useExhaustiveDependencies": "off"
+			},
 			"recommended": true
 		}
 	}

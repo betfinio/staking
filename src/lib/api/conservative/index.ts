@@ -1,12 +1,5 @@
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types.ts';
-import {
-	BetsMemoryContract,
-	ConservativeStakingContract,
-	ConservativeStakingPoolContract,
-	ZeroAddress,
-	defaultMulticall,
-	valueToNumber,
-} from '@betfinio/abi';
+import { BetsMemoryContract, ConservativeStakingContract, ConservativeStakingPoolContract, ZeroAddress, defaultMulticall, valueToNumber } from '@betfinio/abi';
 import arrayFrom from '@betfinio/hooks/dist/utils';
 import { multicall, readContract } from '@wagmi/core';
 import { fetchTotalStaked } from 'betfinio_app/lib/api/conservative';
@@ -20,10 +13,7 @@ import { DateTime } from 'luxon';
 import type { Address } from 'viem';
 import type { Config } from 'wagmi';
 
-export const fetchPool = async (
-	pool: Address,
-	config: Config,
-): Promise<ExtendedPoolInfo> => {
+export const fetchPool = async (pool: Address, config: Config): Promise<ExtendedPoolInfo> => {
 	console.log('fetching pool conservative', pool);
 	const totalStaked = (await readContract(config, {
 		abi: ConservativeStakingPoolContract.abi,
@@ -57,9 +47,7 @@ export const fetchTotalVolume = async (config: Config): Promise<bigint> => {
 	})) as bigint;
 };
 
-export const fetchConservativePools = async (
-	config: Config,
-): Promise<ExtendedPoolInfo[]> => {
+export const fetchConservativePools = async (config: Config): Promise<ExtendedPoolInfo[]> => {
 	console.log('fetching pools conservative');
 	const count = (await readContract(config, {
 		abi: ConservativeStakingContract.abi,
@@ -78,14 +66,9 @@ export const fetchConservativePools = async (
 		})),
 	});
 	console.log(pools);
-	return await Promise.all(
-		pools.reverse().map((pool) => fetchPool(pool.result as Address, config)),
-	);
+	return await Promise.all(pools.reverse().map((pool) => fetchPool(pool.result as Address, config)));
 };
-export const fetchEarnings = async (
-	address: Address,
-	options: Options,
-): Promise<Earning[]> => {
+export const fetchEarnings = async (address: Address, options: Options): Promise<Earning[]> => {
 	if (!options.supabase) throw new Error('Supabase client is not defined');
 	const data = await options.supabase
 		.from('conservative_earnings')
@@ -106,10 +89,7 @@ export const fetchEarnings = async (
 	);
 };
 
-export const fetchClaims = async (
-	address: Address,
-	options: Options,
-): Promise<Claim[]> => {
+export const fetchClaims = async (address: Address, options: Options): Promise<Claim[]> => {
 	if (!options.supabase) throw new Error('Supabase client is not defined');
 	const data = await options.supabase
 		.from('conservative_claims')
@@ -127,11 +107,9 @@ export const fetchClaims = async (
 	);
 };
 
-export const fetchProfit = async (
-	address: Address,
-	config: Config,
-): Promise<bigint> => {
+export const fetchProfit = async (address: Address | undefined, config: Config): Promise<bigint> => {
 	console.log('fetching profit conservative', address);
+	if (!address) return 0n;
 	return (await readContract(config, {
 		abi: ConservativeStakingContract.abi,
 		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
@@ -140,10 +118,7 @@ export const fetchProfit = async (
 	})) as bigint;
 };
 
-export const fetchClaimable = async (
-	address: Address,
-	config: Config,
-): Promise<bigint> => {
+export const fetchClaimable = async (address: Address, config: Config): Promise<bigint> => {
 	if (address === ZeroAddress) return 0n;
 	console.log('fetching claimable conservative', address);
 	return (await readContract(config, {
@@ -165,11 +140,9 @@ export const fetchTotalBets = async (config: Config): Promise<number> => {
 	return Number(bets);
 };
 
-export const fetchStaked = async (
-	address: Address,
-	config: Config,
-): Promise<bigint> => {
+export const fetchStaked = async (address: Address | undefined, config: Config): Promise<bigint> => {
 	console.log('fetching staked conservative', address);
+	if (!address) return 0n;
 	return (await readContract(config, {
 		abi: ConservativeStakingContract.abi,
 		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
@@ -178,11 +151,7 @@ export const fetchStaked = async (
 	})) as bigint;
 };
 
-export const fetchTotalStakedDiff = async (
-	start: number,
-	supabase: SupabaseClient | undefined,
-	config: Config,
-): Promise<bigint[]> => {
+export const fetchTotalStakedDiff = async (start: number, supabase: SupabaseClient | undefined, config: Config): Promise<bigint[]> => {
 	if (!supabase) throw new Error('Supabase client is not defined');
 	const block = await getBlockByTimestamp(start, supabase);
 	console.log(block, start);
@@ -197,14 +166,9 @@ export const fetchTotalStakedDiff = async (
 	}
 };
 
-export const fetchTotalProfitDiff = async (
-	config: Config,
-): Promise<bigint[]> => {
+export const fetchTotalProfitDiff = async (config: Config): Promise<bigint[]> => {
 	try {
-		const profitNow = await fetchBalance(
-			import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-			{ config },
-		);
+		const profitNow = await fetchBalance(import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address, { config });
 		const totalProfit = await fetchTotalProfit(config);
 		return [profitNow, totalProfit];
 	} catch (e) {
@@ -212,10 +176,7 @@ export const fetchTotalProfitDiff = async (
 	}
 };
 
-export const fetchTotalStakers = async (
-	config: Config,
-	block?: bigint,
-): Promise<number> => {
+export const fetchTotalStakers = async (config: Config, block?: bigint): Promise<number> => {
 	console.log('fetching total stakers conservative');
 	const data = await readContract(config, {
 		abi: ConservativeStakingContract.abi,
@@ -226,10 +187,7 @@ export const fetchTotalStakers = async (
 	return Number(data);
 };
 
-export const fetchStakersPools = async (
-	address: Address,
-	config: Config,
-): Promise<Address[]> => {
+export const fetchStakersPools = async (address: Address, config: Config): Promise<Address[]> => {
 	const poolsCount = await readContract(config, {
 		abi: ConservativeStakingContract.abi,
 		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
@@ -247,10 +205,7 @@ export const fetchStakersPools = async (
 		),
 	)) as Address[];
 };
-export const fetchTotalProfit = async (
-	config: Config,
-	block?: bigint,
-): Promise<bigint> => {
+export const fetchTotalProfit = async (config: Config, block?: bigint): Promise<bigint> => {
 	console.log('fetching total profit conservative');
 	return (await readContract(config, {
 		abi: ConservativeStakingContract.abi,
@@ -260,9 +215,7 @@ export const fetchTotalProfit = async (
 	})) as bigint;
 };
 
-export async function fetchPredictContribution(
-	config: Config,
-): Promise<bigint> {
+export async function fetchPredictContribution(config: Config): Promise<bigint> {
 	console.log('fetching predict contribution conservative');
 	return (
 		(((await readContract(config, {
@@ -276,10 +229,7 @@ export async function fetchPredictContribution(
 	);
 }
 
-export const fetchStakes = async (
-	address: Address,
-	config: Config,
-): Promise<Stake[]> => {
+export const fetchStakes = async (address: Address, config: Config): Promise<Stake[]> => {
 	console.log('fetching stakes conservative', address);
 	if (!address) {
 		return [];
@@ -316,14 +266,7 @@ export const fetchStakes = async (
 	return stakes
 		.map((e) => e.result)
 		.map((stake, i) => {
-			const [startDate, unlockDate, amount, staker, ended] = stake as [
-				bigint,
-				bigint,
-				bigint,
-				Address,
-				boolean,
-				boolean,
-			];
+			const [startDate, unlockDate, amount, staker, ended] = stake as [bigint, bigint, bigint, Address, boolean, boolean];
 			return {
 				start: Number(startDate),
 				end: Number(unlockDate),
@@ -337,51 +280,31 @@ export const fetchStakes = async (
 		.reverse();
 };
 
-export const fetchCalculationsStat = async (
-	timeframe: Timeframe,
-	options: Options,
-): Promise<Stat[]> => {
+export const fetchCalculationsStat = async (timeframe: Timeframe, options: Options): Promise<Stat[]> => {
 	console.log('fetching calculations conservative');
 	const fridays = getTenFridaysFrom(getLastFriday())
 		.filter((f) => {
-			if (
-				timeframe === 'hour' &&
-				f.toSeconds() > DateTime.now().toSeconds() - 60 * 60 * 24
-			) {
+			if (timeframe === 'hour' && f.toSeconds() > DateTime.now().toSeconds() - 60 * 60 * 24) {
 				return true;
 			}
-			if (
-				timeframe === 'day' &&
-				f.toSeconds() > DateTime.now().toSeconds() - 60 * 60 * 24 * 30
-			) {
+			if (timeframe === 'day' && f.toSeconds() > DateTime.now().toSeconds() - 60 * 60 * 24 * 30) {
 				return true;
 			}
-			if (
-				timeframe === 'week' &&
-				f.toSeconds() > DateTime.now().toSeconds() - 60 * 60 * 24 * 30 * 12
-			) {
+			if (timeframe === 'week' && f.toSeconds() > DateTime.now().toSeconds() - 60 * 60 * 24 * 30 * 12) {
 				return true;
 			}
 		})
 		.map((f) => f.toISO());
-	return await Promise.all(
-		fridays.map((f) => fetchOneStat(f, options.supabase)),
-	);
+	return await Promise.all(fridays.map((f) => fetchOneStat(f, options.supabase)));
 };
 
-const fetchOneStat = async (
-	time: string | null,
-	supabase: SupabaseClient | undefined,
-): Promise<Stat> => {
+const fetchOneStat = async (time: string | null, supabase: SupabaseClient | undefined): Promise<Stat> => {
 	if (supabase === undefined) throw new Error('Supabase client is not defined');
 	if (!time) throw new Error('Time is not defined');
 	const data = await supabase
 		.from('staking_statistics')
 		.select('timestamp::timestamp, revenues::text')
-		.eq(
-			'staking',
-			import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS.toLowerCase(),
-		)
+		.eq('staking', import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS.toLowerCase())
 		.gt('timestamp', time)
 		.order('timestamp', { ascending: true })
 		.limit(1);
@@ -395,9 +318,7 @@ const fetchOneStat = async (
 };
 
 const getLastFriday = () => {
-	let lastFriday = DateTime.now()
-		.setZone('utc')
-		.set({ weekday: 5, hour: 12, minute: 0, second: 0, millisecond: 0 });
+	let lastFriday = DateTime.now().setZone('utc').set({ weekday: 5, hour: 12, minute: 0, second: 0, millisecond: 0 });
 
 	// If it's Friday today, adjust to get the *previous* Friday
 	if (lastFriday > DateTime.now()) {

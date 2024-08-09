@@ -12,11 +12,7 @@ import type { StakeParams } from '@/src/lib/query/conservative';
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types.ts';
 import { DynamicStakingPoolContract, PartnerContract } from '@betfinio/abi';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import {
-	type WriteContractErrorType,
-	type WriteContractReturnType,
-	writeContract,
-} from '@wagmi/core';
+import { type WriteContractErrorType, type WriteContractReturnType, writeContract } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
 import { fetchTotalStaked } from 'betfinio_app/lib/api/dynamic';
 import type { Stake } from 'betfinio_app/lib/types';
@@ -39,19 +35,14 @@ export const useTotalStakedDiff = () => {
 	const config = useConfig();
 	return useQuery({
 		queryKey: ['staking', 'dynamic', 'totalStaked', 'diff'],
-		queryFn: () => fetchTotalStakedDiff(client!, config),
+		queryFn: () => fetchTotalStakedDiff(client, config),
 	});
 };
 
-export const fetchTotalStakedDiff = async (
-	supabase: SupabaseClient,
-	config: Config,
-): Promise<bigint[]> => {
-	const cycleStart = starts.findLast((e) => e * 1000 < Date.now())! * 1000;
-	const block = await getBlockByTimestamp(
-		Math.floor(cycleStart / 1000),
-		supabase,
-	);
+export const fetchTotalStakedDiff = async (supabase: SupabaseClient | undefined, config: Config): Promise<bigint[]> => {
+	if (!supabase) throw new Error('Supabase client is not defined');
+	const cycleStart = (starts.findLast((e) => e * 1000 < Date.now()) || 0) * 1000;
+	const block = await getBlockByTimestamp(Math.floor(cycleStart / 1000), supabase);
 	try {
 		const stakedNow = await fetchTotalStaked(config);
 		const stakedThen = await fetchTotalStaked(config, block);
@@ -82,7 +73,7 @@ export const useTotalStakers = () => {
 	});
 };
 
-export const useStaked = (address: Address) => {
+export const useStaked = (address?: Address) => {
 	const config = useConfig();
 
 	return useQuery<bigint>({
@@ -91,7 +82,7 @@ export const useStaked = (address: Address) => {
 	});
 };
 
-export const useClaimed = (address: Address) => {
+export const useClaimed = (address?: Address) => {
 	const config = useConfig();
 	return useQuery<bigint>({
 		queryKey: ['staking', 'dynamic', 'claimed', address],
@@ -138,13 +129,12 @@ export const useStakes = (address: Address) => {
 export const useStake = () => {
 	const { t } = useTranslation('', { keyPrefix: 'errors' });
 	const config = useConfig();
-	return useMutation<WriteContractReturnType, any, StakeParams>({
+	return useMutation<WriteContractReturnType, WriteContractErrorType, StakeParams>({
 		mutationKey: ['staking', 'dynamic', 'stake'],
 		mutationFn: stake,
 		onError: (e) => {
-			console.log(e, e.cause, e.cause.reason);
 			// @ts-ignore
-			const error = (e.cause && e.cause.reason) || 'unknown';
+			const error = e.cause?.reason || 'unknown';
 			toast({
 				description: t(error),
 				variant: 'destructive',
@@ -171,10 +161,7 @@ export const useStake = () => {
 	});
 };
 
-export const stake = async ({
-	amount,
-	config,
-}: StakeParams): Promise<WriteContractReturnType> => {
+export const stake = async ({ amount, config }: StakeParams): Promise<WriteContractReturnType> => {
 	console.log('staking', amount);
 	return await writeContract(config, {
 		abi: PartnerContract.abi,
@@ -199,7 +186,7 @@ export const useDistributeProfit = () => {
 		},
 		onError: (e) => {
 			// @ts-ignore
-			const error = (e.cause && e.cause['reason']) || 'unknown';
+			const error = e.cause?.reason || 'unknown';
 			toast({
 				description: t(error),
 				variant: 'destructive',

@@ -16,12 +16,7 @@ import {
 	fetchTotalVolume,
 } from '@/src/lib/api/conservative';
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types';
-import {
-	ConservativeStakingContract,
-	ConservativeStakingPoolContract,
-	GameContract,
-	PartnerContract,
-} from '@betfinio/abi';
+import { ConservativeStakingContract, ConservativeStakingPoolContract, GameContract, PartnerContract } from '@betfinio/abi';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { type WriteContractReturnType, writeContract } from '@wagmi/core';
 import type { WriteContractErrorType } from '@wagmi/core';
@@ -96,10 +91,7 @@ export const useTotalBets = () => {
 				queryKey: ['staking', 'conservative', 'totalBets'],
 			});
 			await queryClient.invalidateQueries({
-				queryKey: [
-					'balance',
-					import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-				],
+				queryKey: ['balance', import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address],
 			});
 		},
 	});
@@ -117,7 +109,7 @@ export const useClaimable = (address: Address) => {
 	});
 };
 
-export const useStaked = (address: Address) => {
+export const useStaked = (address?: Address) => {
 	const queryClient = useQueryClient();
 	const config = useConfig();
 	useWatchContractEvent({
@@ -131,7 +123,7 @@ export const useStaked = (address: Address) => {
 				strict: true,
 			});
 			const { staker } = event.args as unknown as { staker: string };
-			if (staker.toLowerCase() === address.toLowerCase()) {
+			if (staker.toLowerCase() === address?.toLowerCase()) {
 				await queryClient.invalidateQueries({
 					queryKey: ['staking', 'conservative', 'staked', address],
 				});
@@ -149,7 +141,7 @@ export const useStaked = (address: Address) => {
 				strict: true,
 			});
 			const { staker } = event.args as unknown as { staker: string };
-			if (staker.toLowerCase() === address.toLowerCase()) {
+			if (staker.toLowerCase() === address?.toLowerCase()) {
 				await queryClient.invalidateQueries({
 					queryKey: ['staking', 'conservative', 'staked', address],
 				});
@@ -165,7 +157,7 @@ export const useStaked = (address: Address) => {
 	});
 };
 
-export const useProfit = (address: Address) => {
+export const useProfit = (address?: Address) => {
 	const config = useConfig();
 	return useQuery<bigint>({
 		queryKey: ['staking', 'conservative', 'profit', address],
@@ -262,11 +254,7 @@ export type StakeParams = {
 export const useStake = () => {
 	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
 	const config = useConfig();
-	return useMutation<
-		WriteContractReturnType,
-		WriteContractErrorType,
-		StakeParams
-	>({
+	return useMutation<WriteContractReturnType, WriteContractErrorType, StakeParams>({
 		mutationKey: ['staking', 'conservative', 'stake'],
 		mutationFn: stake,
 		onError: (e) => {
@@ -335,23 +323,15 @@ export const useClaim = () => {
 	});
 };
 
-export const stake = async ({
-	amount,
-	config,
-}: StakeParams): Promise<WriteContractReturnType> => {
+export const stake = async ({ amount, config }: StakeParams): Promise<WriteContractReturnType> => {
 	return await writeContract(config, {
 		abi: PartnerContract.abi,
 		address: import.meta.env.PUBLIC_PARTNER_ADDRESS as Address,
 		functionName: 'stake',
-		args: [
-			import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-			amount,
-		],
+		args: [import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address, amount],
 	});
 };
-export const claimAll = async ({
-	config,
-}: { config: Config }): Promise<WriteContractReturnType> => {
+export const claimAll = async ({ config }: { config: Config }): Promise<WriteContractReturnType> => {
 	return await writeContract(config, {
 		abi: ConservativeStakingContract.abi,
 		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,

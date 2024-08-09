@@ -1,22 +1,12 @@
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types.ts';
-import {
-	BetsMemoryContract,
-	ConservativeStakingPoolContract,
-	DynamicStakingContract,
-	DynamicStakingPoolContract,
-	TokenContract,
-	defaultMulticall,
-} from '@betfinio/abi';
+import { BetsMemoryContract, DynamicStakingContract, DynamicStakingPoolContract, TokenContract, defaultMulticall } from '@betfinio/abi';
 import arrayFrom from '@betfinio/hooks/dist/utils';
 import { multicall, readContract } from '@wagmi/core';
 import type { Options, Stake } from 'betfinio_app/lib/types';
 import type { Address } from 'viem';
 import type { Config } from 'wagmi';
 
-export const fetchPool = async (
-	pool: Address,
-	config: Config,
-): Promise<ExtendedPoolInfo> => {
+export const fetchPool = async (pool: Address, config: Config): Promise<ExtendedPoolInfo> => {
 	console.log('fetching pool dynamic', pool);
 	const data = await multicall(config, {
 		contracts: [
@@ -64,10 +54,7 @@ export const fetchTotalVolume = async (config: Config): Promise<bigint> => {
 	})) as bigint;
 };
 
-export const fetchStakersPools = async (
-	address: Address,
-	config: Config,
-): Promise<Address[]> => {
+export const fetchStakersPools = async (address: Address, config: Config): Promise<Address[]> => {
 	const poolsCount = await readContract(config, {
 		abi: DynamicStakingContract.abi,
 		address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
@@ -85,10 +72,7 @@ export const fetchStakersPools = async (
 		),
 	)) as Address[];
 };
-export const fetchStakes = async (
-	address: Address,
-	config: Config,
-): Promise<Stake[]> => {
+export const fetchStakes = async (address: Address, config: Config): Promise<Stake[]> => {
 	console.log('fetching stakes dynamic', address);
 	if (!address) {
 		return [];
@@ -108,16 +92,16 @@ export const fetchStakes = async (
 			functionName: 'endCycle',
 		})),
 	});
-	const stakes = (await multicall(config, {
+	const stakes = await multicall(config, {
 		contracts: pools.map((pool) => ({
 			abi: DynamicStakingPoolContract.abi,
 			address: pool,
 			functionName: 'getStake',
 			args: [address],
 		})),
-	})) as any[];
+	});
 
-	const rewards = (await multicall(config, {
+	const rewards = await multicall(config, {
 		multicallAddress: defaultMulticall,
 		contracts: pools.map((pool) => ({
 			abi: DynamicStakingPoolContract.abi,
@@ -125,7 +109,7 @@ export const fetchStakes = async (
 			functionName: 'getClaimed',
 			args: [address],
 		})),
-	})) as any[];
+	});
 
 	return stakes
 		.map((e) => e.result)
@@ -146,9 +130,7 @@ export const fetchStakes = async (
 		.reverse();
 };
 
-export const fetchActivePools = async (
-	config: Config,
-): Promise<ExtendedPoolInfo[]> => {
+export const fetchActivePools = async (config: Config): Promise<ExtendedPoolInfo[]> => {
 	console.log('fetching active pools dynamic');
 	const activePoolsCount = (await readContract(config, {
 		abi: DynamicStakingContract.abi,
@@ -163,15 +145,13 @@ export const fetchActivePools = async (
 			args: [i],
 		})),
 	});
-	return await Promise.all(
-		pools.reverse().map((pool) => fetchPool(pool.result as Address, config)),
-	);
+	return await Promise.all(pools.reverse().map((pool) => fetchPool(pool.result as Address, config)));
 };
 
-export const fetchStaked = async (
-	address: Address,
-	config: Config,
-): Promise<bigint> => {
+export const fetchStaked = async (address: Address | undefined, config: Config): Promise<bigint> => {
+	if (!address) {
+		return 0n;
+	}
 	const data = await readContract(config, {
 		abi: DynamicStakingContract.abi,
 		address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
@@ -189,10 +169,10 @@ export const fetchTotalBets = async (config: Config): Promise<number> => {
 	})) as number;
 	return Number(bets);
 };
-export const fetchClaimed = async (
-	address: Address,
-	config: Config,
-): Promise<bigint> => {
+export const fetchClaimed = async (address: Address | undefined, config: Config): Promise<bigint> => {
+	if (!address) {
+		return 0n;
+	}
 	const data = await readContract(config, {
 		abi: DynamicStakingContract.abi,
 		address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
@@ -202,10 +182,7 @@ export const fetchClaimed = async (
 	return data as bigint;
 };
 
-export const fetchTotalStakers = async (
-	config: Config,
-	block?: bigint,
-): Promise<number> => {
+export const fetchTotalStakers = async (config: Config, block?: bigint): Promise<number> => {
 	const data = await readContract(config, {
 		abi: DynamicStakingContract.abi,
 		address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
@@ -215,21 +192,10 @@ export const fetchTotalStakers = async (
 	return Number(data);
 };
 
-export const fetchCurrentPool = async (config: Config): Promise<string> => {
-	console.log('fetching current pool dynamic');
-	return (await readContract(config, {
-		abi: DynamicStakingContract.abi,
-		address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
-		functionName: 'currentPool',
-	})) as string;
-};
-
-export const fetchEarnings = async (
-	address: Address,
-	options: Options,
-): Promise<Earning[]> => {
-	const data = await options
-		.supabase!.from('dynamic_earnings')
+export const fetchEarnings = async (address: Address, options: Options): Promise<Earning[]> => {
+	if (!options.supabase) throw new Error('Supabase not initialized');
+	const data = await options.supabase
+		.from('dynamic_earnings')
 		.select('amount::text, timestamp::text, transaction, member, pool')
 		.eq('member', address.toLowerCase())
 		.gt('amount', 0)

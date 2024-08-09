@@ -12,18 +12,14 @@ export const Route = createFileRoute('/dynamic/')({
 
 function DynamicStakingPage() {
 	return (
-		<div
-			className={'w-full h-full p-2 md:p-3 lg:p-4 gap-2 flex flex-col lg:gap-4'}
-		>
+		<div className={'w-full h-full p-2 md:p-3 lg:p-4 gap-2 flex flex-col lg:gap-4'}>
 			<Header type={'dynamic'} />
 
 			<div className={'grid grid-cols-1 md:grid-cols-2 gap-2 lg:gap-4'}>
 				<div className={'row-span-2'}>
 					<Stake type={'dynamic'} />
 				</div>
-				<div
-					className={'flex flex-col justify-between gap-2 lg:gap-4 row-span-3'}
-				>
+				<div className={'flex flex-col justify-between gap-2 lg:gap-4 row-span-3'}>
 					<InfoBlock type={'dynamic'} />
 				</div>
 				<div className={'row-span-3 mt-4 mb-1 md:mb-0 md:mt-2 lg:mt-0'}>
