@@ -12,7 +12,6 @@ import {type FC, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {NumericFormat} from 'react-number-format';
 import {useAccount, useConfig} from 'wagmi';
-import {Button} from "betfinio_app/button"
 import {Loader} from "lucide-react";
 import ActionModal from "@betfinio/ui/dist/shared/modal/ActionModal";
 import {toast} from 'betfinio_app/use-toast';
@@ -97,11 +96,11 @@ const Stake: FC<{ type: StakingType }> = ({type}) => {
             MAX
           </span>
 				</div>
-				<Button
+				<button
 					onClick={handleStake}
 					disabled={temp < 10000 || BigInt(temp) * 10n ** 18n > balance}
 					className={
-						'rounded-lg px-6 p-2 md:py-4 min-w-[90px] flex flex-row justify-center items-center text-sm md:text-base h-[52px] font-semibold bg-green-500  disabled:bg-gray-700 disabled:cursor-not-allowed'
+						'rounded-lg px-6 p-2 md:py-4 min-w-[90px] flex flex-row justify-center items-center text-sm md:text-base h-[52px] font-semibold bg-green-500  disabled:bg-gray-800 disabled:cursor-not-allowed'
 					}
 				>
 					{loadingD || loadingC ? (
@@ -109,7 +108,7 @@ const Stake: FC<{ type: StakingType }> = ({type}) => {
 					) : (
 						t('conservative.stake')
 					)}
-				</Button>
+				</button>
 			</div>
 			{open && <ActionModal open={open}
 			                      onClose={() => setOpen(false)}

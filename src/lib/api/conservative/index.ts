@@ -1,7 +1,6 @@
 import {type Earning, type ExtendedPoolInfo,} from '@/src/lib/types.ts';
 import {BetsMemoryContract, ConservativeStakingContract, ConservativeStakingPoolContract, defaultMulticall, valueToNumber, ZeroAddress,} from '@betfinio/abi';
 import arrayFrom from '@betfinio/hooks/dist/utils';
-import type {SupabaseClient} from '@supabase/supabase-js';
 import {multicall, readContract} from '@wagmi/core';
 import {fetchBalance} from 'betfinio_app/lib/api/token';
 import {getBlockByTimestamp} from 'betfinio_app/lib/utils';
@@ -10,8 +9,9 @@ import type {Config} from 'wagmi';
 import {fetchTotalStaked} from "betfinio_app/lib/api/conservative";
 import {Options, Stake, Stat} from 'betfinio_app/lib/types';
 import {DateTime} from "luxon";
-import {Timeframe} from "betfinio_app/compiled-types/lib/types/staking";
-import {Claim} from "betfinio_app/compiled-types/lib/types/affiliate";
+import {Timeframe} from "betfinio_app/lib/types";
+import {Claim} from "betfinio_app/lib/types";
+import {SupabaseClient} from 'betfinio_app/supabase';
 
 export const fetchPool = async (
 	pool: Address,
@@ -49,14 +49,6 @@ export const fetchTotalVolume = async (config: Config): Promise<bigint> => {
 		args: [import.meta.env.PUBLIC_PREDICT_ADDRESS as Address],
 	})) as bigint;
 };
-export const fetchCurrentPool = async (config: Config): Promise<string> => {
-	console.log('fetching current pool conservative');
-	return (await readContract(config, {
-		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-		functionName: 'currentPool',
-	})) as string;
-};
 
 export const fetchConservativePools = async (
 	config: Config,
@@ -88,7 +80,8 @@ export const fetchEarnings = async (address: Address, options: Options): Promise
 		.from('conservative_earnings')
 		.select("amount::text, timestamp::text, transaction, member, pool")
 		.eq("member", address.toLowerCase())
-		.gt("amount", 0);
+		.gt("amount", 0)
+		.order("timestamp", {ascending: false});
 	
 	return (data.data || []).map((e) => ({
 		pool: e.pool,
