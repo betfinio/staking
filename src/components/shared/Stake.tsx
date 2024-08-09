@@ -6,7 +6,7 @@ import {valueToNumber} from '@betfinio/hooks/dist/utils';
 import Lock from '@betfinio/ui/dist/icons/Lock';
 import {
 	useAllowance,
-	useBalance,
+	useBalance, useIncreaseAllowance,
 } from 'betfinio_app/lib/query/token';
 import {type FC, useState} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -14,6 +14,9 @@ import {NumericFormat} from 'react-number-format';
 import {useAccount, useConfig} from 'wagmi';
 import {Button} from "betfinio_app/button"
 import {Loader} from "lucide-react";
+import ActionModal from "@betfinio/ui/dist/shared/modal/ActionModal";
+import {toast} from 'betfinio_app/use-toast';
+import {Action} from "@betfinio/ui/dist/shared/modal/types";
 
 const Stake: FC<{ type: StakingType }> = ({type}) => {
 	const {t} = useTranslation('', {keyPrefix: 'staking'});
@@ -24,8 +27,18 @@ const Stake: FC<{ type: StakingType }> = ({type}) => {
 	const {data: balance = 0n} = useBalance(address);
 	const {mutate: stakeD, isPending: loadingD, data: dataD} = useStakeD();
 	const {mutate: stakeC, isPending: loadingC, data: dataC} = useStakeC();
-	
 	const config = useConfig();
+	const [open, setOpen] = useState(false);
+	
+	const {mutate: increase} = useIncreaseAllowance();
+	
+	const handleAction = async (action: Action) => {
+		if (action.type === 'sign_transaction') {
+			await handleStake()
+		} else if (action.type === 'request_allowance') {
+			increase()
+		}
+	}
 	const handleStake = async () => {
 		const amount = BigInt(temp) * 10n ** 18n;
 		if (balance >= amount && allowance >= amount) {
@@ -34,6 +47,10 @@ const Stake: FC<{ type: StakingType }> = ({type}) => {
 			} else {
 				stakeC({amount, config});
 			}
+		} else if (allowance < amount) {
+			setOpen(true)
+		} else {
+			toast({description: "Insufficient balance to stake", type: 'destructive'});
 		}
 	};
 	
@@ -94,6 +111,13 @@ const Stake: FC<{ type: StakingType }> = ({type}) => {
 					)}
 				</Button>
 			</div>
+			{open && <ActionModal open={open}
+			                      onClose={() => setOpen(false)}
+			                      onAction={handleAction}
+			                      requiredAllowance={BigInt(temp) * 10n ** 18n}
+			                      allowance={allowance}
+			                      tx={dataD || dataC}
+			                      scan={import.meta.env.PUBLIC_ETHSCAN}/>}
 		</div>
 	);
 };
