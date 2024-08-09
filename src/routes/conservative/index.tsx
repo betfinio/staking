@@ -24,7 +24,7 @@ function ConservativeStakingPage() {
           }
         >
           <Stake type={'conservative'} />
-          <Claim className={'hidden md:flex'} />
+          <Claim className={'flex'} />
         </div>
         <InfoBlock type={'conservative'} />
         <Charts />
