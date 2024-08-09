@@ -135,7 +135,7 @@ export const useStake = () => {
 			// @ts-ignore
 			const error = e.cause && e.cause.reason || "unknown"
 			toast({
-				title: "An error occurred",
+				
 				description: t(error),
 				variant: "destructive"
 			})
@@ -192,7 +192,7 @@ export const useDistributeProfit = () => {
 			// @ts-ignore
 			const error = e.cause && e.cause['reason'] || "unknown"
 			toast({
-				title: "An error occurred",
+				
 				description: t(error),
 				variant: "destructive"
 			})
