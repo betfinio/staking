@@ -42,6 +42,7 @@ export default defineConfig({
 	},
 	html: {
 		title: 'Betfin Staking',
+		favicon: './src/assets/favicon.svg',
 	},
 	output: {
 		assetPrefix: getOutput(),

@@ -123,9 +123,9 @@ export const fetchStakes = async (
 	const rewards = (await multicall(config, {
 		multicallAddress: defaultMulticall,
 		contracts: pools.map((pool) => ({
-			abi: ConservativeStakingPoolContract.abi,
+			abi: DynamicStakingPoolContract.abi,
 			address: pool,
-			functionName: 'profit',
+			functionName: 'getClaimed',
 			args: [address],
 		})),
 	})) as any[];
@@ -230,7 +230,9 @@ export const fetchEarnings = async (address: Address, options: Options): Promise
 		.from('dynamic_earnings')
 		.select("amount::text, timestamp::text, transaction, member, pool")
 		.eq("member", address.toLowerCase())
-		.gt("amount", 0);
+		.gt("amount", 0)
+		.order('timestamp', {ascending: true});
+	console.log(data)
 	
 	return (data.data || []).map((e) => ({
 		pool: e.pool,
