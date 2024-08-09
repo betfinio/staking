@@ -86,8 +86,9 @@ export const fetchEarnings = async (
 	address: Address,
 	options: Options,
 ): Promise<Earning[]> => {
-	const data = await options
-		.supabase!.from('conservative_earnings')
+	if (!options.supabase) throw new Error('Supabase client is not defined');
+	const data = await options.supabase
+		.from('conservative_earnings')
 		.select('amount::text, timestamp::text, transaction, member, pool')
 		.eq('member', address.toLowerCase())
 		.gt('amount', 0)
@@ -109,8 +110,9 @@ export const fetchClaims = async (
 	address: Address,
 	options: Options,
 ): Promise<Claim[]> => {
-	const data = await options
-		.supabase!.from('conservative_claims')
+	if (!options.supabase) throw new Error('Supabase client is not defined');
+	const data = await options.supabase
+		.from('conservative_claims')
 		.select('amount::text, timestamp::text, transaction, member')
 		.eq('member', address.toLowerCase());
 
@@ -178,10 +180,10 @@ export const fetchStaked = async (
 
 export const fetchTotalStakedDiff = async (
 	start: number,
-	supabase: SupabaseClient,
+	supabase: SupabaseClient | undefined,
 	config: Config,
 ): Promise<bigint[]> => {
-	// @ts-ignore
+	if (!supabase) throw new Error('Supabase client is not defined');
 	const block = await getBlockByTimestamp(start, supabase);
 	console.log(block, start);
 	try {
@@ -291,7 +293,11 @@ export const fetchStakes = async (
 			functionName: 'getStake',
 			args: [address],
 		})),
-	})) as any[];
+	})) as {
+		error: unknown;
+		result: (bigint | Address | boolean)[];
+		status: unknown;
+	}[];
 
 	const rewards = (await multicall(config, {
 		multicallAddress: defaultMulticall,
@@ -301,7 +307,11 @@ export const fetchStakes = async (
 			functionName: 'profit',
 			args: [address],
 		})),
-	})) as any[];
+	})) as {
+		error: unknown;
+		result: bigint;
+		status: unknown;
+	}[];
 
 	return stakes
 		.map((e) => e.result)
@@ -310,7 +320,7 @@ export const fetchStakes = async (
 				bigint,
 				bigint,
 				bigint,
-				string,
+				Address,
 				boolean,
 				boolean,
 			];
@@ -355,14 +365,16 @@ export const fetchCalculationsStat = async (
 		})
 		.map((f) => f.toISO());
 	return await Promise.all(
-		fridays.map((f) => fetchOneStat(f!, options.supabase!)),
+		fridays.map((f) => fetchOneStat(f, options.supabase)),
 	);
 };
 
 const fetchOneStat = async (
-	time: string,
-	supabase: SupabaseClient,
+	time: string | null,
+	supabase: SupabaseClient | undefined,
 ): Promise<Stat> => {
+	if (supabase === undefined) throw new Error('Supabase client is not defined');
+	if (!time) throw new Error('Time is not defined');
 	const data = await supabase
 		.from('staking_statistics')
 		.select('timestamp::timestamp, revenues::text')

@@ -1,8 +1,7 @@
 import { valueToNumber } from '@betfinio/abi';
 import { truncateEthAddress } from '@betfinio/hooks/dist/utils';
 import { Bet } from '@betfinio/ui/dist/icons';
-import { Link } from '@tanstack/react-router';
-import { createColumnHelper } from '@tanstack/react-table';
+import { type CellContext, createColumnHelper } from '@tanstack/react-table';
 import { BetValue } from 'betfinio_app/BetValue';
 import { DataTable } from 'betfinio_app/DataTable';
 import type { Stake } from 'betfinio_app/lib/types';
@@ -51,7 +50,7 @@ const Stakes: FC<{ data: Stake[]; isLoading: boolean }> = ({
 			cell: (props) => (
 				<a
 					target={'_blank'}
-					href={import.meta.env.PUBLIC_ETHSCAN + '/address/' + props.getValue()}
+					href={`${import.meta.env.PUBLIC_ETHSCAN}/address/${props.getValue()}`}
 					rel="noreferrer"
 				>
 					{truncateEthAddress(props.getValue())}
@@ -93,7 +92,7 @@ const Stakes: FC<{ data: Stake[]; isLoading: boolean }> = ({
 };
 
 // todo add ts
-const RewardValue = (props: any) => {
+const RewardValue = (props: CellContext<Stake, bigint | undefined>) => {
 	const poolReward = Number(props.getValue() ?? 1n);
 	const poolAmount = Number(props.row.getValue('amount') as bigint);
 	const percentage = (poolReward / poolAmount) * 100;

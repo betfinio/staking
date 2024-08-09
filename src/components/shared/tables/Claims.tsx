@@ -1,9 +1,9 @@
-import type { Claim } from '@/src/lib/types';
 import { valueToNumber } from '@betfinio/abi';
 import { truncateEthAddress } from '@betfinio/hooks/dist/utils';
 import { createColumnHelper } from '@tanstack/react-table';
 import { BetValue } from 'betfinio_app/BetValue';
 import { DataTable } from 'betfinio_app/DataTable';
+import type { Claim } from 'betfinio_app/lib/types';
 import { DateTime } from 'luxon';
 import type { FC } from 'react';
 
@@ -43,7 +43,7 @@ const Claims: FC<{ data: Claim[]; isLoading: boolean }> = ({
 			cell: (props) => (
 				<a
 					target={'_blank'}
-					href={import.meta.env.PUBLIC_ETHSCAN + '/tx/' + props.getValue()}
+					href={`${import.meta.env.PUBLIC_ETHSCAN}/tx/${props.getValue()}`}
 					rel="noreferrer"
 				>
 					{truncateEthAddress(props.getValue())}

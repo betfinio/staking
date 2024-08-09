@@ -23,20 +23,16 @@ import {
 	PartnerContract,
 } from '@betfinio/abi';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-	type WriteContractReturnType,
-	getBlock,
-	writeContract,
-} from '@wagmi/core';
+import { type WriteContractReturnType, writeContract } from '@wagmi/core';
 import type { WriteContractErrorType } from '@wagmi/core';
-import type { Timeframe } from 'betfinio_app/compiled-types/lib/types/staking';
 import { getTransactionLink } from 'betfinio_app/helpers';
+import type { Timeframe } from 'betfinio_app/lib/types';
 import type { Stake, Stat } from 'betfinio_app/lib/types';
 import { useSupabase } from 'betfinio_app/supabase';
 import { toast } from 'betfinio_app/use-toast';
 import { useTranslation } from 'react-i18next';
 import { type Address, type Log, decodeEventLog } from 'viem';
-import { getContractEvents, waitForTransactionReceipt } from 'viem/actions';
+import { waitForTransactionReceipt } from 'viem/actions';
 import { type Config, useConfig, useWatchContractEvent } from 'wagmi';
 
 export const usePredictContribution = () => {
@@ -76,8 +72,7 @@ export const useTotalStakedDiff = (start: number) => {
 	const config = useConfig();
 	return useQuery({
 		queryKey: ['staking', 'conservative', 'totalStaked', 'diff', start],
-		//@ts-ignore
-		queryFn: () => fetchTotalStakedDiff(start, client!, config),
+		queryFn: () => fetchTotalStakedDiff(start, client, config),
 	});
 };
 
@@ -231,7 +226,7 @@ export const useClaims = (address: Address) => {
 				strict: true,
 			});
 			const args = event.args as unknown as { staker: string };
-			if (args.staker.toLowerCase() === address!.toLowerCase()) {
+			if (args.staker.toLowerCase() === address?.toLowerCase()) {
 				await queryClient.invalidateQueries({
 					queryKey: ['staking', 'conservative', 'claims', address],
 				});
@@ -264,10 +259,6 @@ export type StakeParams = {
 	amount: bigint;
 	config: Config;
 };
-export type UnstakeParams = {
-	pool: string;
-	config: Config;
-};
 export const useStake = () => {
 	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
 	const config = useConfig();
@@ -280,7 +271,7 @@ export const useStake = () => {
 		mutationFn: stake,
 		onError: (e) => {
 			// @ts-ignore
-			const error = (e.cause && e.cause['reason']) || 'unknown';
+			const error = e.cause?.reason || 'unknown';
 			toast({
 				description: t(error),
 				variant: 'destructive',
@@ -315,7 +306,7 @@ export const useClaim = () => {
 		mutationFn: () => claimAll({ config }),
 		onError: (e) => {
 			// @ts-ignore
-			const error = (e.cause && e.cause['reason']) || 'unknown';
+			const error = e.cause?.reason || 'unknown';
 			toast({
 				description: t(error),
 				variant: 'destructive',
@@ -392,7 +383,7 @@ export const useDistributeProfit = () => {
 		},
 		onError: (e) => {
 			// @ts-ignore
-			const error = (e.cause && e.cause['reason']) || 'unknown';
+			const error = e.cause?.reason || 'unknown';
 			toast({
 				description: t(error),
 				variant: 'destructive',
