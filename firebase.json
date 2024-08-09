@@ -1,70 +1,70 @@
 {
-  "hosting": [
-    {
-      "public": "dist",
-      "target": "staking",
-      "headers": [
-        {
-          "source": "**/*",
-          "headers": [
-            {
-              "key": "Access-Control-Allow-Origin",
-              "value": "*"
-            }
-          ]
-        }
-      ],
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    },
-    {
-      "public": "dist",
-      "target": "staking-dev",
-      "headers": [
-        {
-          "source": "**/*",
-          "headers": [
-            {
-              "key": "Access-Control-Allow-Origin",
-              "value": "*"
-            }
-          ]
-        }
-      ],
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    },
-    {
-      "public": "dist",
-      "target": "staking-ua",
-      "headers": [
-        {
-          "source": "**/*",
-          "headers": [
-            {
-              "key": "Access-Control-Allow-Origin",
-              "value": "*"
-            }
-          ]
-        }
-      ],
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    }
-  ]
+	"hosting": [
+		{
+			"public": "dist",
+			"target": "staking",
+			"headers": [
+				{
+					"source": "**/*",
+					"headers": [
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						}
+					]
+				}
+			],
+			"ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+			"rewrites": [
+				{
+					"source": "**",
+					"destination": "/index.html"
+				}
+			]
+		},
+		{
+			"public": "dist",
+			"target": "staking-dev",
+			"headers": [
+				{
+					"source": "**/*",
+					"headers": [
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						}
+					]
+				}
+			],
+			"ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+			"rewrites": [
+				{
+					"source": "**",
+					"destination": "/index.html"
+				}
+			]
+		},
+		{
+			"public": "dist",
+			"target": "staking-ua",
+			"headers": [
+				{
+					"source": "**/*",
+					"headers": [
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						}
+					]
+				}
+			],
+			"ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+			"rewrites": [
+				{
+					"source": "**",
+					"destination": "/index.html"
+				}
+			]
+		}
+	]
 }

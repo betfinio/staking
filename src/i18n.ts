@@ -11,30 +11,30 @@ import enShared from 'betfinio_app/locales/en';
 import ruShared from 'betfinio_app/locales/ru';
 
 const resources = {
-  en: {
-    translation: {
-      staking: enJSON,
-      shared: enShared,
-    },
-  },
-  ru: {
-    translation: {
-      staking: ruJSON,
-      shared: ruShared,
-    },
-  },
+	en: {
+		translation: {
+			staking: enJSON,
+			shared: enShared,
+		},
+	},
+	ru: {
+		translation: {
+			staking: ruJSON,
+			shared: ruShared,
+		},
+	},
 };
 
 const instance: i18n = i18.createInstance();
 instance
-  .use(initReactI18next)
-  .use(ICU)
-  .init({
-    resources: resources,
-    lng: 'en', // default language
-    fallbackLng: 'en',
-    interpolation: { escapeValue: false },
-    react: { useSuspense: true },
-  });
+	.use(initReactI18next)
+	.use(ICU)
+	.init({
+		resources: resources,
+		lng: 'en', // default language
+		fallbackLng: 'en',
+		interpolation: { escapeValue: false },
+		react: { useSuspense: true },
+	});
 
 export default instance;

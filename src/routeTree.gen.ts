@@ -10,79 +10,79 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root';
-import { Route as ConservativeIndexImport } from './routes/conservative/index';
-import { Route as DynamicIndexImport } from './routes/dynamic/index';
-import { Route as IndexImport } from './routes/index';
-import { Route as StakingImport } from './routes/staking';
-import { Route as StatisticsIndexImport } from './routes/statistics/index';
+import { Route as rootRoute } from './routes/__root'
+import { Route as StakingImport } from './routes/staking'
+import { Route as IndexImport } from './routes/index'
+import { Route as StatisticsIndexImport } from './routes/statistics/index'
+import { Route as DynamicIndexImport } from './routes/dynamic/index'
+import { Route as ConservativeIndexImport } from './routes/conservative/index'
 
 // Create/Update Routes
 
 const StakingRoute = StakingImport.update({
   path: '/staking',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const StatisticsIndexRoute = StatisticsIndexImport.update({
   path: '/statistics/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const DynamicIndexRoute = DynamicIndexImport.update({
   path: '/dynamic/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const ConservativeIndexRoute = ConservativeIndexImport.update({
   path: '/conservative/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
-      id: '/';
-      path: '/';
-      fullPath: '/';
-      preLoaderRoute: typeof IndexImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
     '/staking': {
-      id: '/staking';
-      path: '/staking';
-      fullPath: '/staking';
-      preLoaderRoute: typeof StakingImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/staking'
+      path: '/staking'
+      fullPath: '/staking'
+      preLoaderRoute: typeof StakingImport
+      parentRoute: typeof rootRoute
+    }
     '/conservative/': {
-      id: '/conservative/';
-      path: '/conservative';
-      fullPath: '/conservative';
-      preLoaderRoute: typeof ConservativeIndexImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/conservative/'
+      path: '/conservative'
+      fullPath: '/conservative'
+      preLoaderRoute: typeof ConservativeIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/dynamic/': {
-      id: '/dynamic/';
-      path: '/dynamic';
-      fullPath: '/dynamic';
-      preLoaderRoute: typeof DynamicIndexImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/dynamic/'
+      path: '/dynamic'
+      fullPath: '/dynamic'
+      preLoaderRoute: typeof DynamicIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/statistics/': {
-      id: '/statistics/';
-      path: '/statistics';
-      fullPath: '/statistics';
-      preLoaderRoute: typeof StatisticsIndexImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/statistics/'
+      path: '/statistics'
+      fullPath: '/statistics'
+      preLoaderRoute: typeof StatisticsIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -94,7 +94,7 @@ export const routeTree = rootRoute.addChildren({
   ConservativeIndexRoute,
   DynamicIndexRoute,
   StatisticsIndexRoute,
-});
+})
 
 /* prettier-ignore-end */
 
