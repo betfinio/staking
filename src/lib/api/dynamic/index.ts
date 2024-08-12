@@ -218,7 +218,7 @@ export const fetchEarnings = async (address: Address, options: Options): Promise
 		.select('amount::text, timestamp::text, transaction, member, pool')
 		.eq('member', address.toLowerCase())
 		.gt('amount', 0)
-		.order('timestamp', { ascending: true });
+		.order('timestamp', { ascending: false });
 	console.log(data);
 
 	return (data.data || []).map(
