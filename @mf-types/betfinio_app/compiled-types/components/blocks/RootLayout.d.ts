@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, ReactNode } from "react";
+import type { FC, PropsWithChildren, ReactNode } from 'react';
 interface RootLayoutProps {
     header: ReactNode;
     footer: ReactNode;

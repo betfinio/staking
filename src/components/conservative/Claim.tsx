@@ -1,6 +1,6 @@
 import { useClaim, useClaimable, useStaked } from '@/src/lib/query/conservative';
 import { ZeroAddress } from '@betfinio/abi';
-import { valueToNumber } from '@betfinio/hooks/dist/utils';
+import { valueToNumber } from '@betfinio/abi';
 import { BetValue } from 'betfinio_app/BetValue';
 import { useTotalStaked } from 'betfinio_app/lib/query/conservative';
 import { useBalance } from 'betfinio_app/lib/query/token';

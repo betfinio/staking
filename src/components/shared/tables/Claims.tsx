@@ -1,5 +1,5 @@
 import { valueToNumber } from '@betfinio/abi';
-import { truncateEthAddress } from '@betfinio/hooks/dist/utils';
+import { truncateEthAddress } from '@betfinio/abi';
 import { createColumnHelper } from '@tanstack/react-table';
 import { BetValue } from 'betfinio_app/BetValue';
 import { DataTable } from 'betfinio_app/DataTable';

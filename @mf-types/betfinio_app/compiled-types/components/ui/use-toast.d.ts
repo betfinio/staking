@@ -1,5 +1,5 @@
-import * as React from "react";
-import type { ToastActionElement, ToastProps } from "@/components/ui/toast";
+import * as React from 'react';
+import type { ToastActionElement, ToastProps } from '@/components/ui/toast';
 type ToasterToast = ToastProps & {
     id: string;
     title?: React.ReactNode;
@@ -14,23 +14,23 @@ declare const actionTypes: {
 };
 type ActionType = typeof actionTypes;
 type Action = {
-    type: ActionType["ADD_TOAST"];
+    type: ActionType['ADD_TOAST'];
     toast: ToasterToast;
 } | {
-    type: ActionType["UPDATE_TOAST"];
+    type: ActionType['UPDATE_TOAST'];
     toast: Partial<ToasterToast>;
 } | {
-    type: ActionType["DISMISS_TOAST"];
-    toastId?: ToasterToast["id"];
+    type: ActionType['DISMISS_TOAST'];
+    toastId?: ToasterToast['id'];
 } | {
-    type: ActionType["REMOVE_TOAST"];
-    toastId?: ToasterToast["id"];
+    type: ActionType['REMOVE_TOAST'];
+    toastId?: ToasterToast['id'];
 };
 interface State {
     toasts: ToasterToast[];
 }
 export declare const reducer: (state: State, action: Action) => State;
-type Toast = Omit<ToasterToast, "id">;
+type Toast = Omit<ToasterToast, 'id'>;
 declare function toast({ ...props }: Toast): {
     id: string;
     dismiss: () => void;

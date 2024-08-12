@@ -1,4 +1,4 @@
-import { valueToNumber } from '@betfinio/hooks/dist/utils';
+import { valueToNumber } from '@betfinio/abi';
 import { BetValue } from 'betfinio_app/BetValue';
 import cx from 'clsx';
 import type { FC } from 'react';

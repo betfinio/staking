@@ -12,7 +12,7 @@ export interface Earning {
 	amount: bigint;
 	timestamp: number;
 	transaction: Address;
-	pool: string;
+	pool: Address;
 }
 
 export interface Unstake {
