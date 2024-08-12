@@ -7,6 +7,7 @@ import {
 	fetchTotalBets,
 	fetchTotalStakers,
 	fetchTotalVolume,
+	fetchUnrealizedProfit,
 } from '@/src/lib/api/dynamic';
 import type { StakeParams } from '@/src/lib/query/conservative';
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types.ts';
@@ -36,6 +37,14 @@ export const useTotalStakedDiff = () => {
 	return useQuery({
 		queryKey: ['staking', 'dynamic', 'totalStaked', 'diff'],
 		queryFn: () => fetchTotalStakedDiff(client, config),
+	});
+};
+
+export const useUnrealizedProfit = () => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['staking', 'dynamic', 'profit', 'unrealized'],
+		queryFn: () => fetchUnrealizedProfit(config),
 	});
 };
 

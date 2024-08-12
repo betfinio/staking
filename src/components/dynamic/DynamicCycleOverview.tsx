@@ -1,5 +1,5 @@
 import SharedGameBlock from '@/src/components/shared/SharedGameBlock.tsx';
-import { useTotalStakedDiff } from '@/src/lib/query/dynamic';
+import { useTotalStakedDiff, useUnrealizedProfit } from '@/src/lib/query/dynamic';
 import { valueToNumber } from '@betfinio/hooks/dist/utils';
 import { BetValue } from 'betfinio_app/BetValue';
 import { useTotalProfit, useTotalStaked } from 'betfinio_app/lib/query/dynamic';
@@ -20,7 +20,8 @@ for (let i = 0; i <= 80; i++) {
 export const CycleOverview: FC = () => {
 	const { data: newStaked = [0n, 0n], isFetching: isNewStakedFetching } = useTotalStakedDiff();
 	const { data: staked = 0n } = useTotalStaked();
-	const { data: profit = 0n, isFetching: isProfitFetching } = useTotalProfit();
+	const { data: profit = 0n, isFetching: isProfitFetching } = useUnrealizedProfit();
+	console.log(profit);
 	const percentage = (valueToNumber(profit) / valueToNumber(staked)) * 100;
 
 	const cycleStart = (starts.findLast((e) => e * 1000 < Date.now()) || 0) * 1000;
@@ -166,7 +167,7 @@ const NewStakes: FC = () => {
 
 const GamesProfit = () => {
 	const { data: staked = 0n } = useTotalStaked();
-	const { data: profit = 0n } = useTotalProfit();
+	const { data: profit = 0n } = useUnrealizedProfit();
 	const percentage = (valueToNumber(profit) / valueToNumber(staked)) * 100;
 
 	return (

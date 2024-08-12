@@ -54,6 +54,26 @@ export const fetchTotalVolume = async (config: Config): Promise<bigint> => {
 	})) as bigint;
 };
 
+export const fetchUnrealizedProfit = async (config: Config): Promise<bigint> => {
+	console.log('fetching unrealized profit dynamic');
+	const result = await multicall(config, {
+		contracts: [
+			{
+				abi: TokenContract.abi,
+				address: import.meta.env.PUBLIC_TOKEN_ADDRESS,
+				functionName: 'balanceOf',
+				args: [import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS],
+			},
+			{
+				abi: DynamicStakingContract.abi,
+				address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
+				functionName: 'realStaked',
+			},
+		],
+	});
+	return (result[0].result as bigint) - (result[1].result as bigint);
+};
+
 export const fetchStakersPools = async (address: Address, config: Config): Promise<Address[]> => {
 	const poolsCount = await readContract(config, {
 		abi: DynamicStakingContract.abi,
