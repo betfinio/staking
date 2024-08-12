@@ -1,24 +1,21 @@
-import {ModuleFederationPlugin} from '@module-federation/enhanced/rspack';
-import {defineConfig} from '@rsbuild/core';
-import {pluginReact} from '@rsbuild/plugin-react';
-// @ts-ignore
-import {TanStackRouterRspack} from '@tanstack/router-plugin/rspack';
-// @ts-ignore
-import {dependencies} from './package.json';
-
+import { ModuleFederationPlugin } from '@module-federation/enhanced/rspack';
+import { defineConfig } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { TanStackRouterRspack } from '@tanstack/router-plugin/rspack';
+import { dependencies } from './package.json';
 
 const getApp = () => {
 	switch (process.env.PUBLIC_ENVIRONMENT) {
 		case 'development':
-			return 'betfinio_app@https://betfin-app-dev.web.app/mf-manifest.json'
+			return 'betfinio_app@https://betfin-app-dev.web.app/mf-manifest.json';
 		case 'production':
-			return 'betfinio_app@https://app.betfin.io/mf-manifest.json'
+			return 'betfinio_app@https://app.betfin.io/mf-manifest.json';
 		case 'production-ua':
-			return 'betfinio_app@https://app.betfin.gg/mf-manifest.json'
+			return 'betfinio_app@https://app.betfin.gg/mf-manifest.json';
 		default:
-			return 'betfinio_app@http://localhost:5555/mf-manifest.json'
+			return 'betfinio_app@http://localhost:5555/mf-manifest.json';
 	}
-}
+};
 
 function getOutput() {
 	switch (process.env.PUBLIC_ENVIRONMENT) {
@@ -48,9 +45,11 @@ export default defineConfig({
 		assetPrefix: getOutput(),
 	},
 	tools: {
-		rspack: (config, {appendPlugins, addRules}) => {
-			config.output!.uniqueName = 'betfinio_staking';
-			appendPlugins([
+		rspack: {
+			output: {
+				uniqueName: 'betfinio_staking',
+			},
+			plugins: [
 				TanStackRouterRspack(),
 				new ModuleFederationPlugin({
 					name: 'betfinio_staking',
@@ -67,7 +66,7 @@ export default defineConfig({
 					shared: {
 						react: {
 							singleton: true,
-							requiredVersion: dependencies['react'],
+							requiredVersion: dependencies.react,
 						},
 						'react-dom': {
 							singleton: true,
@@ -91,7 +90,7 @@ export default defineConfig({
 						},
 						i18next: {
 							singleton: true,
-							requiredVersion: dependencies['i18next'],
+							requiredVersion: dependencies.i18next,
 						},
 						'react-i18next': {
 							singleton: true,
@@ -103,7 +102,7 @@ export default defineConfig({
 						},
 						tailwindcss: {
 							singleton: true,
-							requiredVersion: dependencies['tailwindcss'],
+							requiredVersion: dependencies.tailwindcss,
 						},
 						'@supabase/supabase-js': {
 							singleton: true,
@@ -111,11 +110,11 @@ export default defineConfig({
 						},
 						wagmi: {
 							singleton: true,
-							requiredVersion: dependencies['wagmi'],
+							requiredVersion: dependencies.wagmi,
 						},
 					},
 				}),
-			]);
+			],
 		},
 	},
 	plugins: [pluginReact()],

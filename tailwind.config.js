@@ -27,13 +27,13 @@ module.exports = {
 				secondary: '#201C40',
 				secondaryLight: '#292546',
 				secondaryLighter: '#201C4080',
-				"purple": {
-					"box": '#6A6A9F',
-					"table": '#201C40'
+				purple: {
+					box: '#6A6A9F',
+					table: '#201C40',
 				},
-				"red": {
-					600: "#B80042",
-					"roulette": "#dd375f"
+				red: {
+					600: '#B80042',
+					roulette: '#dd375f',
 				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
@@ -63,12 +63,12 @@ module.exports = {
 			},
 			keyframes: {
 				'accordion-down': {
-					from: {height: '0'},
-					to: {height: 'var(--radix-accordion-content-height)'},
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' },
 				},
 				'accordion-up': {
-					from: {height: 'var(--radix-accordion-content-height)'},
-					to: {height: '0'},
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' },
 				},
 			},
 			backgroundImage: {

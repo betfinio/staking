@@ -4,9 +4,9 @@ import { ZeroAddress } from '@betfinio/abi';
 import { useAccount } from 'wagmi';
 
 const EarningsTable = () => {
-  const { address = ZeroAddress } = useAccount();
-  const { data = [], isFetching, isLoading } = useEarnings(address);
+	const { address = ZeroAddress } = useAccount();
+	const { data = [], isFetching, isLoading } = useEarnings(address);
 
-  return <Earnings data={data} isLoading={isFetching || isLoading} />;
+	return <Earnings data={data} isLoading={isFetching || isLoading} />;
 };
 export default EarningsTable;

@@ -1,6 +1,6 @@
-import {ArcElement, Chart as ChartJS, Legend, Tooltip} from 'chart.js';
-import type {FC} from 'react';
-import {Line} from 'react-chartjs-2';
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
+import type { FC } from 'react';
+import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
 import cx from 'clsx';
 import millify from 'millify';
@@ -14,13 +14,7 @@ const Chart: FC<{
 	className?: string;
 	label?: string;
 	color?: string;
-}> = ({
-	labels = initialLabels,
-	color = '#22c55e',
-	values,
-	className = '',
-	label = 'value',
-}) => {
+}> = ({ labels = initialLabels, color = '#22c55e', values, className = '', label = 'value' }) => {
 	const options = {
 		plugins: {
 			legend: {
@@ -34,12 +28,12 @@ const Chart: FC<{
 		scales: {
 			y: {
 				ticks: {
-					callback: (value: number) => millify(value, {precision: 2}),
+					callback: (value: number) => millify(value, { precision: 2 }),
 				},
 			},
 		},
 	};
-	
+
 	const data = {
 		labels,
 		datasets: [

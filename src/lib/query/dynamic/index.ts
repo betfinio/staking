@@ -1,19 +1,29 @@
-import {fetchActivePools, fetchClaimed, fetchEarnings, fetchStaked, fetchStakes, fetchTotalBets, fetchTotalStakers, fetchTotalVolume,} from '@/src/lib/api/dynamic';
-import type {StakeParams} from '@/src/lib/query/conservative';
-import type {Earning, ExtendedPoolInfo,} from '@/src/lib/types.ts';
-import {DynamicStakingPoolContract, PartnerContract} from '@betfinio/abi';
-import {useMutation, useQuery} from '@tanstack/react-query';
-import {writeContract, type WriteContractErrorType, type WriteContractReturnType} from '@wagmi/core';
-import {getBlockByTimestamp} from 'betfinio_app/lib/utils';
-import {type SupabaseClient, useSupabase} from 'betfinio_app/supabase';
-import {useTranslation} from 'react-i18next';
-import type {Address} from 'viem';
-import {type Config, useConfig} from 'wagmi';
-import {waitForTransactionReceipt} from "viem/actions";
-import {toast} from "betfinio_app/use-toast";
-import {getTransactionLink} from 'betfinio_app/helpers'
-import {fetchTotalStaked} from "betfinio_app/lib/api/dynamic";
-import {Stake} from 'betfinio_app/lib/types';
+import {
+	fetchActivePools,
+	fetchClaimed,
+	fetchEarnings,
+	fetchStaked,
+	fetchStakes,
+	fetchTotalBets,
+	fetchTotalStakers,
+	fetchTotalVolume,
+	fetchUnrealizedProfit,
+} from '@/src/lib/api/dynamic';
+import type { StakeParams } from '@/src/lib/query/conservative';
+import type { Earning, ExtendedPoolInfo } from '@/src/lib/types.ts';
+import { DynamicStakingPoolContract, PartnerContract } from '@betfinio/abi';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { type WriteContractErrorType, type WriteContractReturnType, writeContract } from '@wagmi/core';
+import { getTransactionLink } from 'betfinio_app/helpers';
+import { fetchTotalStaked } from 'betfinio_app/lib/api/dynamic';
+import type { Stake } from 'betfinio_app/lib/types';
+import { getBlockByTimestamp } from 'betfinio_app/lib/utils';
+import { type SupabaseClient, useSupabase } from 'betfinio_app/supabase';
+import { toast } from 'betfinio_app/use-toast';
+import { useTranslation } from 'react-i18next';
+import type { Address } from 'viem';
+import { waitForTransactionReceipt } from 'viem/actions';
+import { type Config, useConfig } from 'wagmi';
 
 const starts = [1715601600];
 
@@ -22,23 +32,26 @@ for (let i = 0; i <= 80; i++) {
 }
 
 export const useTotalStakedDiff = () => {
-	const {client} = useSupabase();
+	const { client } = useSupabase();
 	const config = useConfig();
 	return useQuery({
 		queryKey: ['staking', 'dynamic', 'totalStaked', 'diff'],
-		queryFn: () => fetchTotalStakedDiff(client!, config),
+		queryFn: () => fetchTotalStakedDiff(client, config),
 	});
 };
 
-export const fetchTotalStakedDiff = async (
-	supabase: SupabaseClient,
-	config: Config,
-): Promise<bigint[]> => {
-	const cycleStart = starts.findLast((e) => e * 1000 < Date.now())! * 1000;
-	const block = await getBlockByTimestamp(
-		Math.floor(cycleStart / 1000),
-		supabase,
-	);
+export const useUnrealizedProfit = () => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['staking', 'dynamic', 'profit', 'unrealized'],
+		queryFn: () => fetchUnrealizedProfit(config),
+	});
+};
+
+export const fetchTotalStakedDiff = async (supabase: SupabaseClient | undefined, config: Config): Promise<bigint[]> => {
+	if (!supabase) throw new Error('Supabase client is not defined');
+	const cycleStart = (starts.findLast((e) => e * 1000 < Date.now()) || 0) * 1000;
+	const block = await getBlockByTimestamp(Math.floor(cycleStart / 1000), supabase);
 	try {
 		const stakedNow = await fetchTotalStaked(config);
 		const stakedThen = await fetchTotalStaked(config, block);
@@ -51,7 +64,6 @@ export const fetchTotalStakedDiff = async (
 	}
 };
 
-
 export const useActivePools = () => {
 	const config = useConfig();
 	return useQuery<ExtendedPoolInfo[]>({
@@ -62,7 +74,6 @@ export const useActivePools = () => {
 	});
 };
 
-
 export const useTotalStakers = () => {
 	const config = useConfig();
 	return useQuery<number>({
@@ -71,16 +82,16 @@ export const useTotalStakers = () => {
 	});
 };
 
-export const useStaked = (address: Address) => {
+export const useStaked = (address?: Address) => {
 	const config = useConfig();
-	
+
 	return useQuery<bigint>({
 		queryKey: ['staking', 'dynamic', 'staked', address],
 		queryFn: () => fetchStaked(address, config),
 	});
 };
 
-export const useClaimed = (address: Address) => {
+export const useClaimed = (address?: Address) => {
 	const config = useConfig();
 	return useQuery<bigint>({
 		queryKey: ['staking', 'dynamic', 'claimed', address],
@@ -89,10 +100,10 @@ export const useClaimed = (address: Address) => {
 };
 
 export const useEarnings = (address: Address) => {
-	const {client: supabase} = useSupabase();
+	const { client: supabase } = useSupabase();
 	return useQuery<Earning[]>({
 		queryKey: ['staking', 'dynamic', 'earnings', address],
-		queryFn: () => fetchEarnings(address, {supabase}),
+		queryFn: () => fetchEarnings(address, { supabase }),
 		refetchOnWindowFocus: false,
 		refetchOnMount: false,
 		refetchOnReconnect: false,
@@ -125,46 +136,41 @@ export const useStakes = (address: Address) => {
 // mutations
 
 export const useStake = () => {
-	const {t} = useTranslation('', {keyPrefix: 'errors'});
-	const config = useConfig()
-	return useMutation<WriteContractReturnType, any, StakeParams>({
+	const { t } = useTranslation('', { keyPrefix: 'errors' });
+	const config = useConfig();
+	return useMutation<WriteContractReturnType, WriteContractErrorType, StakeParams>({
 		mutationKey: ['staking', 'dynamic', 'stake'],
 		mutationFn: stake,
 		onError: (e) => {
-			console.log(e, e.cause, e.cause.reason)
 			// @ts-ignore
-			const error = e.cause && e.cause.reason || "unknown"
+			const error = e.cause?.reason || 'unknown';
 			toast({
-				
 				description: t(error),
-				variant: "destructive"
-			})
+				variant: 'destructive',
+			});
 			return t(e.message);
 		},
 		onSuccess: async (data) => {
-			const {update} = toast({
-				title: "Stake is in progress",
-				description: "Transaction is being processed",
-				variant: "loading",
+			const { update } = toast({
+				title: 'Stake is in progress',
+				description: 'Transaction is being processed',
+				variant: 'loading',
 				duration: 10000,
-				action: getTransactionLink(data)
-			})
-			await waitForTransactionReceipt(config.getClient(), {hash: data})
+				action: getTransactionLink(data),
+			});
+			await waitForTransactionReceipt(config.getClient(), { hash: data });
 			update({
-				title: "Staked successful",
-				variant: "default",
-				description: "Transaction has been executed",
-				duration: 5000
-			})
+				title: 'Staked successful',
+				variant: 'default',
+				description: 'Transaction has been executed',
+				duration: 5000,
+			});
 			console.log('staked', data);
 		},
 	});
 };
 
-export const stake = async ({
-	amount,
-	config,
-}: StakeParams): Promise<WriteContractReturnType> => {
+export const stake = async ({ amount, config }: StakeParams): Promise<WriteContractReturnType> => {
 	console.log('staking', amount);
 	return await writeContract(config, {
 		abi: PartnerContract.abi,
@@ -174,11 +180,10 @@ export const stake = async ({
 	});
 };
 
-
 export const useDistributeProfit = () => {
 	const config = useConfig();
-	const {t} = useTranslation('', {keyPrefix: 'shared.errors'});
-	
+	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
+
 	return useMutation<WriteContractReturnType, WriteContractErrorType, Address>({
 		mutationKey: ['staking', 'dynamic', 'distributeProfit'],
 		mutationFn: async (pool: Address) => {
@@ -190,30 +195,29 @@ export const useDistributeProfit = () => {
 		},
 		onError: (e) => {
 			// @ts-ignore
-			const error = e.cause && e.cause['reason'] || "unknown"
+			const error = e.cause?.reason || 'unknown';
 			toast({
-				
 				description: t(error),
-				variant: "destructive"
-			})
+				variant: 'destructive',
+			});
 			return t(e.message);
 		},
 		onSuccess: async (data) => {
-			const {update} = toast({
-				title: "Distribution is in progress",
-				description: "Transaction is being processed",
-				variant: "loading",
+			const { update } = toast({
+				title: 'Distribution is in progress',
+				description: 'Transaction is being processed',
+				variant: 'loading',
 				duration: 10000,
-				action: getTransactionLink(data)
-			})
-			await waitForTransactionReceipt(config.getClient(), {hash: data})
+				action: getTransactionLink(data),
+			});
+			await waitForTransactionReceipt(config.getClient(), { hash: data });
 			update({
-				title: "Distributed successfully",
-				variant: "default",
-				description: "Transaction has been executed",
-				duration: 5000
-			})
+				title: 'Distributed successfully',
+				variant: 'default',
+				description: 'Transaction has been executed',
+				duration: 5000,
+			});
 			console.log('staked', data);
 		},
-	})
-}
+	});
+};

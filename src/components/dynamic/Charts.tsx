@@ -1,24 +1,20 @@
 import Chart from '@/src/components/shared/Chart';
-import {
-	useTotalProfitStat,
-	useTotalStakedStat,
-	useTotalStakersStat,
-} from 'betfinio_app/lib/query/dynamic';
-import {Tabs, TabsContent, TabsList, TabsTrigger} from 'betfinio_app/tabs';
-import {DateTime} from 'luxon';
-import {Select, SelectItem, SelectContent, SelectTrigger, SelectValue} from "betfinio_app/select";
-import {useState} from "react";
+import { useTotalProfitStat, useTotalStakedStat, useTotalStakersStat } from 'betfinio_app/lib/query/dynamic';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'betfinio_app/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
+import { DateTime } from 'luxon';
+import { useState } from 'react';
 
-import {Timeframe} from 'betfinio_app/lib/types';
+import type { Timeframe } from 'betfinio_app/lib/types';
 
 const Charts = () => {
 	const [timeframe, setTimeframe] = useState<Timeframe>('day');
-	const {data: totalStaked = [], error} = useTotalStakedStat(timeframe);
-	const {data: totalStakers = []} = useTotalStakersStat(timeframe);
-	const {data: totalProfit = []} = useTotalProfitStat(timeframe);
-	const handleChange = (val: any) => {
+	const { data: totalStaked = [], error } = useTotalStakedStat(timeframe);
+	const { data: totalStakers = [] } = useTotalStakersStat(timeframe);
+	const { data: totalProfit = [] } = useTotalProfitStat(timeframe);
+	const handleChange = (val: Timeframe) => {
 		setTimeframe(val);
-	}
+	};
 	return (
 		<div className={'flex flex-col h-full'}>
 			<Tabs defaultValue="staked" className={'grow flex flex-col'}>
@@ -29,7 +25,7 @@ const Charts = () => {
 					<div className={'flex-grow flex justify-end'}>
 						<Select defaultValue={'day'} onValueChange={handleChange}>
 							<SelectTrigger className={'max-w-[100px]'}>
-								<SelectValue placeholder="Timeframe"/>
+								<SelectValue placeholder="Timeframe" />
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="hour">1 hour</SelectItem>
@@ -39,16 +35,14 @@ const Charts = () => {
 						</Select>
 					</div>
 				</TabsList>
-				
+
 				<TabsContent value={'staked'} className={'grow'}>
 					<Chart
 						label="Total staked"
 						className={'h-full'}
 						color={'#facc15'}
 						values={totalStaked.map((e) => e.value)}
-						labels={totalStaked.map((e) =>
-							DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'),
-						)}
+						labels={totalStaked.map((e) => DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'))}
 					/>
 				</TabsContent>
 				<TabsContent value={'stakers'} className={'grow'}>
@@ -56,18 +50,14 @@ const Charts = () => {
 						label={'Total stakers'}
 						color={'#6A6A9F'}
 						values={totalStakers.map((e) => e.value)}
-						labels={totalStakers.map((e) =>
-							DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'),
-						)}
+						labels={totalStakers.map((e) => DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'))}
 					/>
 				</TabsContent>
 				<TabsContent value={'revenues'} className={'grow'}>
 					<Chart
 						label={'Total revenue'}
 						values={totalProfit.map((e) => e.value)}
-						labels={totalProfit.map((e) =>
-							DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'),
-						)}
+						labels={totalProfit.map((e) => DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'))}
 					/>
 				</TabsContent>
 			</Tabs>

@@ -1,8 +1,9 @@
 import {
 	fetchCalculationsStat,
-	fetchClaimable, fetchClaims,
-	fetchEarnings,
+	fetchClaimable,
+	fetchClaims,
 	fetchConservativePools,
+	fetchEarnings,
 	fetchPredictContribution,
 	fetchProfit,
 	fetchStaked,
@@ -14,32 +15,20 @@ import {
 	fetchTotalStakers,
 	fetchTotalVolume,
 } from '@/src/lib/api/conservative';
-import {
-	type Earning,
-	type ExtendedPoolInfo,
-} from '@/src/lib/types';
-import {
-	ConservativeStakingContract, ConservativeStakingPoolContract,
-	GameContract,
-	PartnerContract,
-} from '@betfinio/abi';
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {
-	type WriteContractReturnType,
-	getBlock,
-	writeContract,
-} from '@wagmi/core';
-import {useSupabase} from 'betfinio_app/supabase';
-import {type WriteContractErrorType} from '@wagmi/core'
-import {toast} from "betfinio_app/use-toast";
-import {getTransactionLink} from "betfinio_app/helpers";
-import {useTranslation} from 'react-i18next';
-import {type Address, type Log, decodeEventLog} from 'viem';
-import {getContractEvents, waitForTransactionReceipt} from 'viem/actions';
-import {type Config, useConfig, useWatchContractEvent} from 'wagmi';
-import {Stake, Stat} from 'betfinio_app/lib/types';
-import {Timeframe} from "betfinio_app/compiled-types/lib/types/staking";
-
+import type { Earning, ExtendedPoolInfo } from '@/src/lib/types';
+import { ConservativeStakingContract, ConservativeStakingPoolContract, GameContract, PartnerContract } from '@betfinio/abi';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { type WriteContractReturnType, writeContract } from '@wagmi/core';
+import type { WriteContractErrorType } from '@wagmi/core';
+import { getTransactionLink } from 'betfinio_app/helpers';
+import type { Timeframe } from 'betfinio_app/lib/types';
+import type { Stake, Stat } from 'betfinio_app/lib/types';
+import { useSupabase } from 'betfinio_app/supabase';
+import { toast } from 'betfinio_app/use-toast';
+import { useTranslation } from 'react-i18next';
+import { type Address, type Log, decodeEventLog } from 'viem';
+import { waitForTransactionReceipt } from 'viem/actions';
+import { type Config, useConfig, useWatchContractEvent } from 'wagmi';
 
 export const usePredictContribution = () => {
 	const config = useConfig();
@@ -74,12 +63,11 @@ export const useTotalVolume = () => {
 };
 
 export const useTotalStakedDiff = (start: number) => {
-	const {client} = useSupabase();
+	const { client } = useSupabase();
 	const config = useConfig();
 	return useQuery({
 		queryKey: ['staking', 'conservative', 'totalStaked', 'diff', start],
-		//@ts-ignore
-		queryFn: () => fetchTotalStakedDiff(start, client!, config),
+		queryFn: () => fetchTotalStakedDiff(start, client, config),
 	});
 };
 
@@ -103,10 +91,7 @@ export const useTotalBets = () => {
 				queryKey: ['staking', 'conservative', 'totalBets'],
 			});
 			await queryClient.invalidateQueries({
-				queryKey: [
-					'balance',
-					import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-				],
+				queryKey: ['balance', import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address],
 			});
 		},
 	});
@@ -124,7 +109,7 @@ export const useClaimable = (address: Address) => {
 	});
 };
 
-export const useStaked = (address: Address) => {
+export const useStaked = (address?: Address) => {
 	const queryClient = useQueryClient();
 	const config = useConfig();
 	useWatchContractEvent({
@@ -137,8 +122,8 @@ export const useStaked = (address: Address) => {
 				...log[0],
 				strict: true,
 			});
-			const {staker} = event.args as unknown as { staker: string };
-			if (staker.toLowerCase() === address.toLowerCase()) {
+			const { staker } = event.args as unknown as { staker: string };
+			if (staker.toLowerCase() === address?.toLowerCase()) {
 				await queryClient.invalidateQueries({
 					queryKey: ['staking', 'conservative', 'staked', address],
 				});
@@ -155,8 +140,8 @@ export const useStaked = (address: Address) => {
 				...log[0],
 				strict: true,
 			});
-			const {staker} = event.args as unknown as { staker: string };
-			if (staker.toLowerCase() === address.toLowerCase()) {
+			const { staker } = event.args as unknown as { staker: string };
+			if (staker.toLowerCase() === address?.toLowerCase()) {
 				await queryClient.invalidateQueries({
 					queryKey: ['staking', 'conservative', 'staked', address],
 				});
@@ -172,7 +157,7 @@ export const useStaked = (address: Address) => {
 	});
 };
 
-export const useProfit = (address: Address) => {
+export const useProfit = (address?: Address) => {
 	const config = useConfig();
 	return useQuery<bigint>({
 		queryKey: ['staking', 'conservative', 'profit', address],
@@ -181,10 +166,10 @@ export const useProfit = (address: Address) => {
 };
 
 export const useEarnings = (address: Address) => {
-	const {client: supabase} = useSupabase()
+	const { client: supabase } = useSupabase();
 	return useQuery<Earning[]>({
 		queryKey: ['staking', 'conservative', 'earnings', address],
-		queryFn: () => fetchEarnings(address, {supabase}),
+		queryFn: () => fetchEarnings(address, { supabase }),
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 	});
@@ -203,7 +188,7 @@ export const useStakes = (address: Address) => {
 				...log[0],
 				strict: true,
 			});
-			const {staker} = event.args as unknown as { staker: string };
+			const { staker } = event.args as unknown as { staker: string };
 			if (staker.toLowerCase() === address.toLowerCase()) {
 				await queryClient.invalidateQueries({
 					queryKey: ['staking', 'conservative', 'stakes', address],
@@ -221,7 +206,7 @@ export const useStakes = (address: Address) => {
 
 export const useClaims = (address: Address) => {
 	const queryClient = useQueryClient();
-	const {client: supabase} = useSupabase();
+	const { client: supabase } = useSupabase();
 	useWatchContractEvent({
 		abi: ConservativeStakingContract.abi,
 		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
@@ -233,7 +218,7 @@ export const useClaims = (address: Address) => {
 				strict: true,
 			});
 			const args = event.args as unknown as { staker: string };
-			if (args.staker.toLowerCase() === address!.toLowerCase()) {
+			if (args.staker.toLowerCase() === address?.toLowerCase()) {
 				await queryClient.invalidateQueries({
 					queryKey: ['staking', 'conservative', 'claims', address],
 				});
@@ -243,10 +228,10 @@ export const useClaims = (address: Address) => {
 			}
 		},
 	});
-	
+
 	return useQuery({
 		queryKey: ['staking', 'conservative', 'claims', address],
-		queryFn: () => fetchClaims(address, {supabase}),
+		queryFn: () => fetchClaims(address, { supabase }),
 	});
 };
 
@@ -266,98 +251,87 @@ export type StakeParams = {
 	amount: bigint;
 	config: Config;
 };
-export type UnstakeParams = {
-	pool: string;
-	config: Config;
-};
 export const useStake = () => {
-	const {t} = useTranslation('', {keyPrefix: 'shared.errors'});
-	const config = useConfig()
+	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
+	const config = useConfig();
 	return useMutation<WriteContractReturnType, WriteContractErrorType, StakeParams>({
 		mutationKey: ['staking', 'conservative', 'stake'],
 		mutationFn: stake,
 		onError: (e) => {
 			// @ts-ignore
-			const error = e.cause && e.cause['reason'] || "unknown"
+			const error = e.cause?.reason || 'unknown';
 			toast({
 				description: t(error),
-				variant: "destructive"
-			})
+				variant: 'destructive',
+			});
 			return t(e.message);
 		},
 		onSuccess: async (data) => {
-			const {update} = toast({
-				title: "Stake is in progress",
-				description: "Transaction is being processed",
-				variant: "loading",
+			const { update } = toast({
+				title: 'Stake is in progress',
+				description: 'Transaction is being processed',
+				variant: 'loading',
 				duration: 10000,
-				action: getTransactionLink(data)
-			})
-			await waitForTransactionReceipt(config.getClient(), {hash: data})
+				action: getTransactionLink(data),
+			});
+			await waitForTransactionReceipt(config.getClient(), { hash: data });
 			update({
-				title: "Staked successful",
-				variant: "default",
-				description: "Transaction has been executed",
-				duration: 5000
-			})
+				title: 'Staked successful',
+				variant: 'default',
+				description: 'Transaction has been executed',
+				duration: 5000,
+			});
 		},
 	});
 };
 
 export const useClaim = () => {
-	const {t} = useTranslation('', {keyPrefix: 'shared.errors'});
+	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
 	const config = useConfig();
 	const queryClient = useQueryClient();
 	return useMutation<WriteContractReturnType>({
 		mutationKey: ['staking', 'conservative', 'claim'],
-		mutationFn: () => claimAll({config}),
+		mutationFn: () => claimAll({ config }),
 		onError: (e) => {
 			// @ts-ignore
-			const error = e.cause && e.cause['reason'] || "unknown"
+			const error = e.cause?.reason || 'unknown';
 			toast({
-				
 				description: t(error),
-				variant: "destructive"
-			})
+				variant: 'destructive',
+			});
 			return t(e.message);
 		},
 		onSuccess: async (data) => {
-			const {update} = toast({
-				title: "Claim is in progress",
-				description: "Transaction is being processed",
-				variant: "loading",
+			const { update } = toast({
+				title: 'Claim is in progress',
+				description: 'Transaction is being processed',
+				variant: 'loading',
 				duration: 10000,
-				action: getTransactionLink(data)
-			})
-			await waitForTransactionReceipt(config.getClient(), {hash: data})
-			await queryClient.invalidateQueries({queryKey: ['staking', 'conservative']})
+				action: getTransactionLink(data),
+			});
+			await waitForTransactionReceipt(config.getClient(), { hash: data });
+			await queryClient.invalidateQueries({
+				queryKey: ['staking', 'conservative'],
+			});
 			update({
-				title: "Claimed successfully",
-				variant: "default",
-				description: "Transaction has been executed",
-				duration: 5000
-			})
+				title: 'Claimed successfully',
+				variant: 'default',
+				description: 'Transaction has been executed',
+				duration: 5000,
+			});
 		},
 	});
 };
 
-export const stake = async ({
-	amount,
-	config,
-}: StakeParams): Promise<WriteContractReturnType> => {
+export const stake = async ({ amount, config }: StakeParams): Promise<WriteContractReturnType> => {
 	return await writeContract(config, {
 		abi: PartnerContract.abi,
 		address: import.meta.env.PUBLIC_PARTNER_ADDRESS as Address,
 		functionName: 'stake',
-		args: [
-			import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-			amount,
-		],
+		args: [import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address, amount],
 	});
 };
-export const claimAll = async ({
-	config,
-}: { config: Config }): Promise<WriteContractReturnType> => {
+export const claimAll = async ({ config }: { config: Config }): Promise<WriteContractReturnType> => {
 	return await writeContract(config, {
 		abi: ConservativeStakingContract.abi,
 		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
@@ -365,20 +339,19 @@ export const claimAll = async ({
 	});
 };
 
-
 export const useCalculationsStat = (timeframe: Timeframe) => {
 	const config = useConfig();
-	const {client: supabase} = useSupabase();
+	const { client: supabase } = useSupabase();
 	return useQuery<Stat[]>({
 		queryKey: ['staking', 'conservative', 'calculations', 'stat', timeframe],
-		queryFn: () => fetchCalculationsStat(timeframe, {config, supabase}),
-	})
-}
+		queryFn: () => fetchCalculationsStat(timeframe, { config, supabase }),
+	});
+};
 
 export const useDistributeProfit = () => {
 	const config = useConfig();
-	const {t} = useTranslation('', {keyPrefix: 'shared.errors'});
-	
+	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
+
 	return useMutation<WriteContractReturnType, WriteContractErrorType, Address>({
 		mutationKey: ['staking', 'conservative', 'distributeProfit'],
 		mutationFn: async (pool: Address) => {
@@ -390,29 +363,28 @@ export const useDistributeProfit = () => {
 		},
 		onError: (e) => {
 			// @ts-ignore
-			const error = e.cause && e.cause['reason'] || "unknown"
+			const error = e.cause?.reason || 'unknown';
 			toast({
-				
 				description: t(error),
-				variant: "destructive"
-			})
+				variant: 'destructive',
+			});
 			return t(e.message);
 		},
 		onSuccess: async (data) => {
-			const {update} = toast({
-				title: "Distribution is in progress",
-				description: "Transaction is being processed",
-				variant: "loading",
+			const { update } = toast({
+				title: 'Distribution is in progress',
+				description: 'Transaction is being processed',
+				variant: 'loading',
 				duration: 10000,
-				action: getTransactionLink(data)
-			})
-			await waitForTransactionReceipt(config.getClient(), {hash: data})
+				action: getTransactionLink(data),
+			});
+			await waitForTransactionReceipt(config.getClient(), { hash: data });
 			update({
-				title: "Distributed successfully",
-				variant: "default",
-				description: "Transaction has been executed",
-				duration: 5000
-			})
+				title: 'Distributed successfully',
+				variant: 'default',
+				description: 'Transaction has been executed',
+				duration: 5000,
+			});
 		},
-	})
-}
+	});
+};
