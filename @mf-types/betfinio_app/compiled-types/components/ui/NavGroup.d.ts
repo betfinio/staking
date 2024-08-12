@@ -1,6 +1,7 @@
-import { FC, PropsWithChildren } from "react";
+import type { FC, PropsWithChildren } from 'react';
+import { type NavItemProps } from './NavItem';
 declare const NavGroup: FC<PropsWithChildren<{
-    links: any[];
+    links: NavItemProps[];
     minimized?: boolean;
 }>>;
 export default NavGroup;

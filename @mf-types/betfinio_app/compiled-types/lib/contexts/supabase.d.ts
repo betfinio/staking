@@ -1,5 +1,5 @@
-import { FC, PropsWithChildren } from "react";
-import { SupabaseClient } from "@supabase/supabase-js";
+import { SupabaseClient } from '@supabase/supabase-js';
+import { type FC, type PropsWithChildren } from 'react';
 interface SupabaseContextProps {
     client: SupabaseClient | undefined;
 }

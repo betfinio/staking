@@ -1,6 +1,5 @@
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types.ts';
-import { BetsMemoryContract, DynamicStakingContract, DynamicStakingPoolContract, TokenContract, defaultMulticall } from '@betfinio/abi';
-import arrayFrom from '@betfinio/hooks/dist/utils';
+import { BetsMemoryContract, DynamicStakingContract, DynamicStakingPoolContract, TokenContract, arrayFrom, defaultMulticall } from '@betfinio/abi';
 import { multicall, readContract } from '@wagmi/core';
 import type { Options, Stake } from 'betfinio_app/lib/types';
 import type { Address } from 'viem';

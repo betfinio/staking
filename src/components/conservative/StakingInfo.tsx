@@ -1,6 +1,6 @@
 import { useStaked, useTotalBets, useTotalVolume } from '@/src/lib/query/conservative';
 import { ZeroAddress } from '@betfinio/abi';
-import { valueToNumber } from '@betfinio/hooks/dist/utils';
+import { valueToNumber } from '@betfinio/abi';
 import { Bet, Blackjack, CoinLarge, Coins } from '@betfinio/ui/dist/icons';
 import ConservativeStaking from '@betfinio/ui/dist/icons/ConservativeStaking';
 import { BetValue } from 'betfinio_app/BetValue';

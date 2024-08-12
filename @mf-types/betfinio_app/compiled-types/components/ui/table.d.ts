@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Table as ReactTable } from "@tanstack/react-table";
+import type { Table as ReactTable } from '@tanstack/react-table';
+import * as React from 'react';
 declare const Table: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLTableElement> & React.RefAttributes<HTMLTableElement>>;
 declare const TableHeader: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLTableSectionElement> & React.RefAttributes<HTMLTableSectionElement>>;
 declare const TableBody: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLTableSectionElement> & React.RefAttributes<HTMLTableSectionElement>>;
@@ -11,5 +11,5 @@ declare const TableCaption: React.ForwardRefExoticComponent<React.HTMLAttributes
 interface DataTablePaginationProps<TData> {
     table: ReactTable<TData>;
 }
-declare function DataTablePagination<TData>({ table, }: DataTablePaginationProps<TData>): import("react/jsx-runtime").JSX.Element;
+declare function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>): import("react/jsx-runtime").JSX.Element;
 export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption, DataTablePagination };

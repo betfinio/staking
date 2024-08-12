@@ -1,4 +1,4 @@
-import { Address } from "viem";
+import type { Address } from 'viem';
 export interface Stat {
     time: number;
     value: number;
@@ -11,7 +11,7 @@ export interface Stake {
     pool: Address;
     amount: bigint;
     ended: boolean;
-    hash?: string;
+    hash?: Address;
     staking?: string;
     reward?: bigint;
     block?: number;

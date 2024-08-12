@@ -1,5 +1,5 @@
-import * as React from "react";
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import * as TooltipPrimitive from '@radix-ui/react-tooltip';
+import * as React from 'react';
 declare const TooltipProvider: React.FC<TooltipPrimitive.TooltipProviderProps>;
 declare const Tooltip: React.FC<TooltipPrimitive.TooltipProps>;
 declare const TooltipTrigger: React.ForwardRefExoticComponent<TooltipPrimitive.TooltipTriggerProps & React.RefAttributes<HTMLButtonElement>>;

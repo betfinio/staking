@@ -1,6 +1,5 @@
-import { BetInterface } from "@betfinio/hooks/dist/types/game";
-import { Stake } from "@/lib/types";
-import { Address } from "viem";
+import type { BetInterface, Stake } from '@/lib/types';
+import type { Address } from 'viem';
 declare const useBets: (count: number) => import("@tanstack/react-query").UseQueryResult<BetInterface[], Error>;
 declare const useAllStakes: (count: number) => import("@tanstack/react-query").UseQueryResult<Stake[], Error>;
 declare const usePlayerBets: (count: number) => import("@tanstack/react-query").UseQueryResult<BetInterface[], Error>;

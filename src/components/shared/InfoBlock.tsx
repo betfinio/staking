@@ -7,7 +7,6 @@ import { useProfit as useProfitC, useStaked as useStakedC } from '@/src/lib/quer
 import { useClaimed, useStaked as useStakedD } from '@/src/lib/query/dynamic';
 import type { StakingType } from '@/src/lib/types.ts';
 import { valueToNumber } from '@betfinio/abi';
-import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from 'betfinio_app/dialog';
 import { useTotalStaked as useTotalStakedC } from 'betfinio_app/lib/query/conservative';
 import { useTotalStaked as useTotalStakedD } from 'betfinio_app/lib/query/dynamic';
@@ -64,9 +63,7 @@ const InfoBlock: FC<{ type: StakingType }> = ({ type }) => {
 				</DialogTrigger>
 				<DialogContent className={'w-full min-h-[400px] staking'} aria-describedby={undefined}>
 					{type === 'conservative' ? <StatisticsModal /> : <DynamicStatisticsModal />}
-					<VisuallyHidden.Root asChild>
-						<DialogTitle />
-					</VisuallyHidden.Root>
+					<DialogTitle className={'hidden'} />
 				</DialogContent>
 			</Dialog>
 		</div>

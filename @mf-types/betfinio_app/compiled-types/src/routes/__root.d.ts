@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { i18n } from "i18next";
+import type { i18n } from 'i18next';
+import type { FC } from 'react';
 export declare const Root: FC<{
     instance: i18n;
     id: string;

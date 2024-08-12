@@ -1,6 +1,6 @@
 import SharedGameBlock from '@/src/components/shared/SharedGameBlock.tsx';
 import { useTotalStakedDiff, useUnrealizedProfit } from '@/src/lib/query/dynamic';
-import { valueToNumber } from '@betfinio/hooks/dist/utils';
+import { valueToNumber } from '@betfinio/abi';
 import { BetValue } from 'betfinio_app/BetValue';
 import { useTotalProfit, useTotalStaked } from 'betfinio_app/lib/query/dynamic';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from 'betfinio_app/tooltip';

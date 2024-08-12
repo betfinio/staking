@@ -1,6 +1,6 @@
 import SharedGameBlock from '@/src/components/shared/SharedGameBlock.tsx';
 import { useTotalProfitDiff, useTotalStakedDiff } from '@/src/lib/query/conservative';
-import { valueToNumber } from '@betfinio/hooks/dist/utils';
+import { valueToNumber } from '@betfinio/abi';
 import { BetValue } from 'betfinio_app/BetValue';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from 'betfinio_app/tooltip';
 import cx from 'clsx';

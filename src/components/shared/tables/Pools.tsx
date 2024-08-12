@@ -2,7 +2,7 @@ import { useDistributeProfit as useDistributeProfitConservative } from '@/src/li
 import { useDistributeProfit as useDistributeProfitDynamic } from '@/src/lib/query/dynamic';
 import type { ExtendedPoolInfo, StakingType } from '@/src/lib/types';
 import { valueToNumber } from '@betfinio/abi';
-import { truncateEthAddress } from '@betfinio/hooks/dist/utils';
+import { truncateEthAddress } from '@betfinio/abi';
 import { createColumnHelper } from '@tanstack/react-table';
 import { BetValue } from 'betfinio_app/BetValue';
 import { DataTable } from 'betfinio_app/DataTable';

@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 declare const Breadcrumb: React.ForwardRefExoticComponent<Omit<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>, "ref"> & {
     separator?: React.ReactNode;
 } & React.RefAttributes<HTMLElement>>;
@@ -16,4 +16,4 @@ declare const BreadcrumbEllipsis: {
     ({ className, ...props }: React.ComponentProps<"span">): import("react/jsx-runtime").JSX.Element;
     displayName: string;
 };
-export { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis, };
+export { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis };

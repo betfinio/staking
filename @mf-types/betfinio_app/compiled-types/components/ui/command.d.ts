@@ -1,5 +1,5 @@
-import * as React from "react";
-import { type DialogProps } from "@radix-ui/react-dialog";
+import type { DialogProps } from '@radix-ui/react-dialog';
+import * as React from 'react';
 declare const Command: React.ForwardRefExoticComponent<Omit<{
     children?: React.ReactNode;
 } & Pick<Pick<React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "key" | keyof React.HTMLAttributes<HTMLDivElement>> & {

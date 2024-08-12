@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from 'react';
 declare const Logo: FC<{
     size: 'small' | 'big';
     className?: string;

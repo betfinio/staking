@@ -2,11 +2,9 @@ import { useStake as useStakeC } from '@/src/lib/query/conservative';
 import { useStake as useStakeD } from '@/src/lib/query/dynamic';
 import type { StakingType } from '@/src/lib/types.ts';
 import { ZeroAddress } from '@betfinio/abi';
-import { valueToNumber } from '@betfinio/hooks/dist/utils';
+import { valueToNumber } from '@betfinio/abi';
 import Lock from '@betfinio/ui/dist/icons/Lock';
-import ActionModal from '@betfinio/ui/dist/shared/modal/ActionModal';
-import type { Action } from '@betfinio/ui/dist/shared/modal/types';
-import { useAllowance, useBalance, useIncreaseAllowance } from 'betfinio_app/lib/query/token';
+import { useAllowance, useBalance } from 'betfinio_app/lib/query/token';
 import { toast } from 'betfinio_app/use-toast';
 import { Loader } from 'lucide-react';
 import { type FC, useState } from 'react';
@@ -24,17 +22,17 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 	const { mutate: stakeD, isPending: loadingD, data: dataD } = useStakeD();
 	const { mutate: stakeC, isPending: loadingC, data: dataC } = useStakeC();
 	const config = useConfig();
-	const [open, setOpen] = useState(false);
+	// const [open, setOpen] = useState(false);
 
-	const { mutate: increase } = useIncreaseAllowance();
+	// const { mutate: increase } = useIncreaseAllowance();
 
-	const handleAction = async (action: Action) => {
-		if (action.type === 'sign_transaction') {
-			await handleStake();
-		} else if (action.type === 'request_allowance') {
-			increase();
-		}
-	};
+	// const handleAction = async (action: Action) => {
+	// 	if (action.type === 'sign_transaction') {
+	// 		await handleStake();
+	// 	} else if (action.type === 'request_allowance') {
+	// 		increase();
+	// 	}
+	// };
 	const handleStake = async () => {
 		const amount = BigInt(temp) * 10n ** 18n;
 		if (balance >= amount && allowance >= amount) {
@@ -44,7 +42,10 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 				stakeC({ amount, config });
 			}
 		} else if (allowance < amount) {
-			setOpen(true);
+			toast({
+				title: 'Insufficient allowance',
+				variant: 'destructive',
+			});
 		} else {
 			toast({
 				description: 'Insufficient balance to stake',
@@ -99,17 +100,17 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 					{loadingD || loadingC ? <Loader className={'h-4 w-4 animate-spin'} /> : t('conservative.stake')}
 				</button>
 			</div>
-			{open && (
-				<ActionModal
-					open={open}
-					onClose={() => setOpen(false)}
-					onAction={handleAction}
-					requiredAllowance={BigInt(temp) * 10n ** 18n}
-					allowance={allowance}
-					tx={dataD || dataC}
-					scan={import.meta.env.PUBLIC_ETHSCAN}
-				/>
-			)}
+			{/*{open && (*/}
+			{/*	<ActionModal*/}
+			{/*		open={open}*/}
+			{/*		onClose={() => setOpen(false)}*/}
+			{/*		onAction={handleAction}*/}
+			{/*		requiredAllowance={BigInt(temp) * 10n ** 18n}*/}
+			{/*		allowance={allowance}*/}
+			{/*		tx={dataD || dataC}*/}
+			{/*		scan={import.meta.env.PUBLIC_ETHSCAN}*/}
+			{/*	/>*/}
+			{/*)}*/}
 		</div>
 	);
 };

@@ -1,6 +1,13 @@
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types.ts';
-import { BetsMemoryContract, ConservativeStakingContract, ConservativeStakingPoolContract, ZeroAddress, defaultMulticall, valueToNumber } from '@betfinio/abi';
-import arrayFrom from '@betfinio/hooks/dist/utils';
+import {
+	BetsMemoryContract,
+	ConservativeStakingContract,
+	ConservativeStakingPoolContract,
+	ZeroAddress,
+	arrayFrom,
+	defaultMulticall,
+	valueToNumber,
+} from '@betfinio/abi';
 import { multicall, readContract } from '@wagmi/core';
 import { fetchTotalStaked } from 'betfinio_app/lib/api/conservative';
 import { fetchBalance } from 'betfinio_app/lib/api/token';
