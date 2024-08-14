@@ -77,7 +77,7 @@ const StakingInfo: FC = () => {
 					<CoinLarge className={'hidden md:block text-yellow-400 w-20 h-20'} />
 					<div className={'flex flex-col gap-[18px] md:gap-4 lg:text-sm xl:text-base justify-between items-start h-full'}>
 						<div className={cx(' flex flex-row items-center gap-2')}>
-							<CalculatorIcon className={'w-6 h-6 md:w-5 md:h-5 text-yellow-400'} /> 1 game
+							<CalculatorIcon className={'w-6 h-6 md:w-5 md:h-5 text-yellow-400'} /> 2 games
 						</div>
 						<div className={cx('flex ml-1 flex-row items-center gap-2 font-semibold')}>
 							<Blackjack className={'w-6 h-6 md:w-4 md:h-4 text-yellow-400'} />

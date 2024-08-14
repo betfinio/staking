@@ -1,5 +1,5 @@
 import SharedGameBlock from '@/src/components/shared/SharedGameBlock.tsx';
-import { usePredictContribution, useTotalProfit } from '@/src/lib/query/conservative';
+import { useLuroContribution, usePredictContribution, useTotalProfit } from '@/src/lib/query/conservative';
 import { valueToNumber } from '@betfinio/abi';
 import { Bank, CloseModal } from '@betfinio/ui/dist/icons';
 import { Link } from '@tanstack/react-router';
@@ -16,7 +16,8 @@ const StatisticsModal: FC = () => {
 	const { t } = useTranslation('', { keyPrefix: 'staking' });
 	console.log();
 	const { data: totalProfit } = useTotalProfit();
-	const { data: predictContribution } = usePredictContribution();
+	const { data: predictContribution = 0n } = usePredictContribution();
+	const { data: luroContribution = 0n } = useLuroContribution();
 	return (
 		<div className={cx('rounded-lg bg-primaryLighter z-10 border border-gray-800 font-semibold text-white w-full mx-auto')}>
 			<div className={'py-5 px-7'}>
@@ -39,7 +40,7 @@ const StatisticsModal: FC = () => {
 				<SharedGameBlock
 					games={[
 						{ amount: predictContribution, label: t('games.predict') },
-						{ amount: 0n, label: t('games.soon') },
+						{ amount: luroContribution, label: t('games.luro') },
 						{ amount: 0n, label: t('games.soon') },
 					]}
 				/>

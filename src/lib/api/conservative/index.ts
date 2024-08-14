@@ -46,12 +46,19 @@ export const fetchPool = async (pool: Address, config: Config): Promise<Extended
 };
 export const fetchTotalVolume = async (config: Config): Promise<bigint> => {
 	console.log('fetching total volume conservative');
-	return (await readContract(config, {
+	const predict = (await readContract(config, {
 		abi: BetsMemoryContract.abi,
 		address: import.meta.env.PUBLIC_BETS_MEMORY_ADDRESS as Address,
 		functionName: 'gamesVolume',
 		args: [import.meta.env.PUBLIC_PREDICT_ADDRESS as Address],
 	})) as bigint;
+	const luro = (await readContract(config, {
+		abi: BetsMemoryContract.abi,
+		address: import.meta.env.PUBLIC_BETS_MEMORY_ADDRESS as Address,
+		functionName: 'gamesVolume',
+		args: [import.meta.env.PUBLIC_LUCKY_ROUND_ADDRESS as Address],
+	})) as bigint;
+	return luro + predict;
 };
 
 export const fetchConservativePools = async (config: Config): Promise<ExtendedPoolInfo[]> => {
@@ -230,6 +237,20 @@ export async function fetchPredictContribution(config: Config): Promise<bigint> 
 			address: import.meta.env.PUBLIC_BETS_MEMORY_ADDRESS as Address,
 			functionName: 'gamesVolume',
 			args: [import.meta.env.PUBLIC_PREDICT_ADDRESS as Address],
+		})) as bigint) /
+			100_00n) *
+		3_60n
+	);
+}
+
+export async function fetchLuroContribution(config: Config): Promise<bigint> {
+	console.log('fetching predict contribution conservative');
+	return (
+		(((await readContract(config, {
+			abi: BetsMemoryContract.abi,
+			address: import.meta.env.PUBLIC_BETS_MEMORY_ADDRESS as Address,
+			functionName: 'gamesVolume',
+			args: [import.meta.env.PUBLIC_LUCKY_ROUND_ADDRESS as Address],
 		})) as bigint) /
 			100_00n) *
 		3_60n

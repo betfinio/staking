@@ -4,6 +4,7 @@ import {
 	fetchClaims,
 	fetchConservativePools,
 	fetchEarnings,
+	fetchLuroContribution,
 	fetchPredictContribution,
 	fetchProfit,
 	fetchStaked,
@@ -35,7 +36,13 @@ export const usePredictContribution = () => {
 	return useQuery<bigint>({
 		queryKey: ['staking', 'conservative', 'predictContribution'],
 		queryFn: () => fetchPredictContribution(config),
-		initialData: 0n,
+	});
+};
+export const useLuroContribution = () => {
+	const config = useConfig();
+	return useQuery<bigint>({
+		queryKey: ['staking', 'conservative', 'luroContribution'],
+		queryFn: () => fetchLuroContribution(config),
 	});
 };
 export const useTotalStakers = () => {
