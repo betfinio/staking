@@ -4,10 +4,11 @@ import type { StakingType } from '@/src/lib/types.ts';
 import { ZeroAddress } from '@betfinio/abi';
 import { valueToNumber } from '@betfinio/abi';
 import Lock from '@betfinio/ui/dist/icons/Lock';
+import { useAllowanceModal } from 'betfinio_app/allowance';
 import { useAllowance, useBalance } from 'betfinio_app/lib/query/token';
 import { toast } from 'betfinio_app/use-toast';
 import { Loader } from 'lucide-react';
-import { type FC, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NumericFormat } from 'react-number-format';
 import { useAccount, useConfig } from 'wagmi';
@@ -19,20 +20,26 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 	const { address = ZeroAddress } = useAccount();
 	const { data: allowance = 0n } = useAllowance(address);
 	const { data: balance = 0n } = useBalance(address);
-	const { mutate: stakeD, isPending: loadingD, data: dataD } = useStakeD();
-	const { mutate: stakeC, isPending: loadingC, data: dataC } = useStakeC();
+	const { mutate: stakeD, isPending: loadingD, data: dataD, isSuccess: successD } = useStakeD();
+	const { mutate: stakeC, isPending: loadingC, data: dataC, isSuccess: successC } = useStakeC();
+	const { requestAllowance, setResult, requested } = useAllowanceModal();
+
+	useEffect(() => {
+		if (dataD && successD) {
+			setResult?.(dataD);
+		}
+	}, [dataD, successD]);
+	useEffect(() => {
+		if (dataC && successC) {
+			setResult?.(dataC);
+		}
+	}, [dataC, successC]);
+	useEffect(() => {
+		if (requested) {
+			handleStake();
+		}
+	}, [requested]);
 	const config = useConfig();
-	// const [open, setOpen] = useState(false);
-
-	// const { mutate: increase } = useIncreaseAllowance();
-
-	// const handleAction = async (action: Action) => {
-	// 	if (action.type === 'sign_transaction') {
-	// 		await handleStake();
-	// 	} else if (action.type === 'request_allowance') {
-	// 		increase();
-	// 	}
-	// };
 	const handleStake = async () => {
 		const amount = BigInt(temp) * 10n ** 18n;
 		if (balance >= amount && allowance >= amount) {
@@ -46,6 +53,7 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 				title: 'Insufficient allowance',
 				variant: 'destructive',
 			});
+			requestAllowance?.('stake', amount);
 		} else {
 			toast({
 				description: 'Insufficient balance to stake',
