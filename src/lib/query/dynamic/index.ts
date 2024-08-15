@@ -136,7 +136,7 @@ export const useStakes = (address: Address) => {
 // mutations
 
 export const useStake = () => {
-	const { t } = useTranslation('', { keyPrefix: 'errors' });
+	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
 	const config = useConfig();
 	return useMutation<WriteContractReturnType, WriteContractErrorType, StakeParams>({
 		mutationKey: ['staking', 'dynamic', 'stake'],
