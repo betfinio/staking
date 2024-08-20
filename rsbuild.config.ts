@@ -17,19 +17,6 @@ const getApp = () => {
 	}
 };
 
-function getOutput() {
-	switch (process.env.PUBLIC_ENVIRONMENT) {
-		case 'development':
-			return 'https://staking.betfin.dev';
-		case 'production':
-			return 'https://staking.betfin.io';
-		case 'production-ua':
-			return 'https://staking.betfin.gg';
-		default:
-			return 'http://localhost:5555';
-	}
-}
-
 export default defineConfig({
 	server: {
 		port: 3000,
@@ -42,7 +29,7 @@ export default defineConfig({
 		favicon: './src/assets/favicon.svg',
 	},
 	output: {
-		assetPrefix: getOutput(),
+		assetPrefix: '/',
 	},
 	tools: {
 		rspack: {
