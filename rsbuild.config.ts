@@ -20,7 +20,7 @@ const getApp = () => {
 function getOutput() {
 	switch (process.env.PUBLIC_ENVIRONMENT) {
 		case 'development':
-			return '/app';
+			return '/staking';
 		case 'production':
 			return '';
 		case 'production-ua':
