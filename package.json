@@ -17,10 +17,10 @@
 		"@module-federation/enhanced": "^0.3.5",
 		"@nivo/line": "^0.87.0",
 		"@supabase/supabase-js": "^2.45.1",
-		"@tanstack/react-query": "^5.51.24",
-		"@tanstack/react-router": "^1.48.4",
+		"@tanstack/react-query": "^5.52.0",
+		"@tanstack/react-router": "^1.49.1",
 		"@tanstack/react-table": "^8.20.1",
-		"chart.js": "^4.4.3",
+		"chart.js": "^4.4.4",
 		"class-variance-authority": "^0.7.0",
 		"framer-motion": "^11.3.28",
 		"i18next": "^23.14.0",
@@ -37,7 +37,7 @@
 		"tailwindcss": "^3.4.10",
 		"tailwindcss-animate": "^1.0.7",
 		"viem": "^2.19.8",
-		"wagmi": "^2.12.6"
+		"wagmi": "^2.12.7"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.8.3",
@@ -45,7 +45,7 @@
 		"@rsbuild/plugin-react": "^1.0.1-beta.15",
 		"@tanstack/router-plugin": "^1.48.6",
 		"@types/luxon": "^3.4.2",
-		"@types/react": "^18.3.3",
+		"@types/react": "^18.3.4",
 		"@types/react-dom": "^18.3.0",
 		"lefthook": "^1.7.14",
 		"typescript": "^5.5.4"
