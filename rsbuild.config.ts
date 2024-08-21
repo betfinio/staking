@@ -7,13 +7,13 @@ import { dependencies } from './package.json';
 const getApp = () => {
 	switch (process.env.PUBLIC_ENVIRONMENT) {
 		case 'development':
-			return 'betfinio_app@https://betfin.dev/app/mf-manifest.json';
+			return 'betfinio_app@https://app.betfin.dev/mf-manifest.json';
 		case 'production':
 			return 'betfinio_app@https://app.betfin.io/mf-manifest.json';
 		case 'production-ua':
 			return 'betfinio_app@https://app.betfin.gg/mf-manifest.json';
 		default:
-			return 'betfinio_app@http://localhost:5555/app/mf-manifest.json';
+			return 'betfinio_app@http://localhost:5555/mf-manifest.json';
 	}
 };
 
