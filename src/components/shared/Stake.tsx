@@ -108,17 +108,6 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 					{loadingD || loadingC ? <Loader className={'h-4 w-4 animate-spin'} /> : t('conservative.stake')}
 				</button>
 			</div>
-			{/*{open && (*/}
-			{/*	<ActionModal*/}
-			{/*		open={open}*/}
-			{/*		onClose={() => setOpen(false)}*/}
-			{/*		onAction={handleAction}*/}
-			{/*		requiredAllowance={BigInt(temp) * 10n ** 18n}*/}
-			{/*		allowance={allowance}*/}
-			{/*		tx={dataD || dataC}*/}
-			{/*		scan={import.meta.env.PUBLIC_ETHSCAN}*/}
-			{/*	/>*/}
-			{/*)}*/}
 		</div>
 	);
 };

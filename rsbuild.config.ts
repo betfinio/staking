@@ -7,10 +7,10 @@ import { dependencies } from './package.json';
 const getApp = () => {
 	switch (process.env.PUBLIC_ENVIRONMENT) {
 		case 'development':
-			return 'betfinio_app@https://betfin-app-dev.web.app/mf-manifest.json';
+			return 'betfinio_app@https://app.betfin.dev/mf-manifest.json';
 		case 'production':
 			return 'betfinio_app@https://app.betfin.io/mf-manifest.json';
-		case 'production-ua':
+		case 'production-gg':
 			return 'betfinio_app@https://app.betfin.gg/mf-manifest.json';
 		default:
 			return 'betfinio_app@http://localhost:5555/mf-manifest.json';
@@ -20,13 +20,13 @@ const getApp = () => {
 function getOutput() {
 	switch (process.env.PUBLIC_ENVIRONMENT) {
 		case 'development':
-			return 'https://betfin-staking-dev.web.app';
+			return 'https://staking.betfin.dev/';
 		case 'production':
 			return 'https://staking.betfin.io';
-		case 'production-ua':
+		case 'production-gg':
 			return 'https://staking.betfin.gg';
 		default:
-			return 'http://localhost:5555';
+			return '/';
 	}
 }
 
@@ -55,13 +55,6 @@ export default defineConfig({
 					name: 'betfinio_staking',
 					remotes: {
 						betfinio_app: getApp(),
-					},
-					exposes: {
-						'./lib/api/conservative': './src/lib/api/conservative/index.ts',
-						'./lib/api/dynamic': './src/lib/api/dynamic/index.ts',
-						'./lib/query/conservative': './src/lib/query/conservative/index.ts',
-						'./lib/query/dynamic': './src/lib/query/dynamic/index.ts',
-						'./lib/types': './src/lib/types.ts',
 					},
 					shared: {
 						react: {

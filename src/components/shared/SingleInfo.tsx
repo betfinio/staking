@@ -53,7 +53,6 @@ const SingleIngo: FC<SingleIngoProps> = ({ className = '', label, amount, subtit
 						{percent && '%'}
 					</span>
 				</span>
-				<span className={'md:text-md text-xs text-gray-500'}>{isSoon ? 'Coming soon' : subtitle}</span>
 			</div>
 			{isSoon && <div className={'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-yellow-400 font-bold'}>Soon</div>}
 		</div>
