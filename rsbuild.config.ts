@@ -5,29 +5,11 @@ import { TanStackRouterRspack } from '@tanstack/router-plugin/rspack';
 import { dependencies } from './package.json';
 
 const getApp = () => {
-	switch (process.env.PUBLIC_ENVIRONMENT) {
-		case 'development':
-			return 'betfinio_app@https://app.betfin.dev/mf-manifest.json';
-		case 'production':
-			return 'betfinio_app@https://app.betfin.io/mf-manifest.json';
-		case 'production-gg':
-			return 'betfinio_app@https://app.betfin.gg/mf-manifest.json';
-		default:
-			return 'betfinio_app@http://localhost:5555/mf-manifest.json';
-	}
+	return `betfinio_app@${process.env.PUBLIC_APP_URL}/mf-manifest.json`;
 };
 
 function getOutput() {
-	switch (process.env.PUBLIC_ENVIRONMENT) {
-		case 'development':
-			return 'https://staking.betfin.dev/';
-		case 'production':
-			return 'https://staking.betfin.io';
-		case 'production-gg':
-			return 'https://staking.betfin.gg';
-		default:
-			return '/';
-	}
+	return process.env.PUBLIC_OUTPUT_URL;
 }
 
 export default defineConfig({
