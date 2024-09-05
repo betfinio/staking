@@ -1,0 +1,92 @@
+{
+	"title": {
+		"conservative": "Konzervativní staking",
+		"dynamic": "Dynamický staking"
+	},
+	"games": {
+		"predict": "Krypto Predikce",
+		"roulette": "Ruleta",
+		"luro": "Šťastné kolo",
+		"soon": "Brzy"
+	},
+	"subtitle": {
+		"conservative": "Zisky z poplatků ze sdíleného sázení",
+		"dynamic": "Likvidita pro výplaty loterijních her"
+	},
+	"stat": {
+		"tvl": "Celkově uzamčeno",
+		"stakers": "Celkový počet stakingu",
+		"profit": "Celkově vyděláno"
+	},
+	"links": {
+		"conservative": "Konzervativní Staking",
+		"dynamic": "Dynamický Staking"
+	},
+	"stats": {
+		"title": "Váš Konzervativní Staking",
+		"staking": "Váš staking",
+		"share": "Váš podíl",
+		"earnings": "Vaše výdělky"
+	},
+	"total": {
+		"stakers": "{count, plural, =0 {Žádní stakeři} =1 {1 staker} other {# stakerů}}",
+		"bets": "{count, plural, =0 {Žádné sázky} =1 {1 sázka} other {# sázek}}"
+	},
+	"table": {
+		"title": "Můj Staking",
+		"tabs": {
+			"staking": "Můj Staking",
+			"claims": "Moje Nároky",
+			"earnings": "Moje Výdělky",
+			"unstakes": "Moje Odsázení",
+			"pools": "Pondy"
+		},
+		"date": "Datum Stakingu",
+		"amount": "Částka",
+		"profit": "Zisk",
+		"capacity": "Kapacita",
+		"unlockDate": "Datum Odemčení",
+		"pool": "Pond",
+		"status": "Stav",
+		"noData": "Žádná data k zobrazení",
+		"withdraw": "Vybrat",
+		"reward": "Odměny",
+		"totalStaked": "Celkově stakováno",
+		"ended": "Nárokováno"
+	},
+	"conservative": {
+		"earn": "Zatím není co nárokovat",
+		"stakeBet": "Stakovat BET token",
+		"unstake": "Nárokovat",
+		"stake": "Stakovat",
+		"stakingPeriod": "Doba stakingu je pevně stanovena na 80 týdnů",
+		"unlock": "Odemknout",
+		"unlockTitle": "Zvyšte povolení BET tokenů pro staking",
+		"zeroBalance": "Na vašem účtu není dostatek tokenů pro staking. Použijte faucet pro získání dalších.",
+		"faucet": "Faucet",
+		"profitTitle": "Nárokovat ",
+		"placeholder": "{count, plural, other {Částka k Stakování}}",
+		"claimTitle": "Nárokovatelná částka je {profit} BET",
+		"claim": "Nárokovat",
+		"loginText": "Prosím připojte svou peněženku pro staking BET tokenů",
+		"login": "Připojit peněženku",
+		"pending": "bude připsáno v dalším cyklu"
+	},
+	"dynamic": {
+		"earn": "Zatím není co nárokovat",
+		"stakeBet": "Stakovat BET token",
+		"unstake": "Nárokovat",
+		"stake": "Stakovat",
+		"stakingPeriod": "Doba stakingu je pevně stanovena na 80 týdnů",
+		"unlock": "Odemknout",
+		"unlockTitle": "Zvyšte povolení BET tokenů pro staking",
+		"zeroBalance": "Na vašem účtu není dostatek tokenů pro staking. Použijte faucet pro získání dalších.",
+		"faucet": "Faucet",
+		"profitTitle": "Nárokovat {profit} BET",
+		"placeholder": "Částka k Stakování",
+		"claimTitle": "Nárokovatelná částka je {profit} BET",
+		"claim": "Nárokovat",
+		"loginText": "Prosím připojte svou peněženku pro staking BET tokenů",
+		"login": "Připojit peněženku"
+	}
+}
