@@ -2,7 +2,7 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
 	overwrite: true,
-	schema: "https://api.studio.thegraph.com/query/88505/conservative-staking-dev/version/latest",
+	schema: 'https://api.studio.thegraph.com/query/88505/conservative-staking-dev/version/latest',
 	documents: ['src/lib/**/gql/*.ts', '!src/lib/**/gql/*.gen.*'],
 	generates: {
 		'src/gql/': {

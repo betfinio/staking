@@ -265,23 +265,19 @@ export const fetchStakes = async (address: Address, config: Config): Promise<Sta
 	}
 
 	const staked = await requestConservativeStakes(address);
-	return staked
-
-		.map((stake) => {
-			const { unlock, blockTimestamp, pool, staker, amount, transactionHash, reward } = stake;
-			return {
-				start: blockTimestamp,
-				end: unlock,
-				amount: BigInt(amount),
-				pool: pool,
-				reward: BigInt(reward),
-				staker: staker,
-				ended: false,
-				hash: transactionHash,
-			} as Stake;
-		})
-		
-		
+	return staked.map((stake) => {
+		const { unlock, blockTimestamp, pool, staker, amount, transactionHash, reward } = stake;
+		return {
+			start: blockTimestamp,
+			end: unlock,
+			amount: BigInt(amount),
+			pool: pool,
+			reward: BigInt(reward),
+			staker: staker,
+			ended: false,
+			hash: transactionHash,
+		} as Stake;
+	});
 };
 
 export const fetchCalculationsStat = async (timeframe: Timeframe, options: Options): Promise<Stat[]> => {

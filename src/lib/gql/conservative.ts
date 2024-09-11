@@ -1,9 +1,8 @@
-
-import { GraphQLClient } from "graphql-request";
+import { GraphQLClient } from 'graphql-request';
 import { gql } from 'graphql-tag';
 import type { Address } from 'viem';
-import { StakedInfo } from "../types";
-import { getSdk } from "./conservative.gen";
+import type { StakedInfo } from '../types';
+import { getSdk } from './conservative.gen';
 
 gql`
       query getStaked($staker: Bytes) {
@@ -20,19 +19,13 @@ gql`
       }
 	`;
 
-
-
-
-
-
-    const URL = import.meta.env.PUBLIC_CONSERVATIVE_GRAPH_URL;
+const URL = import.meta.env.PUBLIC_CONSERVATIVE_GRAPH_URL;
 
 const client = new GraphQLClient(URL);
 
 export const requestConservativeStakes = async (staker: Address) => {
-	
-  const getStaked = getSdk(client).getStaked
+	const getStaked = getSdk(client).getStaked;
 
-  const data = await getStaked({staker})
+	const data = await getStaked({ staker });
 	return data.stakeds as StakedInfo[];
 };
