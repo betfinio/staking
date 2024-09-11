@@ -19,7 +19,7 @@ import type { SupabaseClient } from 'betfinio_app/supabase';
 import { DateTime } from 'luxon';
 import type { Address } from 'viem';
 import type { Config } from 'wagmi';
-import { requestConservativeStakes } from '../../graph/conservative';
+import { requestConservativeStakes } from '../../gql/conservative';
 
 export const fetchPool = async (pool: Address, config: Config): Promise<ExtendedPoolInfo> => {
 	console.log('fetching pool conservative', pool);
@@ -280,8 +280,8 @@ export const fetchStakes = async (address: Address, config: Config): Promise<Sta
 				hash: transactionHash,
 			} as Stake;
 		})
-		.sort((a, b) => a.start - b.start)
-		.reverse();
+		
+		
 };
 
 export const fetchCalculationsStat = async (timeframe: Timeframe, options: Options): Promise<Stat[]> => {

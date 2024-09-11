@@ -88,13 +88,65 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  IndexRoute,
-  StakingRoute,
-  ConservativeIndexRoute,
-  DynamicIndexRoute,
-  StatisticsIndexRoute,
-})
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/staking': typeof StakingRoute
+  '/conservative': typeof ConservativeIndexRoute
+  '/dynamic': typeof DynamicIndexRoute
+  '/statistics': typeof StatisticsIndexRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/staking': typeof StakingRoute
+  '/conservative': typeof ConservativeIndexRoute
+  '/dynamic': typeof DynamicIndexRoute
+  '/statistics': typeof StatisticsIndexRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/staking': typeof StakingRoute
+  '/conservative/': typeof ConservativeIndexRoute
+  '/dynamic/': typeof DynamicIndexRoute
+  '/statistics/': typeof StatisticsIndexRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/staking' | '/conservative' | '/dynamic' | '/statistics'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/staking' | '/conservative' | '/dynamic' | '/statistics'
+  id:
+    | '__root__'
+    | '/'
+    | '/staking'
+    | '/conservative/'
+    | '/dynamic/'
+    | '/statistics/'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  StakingRoute: typeof StakingRoute
+  ConservativeIndexRoute: typeof ConservativeIndexRoute
+  DynamicIndexRoute: typeof DynamicIndexRoute
+  StatisticsIndexRoute: typeof StatisticsIndexRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  StakingRoute: StakingRoute,
+  ConservativeIndexRoute: ConservativeIndexRoute,
+  DynamicIndexRoute: DynamicIndexRoute,
+  StatisticsIndexRoute: StatisticsIndexRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 

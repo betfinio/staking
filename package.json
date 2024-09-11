@@ -9,7 +9,9 @@
 		"prod": "rsbuild dev --env-mode production --open",
 		"local": "rsbuild dev --env-mode localhost --open",
 		"format": "biome format --write",
-		"preview": "rsbuild preview"
+		"preview": "rsbuild preview",
+		"codegen": "graphql-codegen --config codegen.ts"
+
 	},
 	"dependencies": {
 		"@betfinio/abi": "^1.0.5",
@@ -42,12 +44,20 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.8.3",
+		"@graphql-codegen/cli": "^5.0.2",
+		"@graphql-codegen/client-preset": "^4.3.3",
+		"@graphql-codegen/near-operation-file-preset": "^3.0.0",
+		"@graphql-codegen/typescript": "^4.0.9",
+		"@graphql-codegen/typescript-graphql-request": "^6.2.0",
+		"@graphql-codegen/typescript-operations": "^4.2.3",
 		"@rsbuild/core": "^1.0.1-rc.4",
 		"@rsbuild/plugin-react": "^1.0.1-rc.4",
 		"@tanstack/router-plugin": "^1.55.0",
 		"@types/luxon": "^3.4.2",
 		"@types/react": "^18.3.5",
 		"@types/react-dom": "^18.3.0",
+		"graphql-request": "^7.1.0",
+		"graphql-tag": "^2.12.6",
 		"lefthook": "^1.7.15",
 		"typescript": "^5.5.4"
 	},
