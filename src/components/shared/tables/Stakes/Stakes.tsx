@@ -58,13 +58,12 @@ const Stakes: FC<{ data: Stake[]; isLoading: boolean }> = ({ data, isLoading }) 
 		}),
 		columnHelper.accessor('reward', {
 			header: t('table.reward'),
-			cell: RewardCell ,
+			cell: RewardCell,
 		}),
 	];
 
 	// @ts-ignore
 	return <DataTable columns={columns} data={data} isLoading={isLoading} />;
 };
-
 
 export default Stakes;

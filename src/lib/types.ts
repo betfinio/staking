@@ -36,13 +36,12 @@ export interface PoolInfo {
 
 export type StakingType = 'conservative' | 'dynamic';
 
-
-export interface StakedInfo{
-	amount:number;
-	blockTimestamp:number;
-	pool:Address
-	unlock:number;
-	staker:Address
-	reward:number;
-	transactionHash:Address
+export interface StakedInfo {
+	amount: number;
+	blockTimestamp: number;
+	pool: Address;
+	unlock: number;
+	staker: Address;
+	reward: number;
+	transactionHash: Address;
 }

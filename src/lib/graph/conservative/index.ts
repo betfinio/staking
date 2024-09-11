@@ -1,12 +1,11 @@
 import { Client, cacheExchange, fetchExchange, gql } from 'urql';
 import type { Address } from 'viem';
-import { StakedInfo } from '../../types';
+import type { StakedInfo } from '../../types';
 const URL = import.meta.env.PUBLIC_CONSERVATIVE_GRAPH_URL;
 
 const client = new Client({
 	url: URL,
-	exchanges: [
-   fetchExchange],
+	exchanges: [fetchExchange],
 });
 
 export const requestConservativeStakes = async (staker: Address) => {
@@ -29,6 +28,3 @@ export const requestConservativeStakes = async (staker: Address) => {
 
 	return result.data.stakeds.reverse() as StakedInfo[];
 };
-
-
-

@@ -199,12 +199,11 @@ export const useStakes = (address: Address) => {
 	// 		});
 	// 		const { staker } = event.args as unknown as { staker: string };
 
-
 	// 		if (staker.toLowerCase() === address.toLowerCase()) {
 
 	// 			console.log("Staked watcher")
 	// 			setTimeout(async() => {
-					
+
 	// 				console.log("REFETCHING")
 	// 				await queryClient.invalidateQueries({
 	// 				queryKey: ['staking', 'conservative',],
@@ -270,7 +269,7 @@ export type StakeParams = {
 export const useStake = () => {
 	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
 	const config = useConfig();
-	const queryClient = useQueryClient()
+	const queryClient = useQueryClient();
 	return useMutation<WriteContractReturnType, WriteContractErrorType, StakeParams>({
 		mutationKey: ['staking', 'conservative', 'stake'],
 		mutationFn: stake,
@@ -291,9 +290,9 @@ export const useStake = () => {
 				duration: 10000,
 				action: getTransactionLink(data),
 			});
-			await waitForTransactionReceipt(config.getClient(), { hash: data,confirmations:3 });
-			
-			 queryClient.invalidateQueries({
+			await waitForTransactionReceipt(config.getClient(), { hash: data, confirmations: 3 });
+
+			queryClient.invalidateQueries({
 				queryKey: ['staking', 'conservative'],
 			});
 			update({
@@ -302,7 +301,6 @@ export const useStake = () => {
 				description: 'Transaction has been executed',
 				duration: 5000,
 			});
-
 		},
 	});
 };
@@ -411,24 +409,21 @@ export const useDistributeProfit = () => {
 	});
 };
 
-
 export const useStakeReward = (address: Address, pool: Address, hash: Address) => {
-
 	const config = useConfig();
 	return useQuery({
 		queryKey: ['staking', 'conservative', 'reward', pool, address, hash],
 		queryFn: () => fetchStakeReward(address, pool, config),
 		refetchOnWindowFocus: false,
-		refetchOnMount: false
+		refetchOnMount: false,
 	});
 };
 export const useStakeStatus = (address: Address, pool: Address, hash: Address) => {
-
 	const config = useConfig();
 	return useQuery({
 		queryKey: ['staking', 'conservative', 'status', pool, address, hash],
 		queryFn: () => fetchStakeStatus(address, pool, config),
 		refetchOnWindowFocus: false,
-		refetchOnMount: false
+		refetchOnMount: false,
 	});
 };

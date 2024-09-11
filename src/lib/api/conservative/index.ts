@@ -8,7 +8,7 @@ import {
 	defaultMulticall,
 	valueToNumber,
 } from '@betfinio/abi';
-import { multicall, readContract, call } from '@wagmi/core';
+import { call, multicall, readContract } from '@wagmi/core';
 import { fetchTotalStaked } from 'betfinio_app/lib/api/conservative';
 import { fetchBalance } from 'betfinio_app/lib/api/token';
 import type { Options, Stake, Stat } from 'betfinio_app/lib/types';
@@ -264,24 +264,24 @@ export const fetchStakes = async (address: Address, config: Config): Promise<Sta
 		return [];
 	}
 
-	const staked = await requestConservativeStakes(address)
+	const staked = await requestConservativeStakes(address);
 	return staked
 
 		.map((stake) => {
-			const { unlock, blockTimestamp, pool, staker, amount ,transactionHash,reward} = stake
+			const { unlock, blockTimestamp, pool, staker, amount, transactionHash, reward } = stake;
 			return {
 				start: blockTimestamp,
 				end: unlock,
 				amount: BigInt(amount),
 				pool: pool,
-				reward:BigInt(reward),
+				reward: BigInt(reward),
 				staker: staker,
 				ended: false,
-				hash:transactionHash
-
+				hash: transactionHash,
 			} as Stake;
 		})
-		.sort((a, b) => a.start - b.start).reverse()
+		.sort((a, b) => a.start - b.start)
+		.reverse();
 };
 
 export const fetchCalculationsStat = async (timeframe: Timeframe, options: Options): Promise<Stat[]> => {
@@ -339,25 +339,21 @@ const getTenFridaysFrom = (friday: DateTime) => {
 	return fridays;
 };
 
-
-
 export const fetchStakeReward = async (address: Address, pool: Address, config: Config) => {
 	const reward = (await readContract(config, {
 		abi: ConservativeStakingPoolContract.abi,
 		address: pool,
 		functionName: 'profit',
 		args: [address],
-
 	})) as bigint;
-	return reward
-}
+	return reward;
+};
 export const fetchStakeStatus = async (address: Address, pool: Address, config: Config) => {
-
 	const status = (await readContract(config, {
 		abi: ConservativeStakingPoolContract.abi,
 		address: pool,
 		functionName: 'getStake',
 		args: [address],
 	})) as [bigint, bigint, bigint, Address, boolean, boolean];
-	return status[4]
-}
+	return status[4];
+};
