@@ -1,7 +1,7 @@
-import Stakes from '@/src/components/shared/tables/Stakes.tsx';
 import { useStakes } from '@/src/lib/query/dynamic';
 import { ZeroAddress } from '@betfinio/abi';
 import { useAccount } from 'wagmi';
+import Stakes from '../../shared/tables/Stakes/Stakes';
 
 const StakesTable = () => {
 	const { address = ZeroAddress } = useAccount();

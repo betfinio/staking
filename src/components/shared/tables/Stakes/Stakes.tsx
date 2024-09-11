@@ -1,14 +1,13 @@
-import { valueToNumber } from '@betfinio/abi';
-import { truncateEthAddress } from '@betfinio/abi';
-import { Bet } from '@betfinio/ui/dist/icons';
-import { type CellContext, createColumnHelper } from '@tanstack/react-table';
+import { truncateEthAddress, valueToNumber } from '@betfinio/abi';
+import { createColumnHelper } from '@tanstack/react-table';
 import { BetValue } from 'betfinio_app/BetValue';
 import { DataTable } from 'betfinio_app/DataTable';
 import type { Stake } from 'betfinio_app/lib/types';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from 'betfinio_app/tooltip';
 import { DateTime } from 'luxon';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { RewardCell } from './RewardCell';
+import { StatusCell } from './StatusCell';
 
 const columnHelper = createColumnHelper<Stake>();
 
@@ -55,11 +54,11 @@ const Stakes: FC<{ data: Stake[]; isLoading: boolean }> = ({ data, isLoading }) 
 			meta: {
 				className: 'hidden md:table-cell ',
 			},
-			cell: (props) => <span>{props.getValue() === true ? 'Ended' : 'Active'}</span>,
+			cell: StatusCell,
 		}),
 		columnHelper.accessor('reward', {
 			header: t('table.reward'),
-			cell: (props) => <RewardValue {...props} />,
+			cell: RewardCell ,
 		}),
 	];
 
@@ -67,28 +66,5 @@ const Stakes: FC<{ data: Stake[]; isLoading: boolean }> = ({ data, isLoading }) 
 	return <DataTable columns={columns} data={data} isLoading={isLoading} />;
 };
 
-// todo add ts
-const RewardValue = (props: CellContext<Stake, bigint | undefined>) => {
-	const poolReward = Number(props.getValue() ?? 1n);
-	const poolAmount = Number(props.row.getValue('amount') as bigint);
-	const percentage = (poolReward / poolAmount) * 100;
-	return (
-		<TooltipProvider delayDuration={0}>
-			<Tooltip>
-				<div className={'text-green-400 font-bold'}>
-					<TooltipTrigger>
-						<span>{percentage.toFixed(2)}%</span>
-					</TooltipTrigger>
-				</div>
-				<TooltipContent className={'text-white bg-black'}>
-					Claimed rewards:
-					<div className={'text-yellow-400 font-bold flex items-center gap-1 justify-center'}>
-						{Math.floor(valueToNumber(props.getValue())).toLocaleString()} <Bet />
-					</div>
-				</TooltipContent>
-			</Tooltip>
-		</TooltipProvider>
-	);
-};
 
 export default Stakes;

@@ -7,6 +7,8 @@ import {
 	fetchLuroContribution,
 	fetchPredictContribution,
 	fetchProfit,
+	fetchStakeReward,
+	fetchStakeStatus,
 	fetchStaked,
 	fetchStakes,
 	fetchTotalBets,
@@ -119,45 +121,45 @@ export const useClaimable = (address: Address) => {
 export const useStaked = (address?: Address) => {
 	const queryClient = useQueryClient();
 	const config = useConfig();
-	useWatchContractEvent({
-		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-		eventName: 'Staked',
-		onLogs: async (log: Log[]) => {
-			const event = decodeEventLog({
-				abi: ConservativeStakingContract.abi,
-				...log[0],
-				strict: true,
-			});
-			const { staker } = event.args as unknown as { staker: string };
-			if (staker.toLowerCase() === address?.toLowerCase()) {
-				await queryClient.invalidateQueries({
-					queryKey: ['staking', 'conservative', 'staked', address],
-				});
-			}
-		},
-	});
-	useWatchContractEvent({
-		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-		eventName: 'Withdraw',
-		onLogs: async (log: Log[]) => {
-			const event = decodeEventLog({
-				abi: ConservativeStakingContract.abi,
-				...log[0],
-				strict: true,
-			});
-			const { staker } = event.args as unknown as { staker: string };
-			if (staker.toLowerCase() === address?.toLowerCase()) {
-				await queryClient.invalidateQueries({
-					queryKey: ['staking', 'conservative', 'staked', address],
-				});
-				await queryClient.invalidateQueries({
-					queryKey: ['staking', 'conservative', 'stakes', address],
-				});
-			}
-		},
-	});
+	// useWatchContractEvent({
+	// 	abi: ConservativeStakingContract.abi,
+	// 	address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
+	// 	eventName: 'Staked',
+	// 	onLogs: async (log: Log[]) => {
+	// 		const event = decodeEventLog({
+	// 			abi: ConservativeStakingContract.abi,
+	// 			...log[0],
+	// 			strict: true,
+	// 		});
+	// 		const { staker } = event.args as unknown as { staker: string };
+	// 		if (staker.toLowerCase() === address?.toLowerCase()) {
+	// 			await queryClient.invalidateQueries({
+	// 				queryKey: ['staking', 'conservative', 'staked', address],
+	// 			});
+	// 		}
+	// 	},
+	// });
+	// useWatchContractEvent({
+	// 	abi: ConservativeStakingContract.abi,
+	// 	address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
+	// 	eventName: 'Withdraw',
+	// 	onLogs: async (log: Log[]) => {
+	// 		const event = decodeEventLog({
+	// 			abi: ConservativeStakingContract.abi,
+	// 			...log[0],
+	// 			strict: true,
+	// 		});
+	// 		const { staker } = event.args as unknown as { staker: string };
+	// 		if (staker.toLowerCase() === address?.toLowerCase()) {
+	// 			await queryClient.invalidateQueries({
+	// 				queryKey: ['staking', 'conservative', 'staked', address],
+	// 			});
+	// 			await queryClient.invalidateQueries({
+	// 				queryKey: ['staking', 'conservative', 'stakes', address],
+	// 			});
+	// 		}
+	// 	},
+	// });
 	return useQuery<bigint>({
 		queryKey: ['staking', 'conservative', 'staked', address],
 		queryFn: () => fetchStaked(address, config),
@@ -185,24 +187,31 @@ export const useEarnings = (address: Address) => {
 export const useStakes = (address: Address) => {
 	const queryClient = useQueryClient();
 	const config = useConfig();
-	useWatchContractEvent({
-		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-		eventName: 'Staked',
-		onLogs: async (log: Log[]) => {
-			const event = decodeEventLog({
-				abi: ConservativeStakingContract.abi,
-				...log[0],
-				strict: true,
-			});
-			const { staker } = event.args as unknown as { staker: string };
-			if (staker.toLowerCase() === address.toLowerCase()) {
-				await queryClient.invalidateQueries({
-					queryKey: ['staking', 'conservative', 'stakes', address],
-				});
-			}
-		},
-	});
+	// useWatchContractEvent({
+	// 	abi: ConservativeStakingContract.abi,
+	// 	address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
+	// 	eventName: 'Staked',
+	// 	onLogs: async (log: Log[]) => {
+	// 		const event = decodeEventLog({
+	// 			abi: ConservativeStakingContract.abi,
+	// 			...log[0],
+	// 			strict: true,
+	// 		});
+	// 		const { staker } = event.args as unknown as { staker: string };
+
+
+	// 		if (staker.toLowerCase() === address.toLowerCase()) {
+
+	// 			console.log("Staked watcher")
+	// 			setTimeout(async() => {
+					
+	// 				console.log("REFETCHING")
+	// 				await queryClient.invalidateQueries({
+	// 				queryKey: ['staking', 'conservative',],
+	// 			})}, 10000)
+	// 		}
+	// 	},
+	// });
 	return useQuery<Stake[]>({
 		queryKey: ['staking', 'conservative', 'stakes', address],
 		queryFn: () => fetchStakes(address, config),
@@ -261,6 +270,7 @@ export type StakeParams = {
 export const useStake = () => {
 	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
 	const config = useConfig();
+	const queryClient = useQueryClient()
 	return useMutation<WriteContractReturnType, WriteContractErrorType, StakeParams>({
 		mutationKey: ['staking', 'conservative', 'stake'],
 		mutationFn: stake,
@@ -281,13 +291,18 @@ export const useStake = () => {
 				duration: 10000,
 				action: getTransactionLink(data),
 			});
-			await waitForTransactionReceipt(config.getClient(), { hash: data });
+			await waitForTransactionReceipt(config.getClient(), { hash: data,confirmations:3 });
+			
+			 queryClient.invalidateQueries({
+				queryKey: ['staking', 'conservative'],
+			});
 			update({
 				title: 'Staked successful',
 				variant: 'default',
 				description: 'Transaction has been executed',
 				duration: 5000,
 			});
+
 		},
 	});
 };
@@ -393,5 +408,27 @@ export const useDistributeProfit = () => {
 				duration: 5000,
 			});
 		},
+	});
+};
+
+
+export const useStakeReward = (address: Address, pool: Address, hash: Address) => {
+
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['staking', 'conservative', 'reward', pool, address, hash],
+		queryFn: () => fetchStakeReward(address, pool, config),
+		refetchOnWindowFocus: false,
+		refetchOnMount: false
+	});
+};
+export const useStakeStatus = (address: Address, pool: Address, hash: Address) => {
+
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['staking', 'conservative', 'status', pool, address, hash],
+		queryFn: () => fetchStakeStatus(address, pool, config),
+		refetchOnWindowFocus: false,
+		refetchOnMount: false
 	});
 };

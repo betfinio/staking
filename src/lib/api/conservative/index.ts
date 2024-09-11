@@ -8,7 +8,7 @@ import {
 	defaultMulticall,
 	valueToNumber,
 } from '@betfinio/abi';
-import { multicall, readContract } from '@wagmi/core';
+import { multicall, readContract, call } from '@wagmi/core';
 import { fetchTotalStaked } from 'betfinio_app/lib/api/conservative';
 import { fetchBalance } from 'betfinio_app/lib/api/token';
 import type { Options, Stake, Stat } from 'betfinio_app/lib/types';
@@ -19,6 +19,7 @@ import type { SupabaseClient } from 'betfinio_app/supabase';
 import { DateTime } from 'luxon';
 import type { Address } from 'viem';
 import type { Config } from 'wagmi';
+import { requestConservativeStakes } from '../../graph/conservative';
 
 export const fetchPool = async (pool: Address, config: Config): Promise<ExtendedPoolInfo> => {
 	console.log('fetching pool conservative', pool);
@@ -258,54 +259,29 @@ export async function fetchLuroContribution(config: Config): Promise<bigint> {
 }
 
 export const fetchStakes = async (address: Address, config: Config): Promise<Stake[]> => {
-	console.log('fetching stakes conservative', address);
+	console.log('fetching stakes conservative ', address);
 	if (!address) {
 		return [];
 	}
-	const pools = await fetchStakersPools(address, config);
-	const stakes = (await multicall(config, {
-		multicallAddress: defaultMulticall,
-		contracts: pools.map((pool) => ({
-			...ConservativeStakingPoolContract,
-			address: pool,
-			functionName: 'getStake',
-			args: [address],
-		})),
-	})) as {
-		error: unknown;
-		result: (bigint | Address | boolean)[];
-		status: unknown;
-	}[];
 
-	const rewards = (await multicall(config, {
-		multicallAddress: defaultMulticall,
-		contracts: pools.map((pool) => ({
-			...ConservativeStakingPoolContract,
-			address: pool,
-			functionName: 'profit',
-			args: [address],
-		})),
-	})) as {
-		error: unknown;
-		result: bigint;
-		status: unknown;
-	}[];
+	const staked = await requestConservativeStakes(address)
+	return staked
 
-	return stakes
-		.map((e) => e.result)
-		.map((stake, i) => {
-			const [startDate, unlockDate, amount, staker, ended] = stake as [bigint, bigint, bigint, Address, boolean, boolean];
+		.map((stake) => {
+			const { unlock, blockTimestamp, pool, staker, amount ,transactionHash,reward} = stake
 			return {
-				start: Number(startDate),
-				end: Number(unlockDate),
-				amount: amount,
-				pool: pools[i],
-				reward: rewards[i].result,
+				start: blockTimestamp,
+				end: unlock,
+				amount: BigInt(amount),
+				pool: pool,
+				reward:BigInt(reward),
 				staker: staker,
-				ended: ended,
+				ended: false,
+				hash:transactionHash
+
 			} as Stake;
 		})
-		.reverse();
+		.sort((a, b) => a.start - b.start).reverse()
 };
 
 export const fetchCalculationsStat = async (timeframe: Timeframe, options: Options): Promise<Stat[]> => {
@@ -362,3 +338,26 @@ const getTenFridaysFrom = (friday: DateTime) => {
 	}
 	return fridays;
 };
+
+
+
+export const fetchStakeReward = async (address: Address, pool: Address, config: Config) => {
+	const reward = (await readContract(config, {
+		abi: ConservativeStakingPoolContract.abi,
+		address: pool,
+		functionName: 'profit',
+		args: [address],
+
+	})) as bigint;
+	return reward
+}
+export const fetchStakeStatus = async (address: Address, pool: Address, config: Config) => {
+
+	const status = (await readContract(config, {
+		abi: ConservativeStakingPoolContract.abi,
+		address: pool,
+		functionName: 'getStake',
+		args: [address],
+	})) as [bigint, bigint, bigint, Address, boolean, boolean];
+	return status[4]
+}
