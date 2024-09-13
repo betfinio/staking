@@ -3,7 +3,7 @@ import EarningsTable from '@/src/components/conservative/tables/EarningsTable.ts
 import PoolsTable from '@/src/components/conservative/tables/PoolsTable.tsx';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
 import { useTranslation } from 'react-i18next';
-import StakesTable from './tables/StakesTable';
+import StakesTable from './tables/Stakes/StakesTable';
 
 const Tables = () => {
 	const { t } = useTranslation('', { keyPrefix: 'staking.table' });

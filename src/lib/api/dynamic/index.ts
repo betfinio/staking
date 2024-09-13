@@ -4,6 +4,7 @@ import { multicall, readContract } from '@wagmi/core';
 import type { Options, Stake } from 'betfinio_app/lib/types';
 import type { Address } from 'viem';
 import type { Config } from 'wagmi';
+import { requestDynamicStakes } from '../../gql/dynamic';
 
 export const fetchPool = async (pool: Address, config: Config): Promise<ExtendedPoolInfo> => {
 	console.log('fetching pool dynamic', pool);
@@ -96,57 +97,25 @@ export const fetchStakes = async (address: Address, config: Config): Promise<Sta
 	if (!address) {
 		return [];
 	}
-	const pools = await fetchStakersPools(address, config);
-	const poolsStartCycle = await multicall(config, {
-		contracts: pools.map((pool) => ({
-			abi: DynamicStakingPoolContract.abi,
-			address: pool,
-			functionName: 'startCycle',
-		})),
-	});
-	const poolsEndCycle = await multicall(config, {
-		contracts: pools.map((pool) => ({
-			abi: DynamicStakingPoolContract.abi,
-			address: pool,
-			functionName: 'endCycle',
-		})),
-	});
-	const stakes = await multicall(config, {
-		contracts: pools.map((pool) => ({
-			abi: DynamicStakingPoolContract.abi,
-			address: pool,
-			functionName: 'getStake',
-			args: [address],
-		})),
-	});
 
-	const rewards = await multicall(config, {
-		multicallAddress: defaultMulticall,
-		contracts: pools.map((pool) => ({
-			abi: DynamicStakingPoolContract.abi,
-			address: pool,
-			functionName: 'getClaimed',
-			args: [address],
-		})),
-	});
+	const staked = await requestDynamicStakes(address);
 
-	return stakes
-		.map((e) => e.result)
-		.map((stake, i) => {
-			const [amount, staker] = stake as [bigint, string];
-			const start = poolsStartCycle[i].result as bigint;
-			const end = poolsEndCycle[i].result as bigint;
-			return {
-				start: Number(start * 60n * 60n * 24n * 7n * 4n),
-				end: Number(end * 60n * 60n * 24n * 7n * 4n),
-				amount: amount,
-				pool: pools[i],
-				staker: staker,
-				reward: rewards[i].result,
-				ended: false,
-			} as Stake;
-		})
-		.reverse();
+
+
+	if (!staked) return [];
+	return staked.map((stake) => {
+		const { start, end, amount, staker, pool, reward, hash } = stake;
+		return {
+			start: start,
+			end: end * 60 * 60 * 24 * 7 * 4,
+			amount: amount,
+			pool,
+			staker: staker,
+			reward,
+			ended: false,
+			hash,
+		} as Stake;
+	});
 };
 
 export const fetchActivePools = async (config: Config): Promise<ExtendedPoolInfo[]> => {
@@ -231,4 +200,22 @@ export const fetchEarnings = async (address: Address, options: Options): Promise
 				amount: BigInt(e.amount),
 			}) as Earning,
 	);
+};
+
+export const fetchStakeReward = async (address: Address, pool: Address, config: Config) => {
+	const reward = (await readContract(config, {
+		abi: DynamicStakingPoolContract.abi,
+		address: pool,
+		functionName: 'getClaimed',
+		args: [address],
+	})) as bigint;
+	return reward;
+};
+export const fetchStakeStatus = async (pool: Address, config: Config) => {
+	const status = (await readContract(config, {
+		abi: DynamicStakingPoolContract.abi,
+		address: pool,
+		functionName: 'ended',
+	})) as boolean;
+	return status;
 };

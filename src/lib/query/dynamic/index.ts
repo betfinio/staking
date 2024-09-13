@@ -2,6 +2,8 @@ import {
 	fetchActivePools,
 	fetchClaimed,
 	fetchEarnings,
+	fetchStakeReward,
+	fetchStakeStatus,
 	fetchStaked,
 	fetchStakes,
 	fetchTotalBets,
@@ -12,7 +14,7 @@ import {
 import type { StakeParams } from '@/src/lib/query/conservative';
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types.ts';
 import { DynamicStakingPoolContract, PartnerContract } from '@betfinio/abi';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { type WriteContractErrorType, type WriteContractReturnType, writeContract } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
 import { fetchTotalStaked } from 'betfinio_app/lib/api/dynamic';
@@ -130,6 +132,8 @@ export const useStakes = (address: Address) => {
 	return useQuery<Stake[]>({
 		queryKey: ['staking', 'dynamic', 'stakes', address],
 		queryFn: () => fetchStakes(address, config),
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
 	});
 };
 
@@ -138,6 +142,8 @@ export const useStakes = (address: Address) => {
 export const useStake = () => {
 	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
 	const config = useConfig();
+
+	const queryClient = useQueryClient();
 	return useMutation<WriteContractReturnType, WriteContractErrorType, StakeParams>({
 		mutationKey: ['staking', 'dynamic', 'stake'],
 		mutationFn: stake,
@@ -158,14 +164,14 @@ export const useStake = () => {
 				duration: 10000,
 				action: getTransactionLink(data),
 			});
-			await waitForTransactionReceipt(config.getClient(), { hash: data });
+			await waitForTransactionReceipt(config.getClient(), { hash: data, confirmations: 3 });
+			//await queryClient.invalidateQueries({queryKey:['staking', 'dynamic']})
 			update({
 				title: 'Staked successful',
 				variant: 'default',
 				description: 'Transaction has been executed',
 				duration: 5000,
 			});
-			console.log('staked', data);
 		},
 	});
 };
@@ -219,5 +225,24 @@ export const useDistributeProfit = () => {
 			});
 			console.log('staked', data);
 		},
+	});
+};
+
+export const useStakeReward = (address: Address, pool: Address, hash: Address) => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['staking', 'dynamic', 'reward', pool, address, hash],
+		queryFn: () => fetchStakeReward(address, pool, config),
+		refetchOnWindowFocus: false,
+		refetchOnMount: false,
+	});
+};
+export const useStakeStatus = (pool: Address) => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['staking', 'dynamic', 'status', pool],
+		queryFn: () => fetchStakeStatus(pool, config),
+		refetchOnWindowFocus: false,
+		refetchOnMount: false,
 	});
 };
