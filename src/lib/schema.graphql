@@ -1,11 +1,11 @@
 query GetStaked($staker: Bytes, $staking: Bytes) {
-    stakeds(where: { staker: $staker, address: $staking }, orderBy: blockTimestamp, orderDirection: desc) {
-        transactionHash
-        blockTimestamp
-        unlock
-        pool
-        amount
-        staker
-        reward
-    }
+	stakeds(where: { staker: $staker, address: $staking }, orderBy: blockTimestamp, orderDirection: desc) {
+		transactionHash
+		blockTimestamp
+		unlock
+		pool
+		amount
+		staker
+		reward
+	}
 }
