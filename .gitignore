@@ -20,15 +20,5 @@ bun.lockb
 
 @mf-types/
 
-#gql
-
-*.gen.*
-
-schema.graphql
-
-src/routeTree.gen.ts
-
-graphql.schema.json
-
-src/gql/
 .graphclient
+src/gql
