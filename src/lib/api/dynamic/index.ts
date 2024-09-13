@@ -100,8 +100,6 @@ export const fetchStakes = async (address: Address, config: Config): Promise<Sta
 
 	const staked = await requestDynamicStakes(address);
 
-
-
 	if (!staked) return [];
 	return staked.map((stake) => {
 		const { start, end, amount, staker, pool, reward, hash } = stake;
