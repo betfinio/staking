@@ -1,10 +1,10 @@
-import { GetConservativeStakedDocument, type GetConservativeStakedQuery, execute } from '@/.graphclient';
+import { GetStakedDocument, type GetStakedQuery, execute } from '@/.graphclient';
 import type { ExecutionResult } from 'graphql/execution';
 import type { Address } from 'viem';
 
 export const requestConservativeStakes = async (staker: Address) => {
-	const data: ExecutionResult<GetConservativeStakedQuery> = await execute(GetConservativeStakedDocument, { staker });
-	return data.data?.conservativeStakeds.map((stake) => {
+	const data: ExecutionResult<GetStakedQuery> = await execute(GetStakedDocument, { staker, staking: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS });
+	return data.data?.stakeds.map((stake) => {
 		return {
 			amount: BigInt(stake.amount),
 			start: Number(stake.blockTimestamp),

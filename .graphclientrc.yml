@@ -1,50 +1,9 @@
 sources:
-  - name: conservative
+  - name: staking
     handler:
       graphql:
-        endpoint: ${PUBLIC_CONSERVATIVE_GRAPH_URL}
-    transforms:
-      - rename:
-          renames:
-            - from:
-                type: Staked
-              to:
-                type: ConservativeStaked
-            - from:
-                type: Query
-                field: stakeds
-              to:
-                type: Query
-                field: conservativeStakeds
-            - from:
-                type: Query
-                field: staked
-              to:
-                type: Query
-                field: conservativeStaked
-  - name: dynamic
-    handler:
-      graphql:
-        endpoint: ${PUBLIC_DYNAMIC_GRAPH_URL}
-    transforms:
-      - rename:
-          renames:
-            - from:
-                type: Staked
-              to:
-                type: DynamicStaked
-            - from:
-                type: Query
-                field: stakeds
-              to:
-                type: Query
-                field: dynamicStakeds
-            - from:
-                type: Query
-                field: staked
-              to:
-                type: Query
-                field: dynamicStaked
+        endpoint: ${PUBLIC_STAKING_GRAPH_URL}
+
 codegen:
   scalars:
     BigInt: bigInt

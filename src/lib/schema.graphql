@@ -1,22 +1,11 @@
-query GetConservativeStaked($staker: Bytes) {
-	conservativeStakeds(where: { staker: $staker }, orderBy: blockTimestamp, orderDirection: desc) {
-		transactionHash
-		blockTimestamp
-		unlock
-		pool
-		amount
-		staker
-		reward
-	}
-}
-query GetDynamicStaked($staker: Bytes) {
-	dynamicStakeds(where: { staker: $staker }, orderBy: blockTimestamp, orderDirection: desc) {
-		transactionHash
-		blockTimestamp
-		unlock
-		pool
-		amount
-		staker
-		reward
-	}
+query GetStaked($staker: Bytes, $staking: Bytes) {
+    stakeds(where: { staker: $staker, address: $staking }, orderBy: blockTimestamp, orderDirection: desc) {
+        transactionHash
+        blockTimestamp
+        unlock
+        pool
+        amount
+        staker
+        reward
+    }
 }
