@@ -3,12 +3,12 @@ sources:
     handler:
       graphql:
         endpoint: ${PUBLIC_CONSERVATIVE_GRAPH_URL}
-    transforms:     
-      - rename:        
-           renames:
-            - from: 
+    transforms:
+      - rename:
+          renames:
+            - from:
                 type: Staked
-              to: 
+              to:
                 type: ConservativeStaked
             - from:
                 type: Query
@@ -26,12 +26,12 @@ sources:
     handler:
       graphql:
         endpoint: ${PUBLIC_DYNAMIC_GRAPH_URL}
-    transforms:     
-      - rename:        
-           renames:
-            - from: 
+    transforms:
+      - rename:
+          renames:
+            - from:
                 type: Staked
-              to: 
+              to:
                 type: DynamicStaked
             - from:
                 type: Query
