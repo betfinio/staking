@@ -14,7 +14,6 @@ export const RewardCell = (props: CellContext<Stake, bigint | undefined>) => {
 
 	const { address = ZeroAddress } = useAccount();
 	const { data: reward = 0n, isLoading } = useStakeReward(address, pool, hash);
-	console.log('reward hash', hash);
 	const poolReward = props.getValue();
 	const poolAmount = Number(props.row.getValue('amount') as bigint);
 

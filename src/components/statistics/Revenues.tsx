@@ -44,7 +44,6 @@ const Revenues = () => {
 		});
 	}, [dynamic]);
 
-	console.log(conservativeData);
 	const data: Serie[] = [
 		{
 			id: 'Conservative',
@@ -116,9 +115,6 @@ const Revenues = () => {
 						itemHeight: 20,
 						itemOpacity: 0.75,
 						toggleSerie: true,
-						onClick: (data) => {
-							console.log(data);
-						},
 						symbolSize: 12,
 						symbolShape: 'circle',
 						symbolBorderColor: 'rgba(255, 255, 255, .5)',

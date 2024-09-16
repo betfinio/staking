@@ -59,7 +59,6 @@ export const fetchTotalStakedDiff = async (supabase: SupabaseClient | undefined,
 		const stakedThen = await fetchTotalStaked(config, block);
 		const stakersNow = await fetchTotalStakers(config);
 		const stakersThen = await fetchTotalStakers(config, block);
-		console.log(stakedNow, stakedThen, stakersNow, stakersThen);
 		return [stakedNow - stakedThen, BigInt(stakersNow - stakersThen)];
 	} catch (e) {
 		return [0n, 0n];
@@ -177,7 +176,6 @@ export const useStake = () => {
 };
 
 export const stake = async ({ amount, config }: StakeParams): Promise<WriteContractReturnType> => {
-	console.log('staking', amount);
 	return await writeContract(config, {
 		abi: PartnerContract.abi,
 		address: import.meta.env.PUBLIC_PARTNER_ADDRESS,
@@ -223,7 +221,6 @@ export const useDistributeProfit = () => {
 				description: 'Transaction has been executed',
 				duration: 5000,
 			});
-			console.log('staked', data);
 		},
 	});
 };

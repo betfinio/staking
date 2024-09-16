@@ -109,9 +109,6 @@ const Stakers = () => {
 						itemHeight: 20,
 						itemOpacity: 0.75,
 						toggleSerie: true,
-						onClick: (data) => {
-							console.log(data);
-						},
 						symbolSize: 12,
 						symbolShape: 'circle',
 						symbolBorderColor: 'rgba(0, 0, 0, .5)',

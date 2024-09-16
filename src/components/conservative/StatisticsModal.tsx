@@ -14,7 +14,6 @@ const CONSERVATIVE_STAKING_ADDRESS = import.meta.env.PUBLIC_CONSERVATIVE_STAKING
 
 const StatisticsModal: FC = () => {
 	const { t } = useTranslation('', { keyPrefix: 'staking' });
-	console.log();
 	const { data: totalProfit } = useTotalProfit();
 	const { data: predictContribution = 0n } = usePredictContribution();
 	const { data: luroContribution = 0n } = useLuroContribution();
