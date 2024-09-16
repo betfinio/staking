@@ -2,7 +2,7 @@ import SharedGameBlock from '@/src/components/shared/SharedGameBlock.tsx';
 import { useTotalStakedDiff, useUnrealizedProfit } from '@/src/lib/query/dynamic';
 import { valueToNumber } from '@betfinio/abi';
 import { BetValue } from 'betfinio_app/BetValue';
-import { useTotalProfit, useTotalStaked } from 'betfinio_app/lib/query/dynamic';
+import { useTotalStaked } from 'betfinio_app/lib/query/dynamic';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from 'betfinio_app/tooltip';
 import cx from 'clsx';
 import { motion } from 'framer-motion';
@@ -21,25 +21,17 @@ export const CycleOverview: FC = () => {
 	const { data: newStaked = [0n, 0n], isFetching: isNewStakedFetching } = useTotalStakedDiff();
 	const { data: staked = 0n } = useTotalStaked();
 	const { data: profit = 0n, isFetching: isProfitFetching } = useUnrealizedProfit();
-	console.log(profit);
 	const percentage = (valueToNumber(profit) / valueToNumber(staked)) * 100;
 
 	const cycleStart = (starts.findLast((e) => e * 1000 < Date.now()) || 0) * 1000;
 	const cycleEnd = cycleStart + secondsInWeek * 1000 * 4;
 	const cycleId = Math.floor(cycleStart / (secondsInWeek * 1000) / 4);
-	const handleCalculate = async () => {
-		console.log(123);
-	};
-
-	const handleCalculateOld = async () => {
-		console.log(123, 'old');
-	};
 	return (
 		<TooltipProvider delayDuration={0}>
 			<div className={'col-span-2 md:col-span-1 p-3 md:p-5 relative  bg-primaryLighter border border-gray-800 rounded-lg flex justify-between flex-col gap-4'}>
 				<Tooltip>
 					<TooltipTrigger className={'absolute  top-3 right-3'}>
-						<CircleHelp className={'w-5 h-5 text-yellow-400 cursor-pointer'} onClick={handleCalculateOld} />
+						<CircleHelp className={'w-5 h-5 text-yellow-400 cursor-pointer'} />
 					</TooltipTrigger>
 					<TooltipContent className={'bg-black px-4 py-2 rounded-md border border-yellow-400 text-white w-[350px]'}>
 						<div className={'text-sm'}>
@@ -57,12 +49,8 @@ export const CycleOverview: FC = () => {
 						</div>
 					</TooltipContent>
 				</Tooltip>
-				<h1 className={'text-left font-normal text-sm lg:text-base md:font-semibold'}>
-					Dynamic cycle{' '}
-					<div className={'underline cursor-pointer'} onClick={handleCalculate}>
-						#{cycleId}
-					</div>{' '}
-					overview
+				<h1 className={'text-left font-normal text-sm lg:text-base md:font-semibold flex flex-row gap-1'}>
+					Dynamic cycle <div className={'underline cursor-pointer'}>#{cycleId}</div> overview
 				</h1>
 				<div>
 					<div className={'flex justify-between text-[#6A6F84] text-xs font-semibold'}>

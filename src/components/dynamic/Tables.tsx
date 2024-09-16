@@ -1,8 +1,8 @@
 import EarningsTable from '@/src/components/dynamic/tables/EarningsTable.tsx';
 import PoolsTable from '@/src/components/dynamic/tables/PoolsTable.tsx';
-import StakesTable from '@/src/components/dynamic/tables/StakesTable.tsx';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
 import { useTranslation } from 'react-i18next';
+import StakesTable from './tables/Stakes/StakesTable';
 
 const Tables = () => {
 	const { t } = useTranslation('', { keyPrefix: 'staking.table' });

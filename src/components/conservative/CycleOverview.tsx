@@ -2,6 +2,7 @@ import SharedGameBlock from '@/src/components/shared/SharedGameBlock.tsx';
 import { useTotalProfitDiff, useTotalStakedDiff } from '@/src/lib/query/conservative';
 import { valueToNumber } from '@betfinio/abi';
 import { BetValue } from 'betfinio_app/BetValue';
+import { useTotalStaked } from 'betfinio_app/lib/query/conservative';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from 'betfinio_app/tooltip';
 import cx from 'clsx';
 import { motion } from 'framer-motion';
@@ -14,9 +15,11 @@ export const CycleOverview: FC = () => {
 	const cycleStart = cycleId * 1000 * 60 * 60 * 24 * 7 + 1000 * 60 * 60 * 36;
 	const cycleEnd = (cycleId + 1) * 1000 * 60 * 60 * 24 * 7 + 1000 * 60 * 60 * 36;
 
+	const { data: totalStaked = 1n } = useTotalStaked();
+
 	const { data: newStaked = [0n, 0n], isFetching: isNewStakedFetching } = useTotalStakedDiff(cycleStart / 1000);
 	const { data: newProfit = [0n, 0n], isFetching: isNewProfitFetching } = useTotalProfitDiff();
-	const diff = (valueToNumber(newProfit[0]) / valueToNumber(newProfit[0] + newProfit[1])) * 100;
+	const diff = (valueToNumber(newProfit[0]) / valueToNumber(totalStaked)) * 100;
 
 	return (
 		<TooltipProvider delayDuration={0}>
@@ -153,7 +156,8 @@ const NewStakes: FC<{ cycleStart: number }> = ({ cycleStart }) => {
 
 const GamesProfit = () => {
 	const { data: newProfit = [0n, 0n] } = useTotalProfitDiff();
-	const diff = (valueToNumber(newProfit[0]) / valueToNumber(newProfit[0] + newProfit[1])) * 100;
+	const { data: totalStaked = 1n } = useTotalStaked();
+	const diff = (valueToNumber(newProfit[0]) / valueToNumber(totalStaked)) * 100;
 
 	return (
 		<Tooltip>

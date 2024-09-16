@@ -1,0 +1,13 @@
+sources:
+  - name: staking
+    handler:
+      graphql:
+        endpoint: ${PUBLIC_STAKING_GRAPH_URL}
+
+codegen:
+  scalars:
+    BigInt: bigInt
+    Bytes: string
+
+documents:
+  - ./src/lib/schema.graphql

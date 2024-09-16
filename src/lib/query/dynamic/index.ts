@@ -2,6 +2,8 @@ import {
 	fetchActivePools,
 	fetchClaimed,
 	fetchEarnings,
+	fetchStakeReward,
+	fetchStakeStatus,
 	fetchStaked,
 	fetchStakes,
 	fetchTotalBets,
@@ -57,7 +59,6 @@ export const fetchTotalStakedDiff = async (supabase: SupabaseClient | undefined,
 		const stakedThen = await fetchTotalStaked(config, block);
 		const stakersNow = await fetchTotalStakers(config);
 		const stakersThen = await fetchTotalStakers(config, block);
-		console.log(stakedNow, stakedThen, stakersNow, stakersThen);
 		return [stakedNow - stakedThen, BigInt(stakersNow - stakersThen)];
 	} catch (e) {
 		return [0n, 0n];
@@ -126,10 +127,11 @@ export const useTotalBets = () => {
 	});
 };
 export const useStakes = (address: Address) => {
-	const config = useConfig();
 	return useQuery<Stake[]>({
 		queryKey: ['staking', 'dynamic', 'stakes', address],
-		queryFn: () => fetchStakes(address, config),
+		queryFn: () => fetchStakes(address),
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
 	});
 };
 
@@ -138,6 +140,7 @@ export const useStakes = (address: Address) => {
 export const useStake = () => {
 	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
 	const config = useConfig();
+
 	return useMutation<WriteContractReturnType, WriteContractErrorType, StakeParams>({
 		mutationKey: ['staking', 'dynamic', 'stake'],
 		mutationFn: stake,
@@ -158,20 +161,19 @@ export const useStake = () => {
 				duration: 10000,
 				action: getTransactionLink(data),
 			});
-			await waitForTransactionReceipt(config.getClient(), { hash: data });
+			await waitForTransactionReceipt(config.getClient(), { hash: data, confirmations: 3 });
+			//await queryClient.invalidateQueries({queryKey:['staking', 'dynamic']})
 			update({
 				title: 'Staked successful',
 				variant: 'default',
 				description: 'Transaction has been executed',
 				duration: 5000,
 			});
-			console.log('staked', data);
 		},
 	});
 };
 
 export const stake = async ({ amount, config }: StakeParams): Promise<WriteContractReturnType> => {
-	console.log('staking', amount);
 	return await writeContract(config, {
 		abi: PartnerContract.abi,
 		address: import.meta.env.PUBLIC_PARTNER_ADDRESS,
@@ -217,7 +219,25 @@ export const useDistributeProfit = () => {
 				description: 'Transaction has been executed',
 				duration: 5000,
 			});
-			console.log('staked', data);
 		},
+	});
+};
+
+export const useStakeReward = (address: Address, pool: Address, hash: Address) => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['staking', 'dynamic', 'reward', pool, address, hash],
+		queryFn: () => fetchStakeReward(address, pool, config),
+		refetchOnWindowFocus: false,
+		refetchOnMount: false,
+	});
+};
+export const useStakeStatus = (pool: Address) => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['staking', 'dynamic', 'status', pool],
+		queryFn: () => fetchStakeStatus(pool, config),
+		refetchOnWindowFocus: false,
+		refetchOnMount: false,
 	});
 };
