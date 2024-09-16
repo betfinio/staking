@@ -1,19 +1,19 @@
 query GetStaked($staker: Bytes, $staking: Bytes) {
-    stakeds(where: { staker: $staker, address: $staking }, orderBy: blockTimestamp, orderDirection: desc) {
-        transactionHash
-        blockTimestamp
-        unlock
-        pool
-        amount
-        staker
-        reward
-    }
+	stakeds(where: { staker: $staker, address: $staking }, orderBy: blockTimestamp, orderDirection: desc) {
+		transactionHash
+		blockTimestamp
+		unlock
+		pool
+		amount
+		staker
+		reward
+	}
 }
 
 query GetClaims($staker: Bytes) {
-    claimeds(where: { staker: $staker }, orderBy: blockTimestamp, orderDirection: desc) {
-        transactionHash
-        blockTimestamp
-        amount
-    }
+	claimeds(where: { staker: $staker }, orderBy: blockTimestamp, orderDirection: desc) {
+		transactionHash
+		blockTimestamp
+		amount
+	}
 }
