@@ -127,10 +127,9 @@ export const useTotalBets = () => {
 	});
 };
 export const useStakes = (address: Address) => {
-	const config = useConfig();
 	return useQuery<Stake[]>({
 		queryKey: ['staking', 'dynamic', 'stakes', address],
-		queryFn: () => fetchStakes(address, config),
+		queryFn: () => fetchStakes(address),
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 	});
