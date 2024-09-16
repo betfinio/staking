@@ -11,7 +11,8 @@
 		"local": "rsbuild dev --env-mode localhost --open",
 		"format": "biome format --write",
 		"preview": "rsbuild preview",
-		"build:schema": "dotenv -e .env.development.local -- graphclient build"
+		"build:schema:dev": "dotenv -e .env.development.local -- graphclient build",
+		"build:schema:prod": "dotenv -e .env.production.local -- graphclient build"
 	},
 	"dependencies": {
 		"@betfinio/abi": "^1.0.5",

@@ -21,15 +21,14 @@ import {
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types';
 import { ConservativeStakingContract, ConservativeStakingPoolContract, GameContract, PartnerContract } from '@betfinio/abi';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { type WriteContractReturnType, writeContract } from '@wagmi/core';
 import type { WriteContractErrorType } from '@wagmi/core';
+import { type WriteContractReturnType, writeContract } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
-import type { Timeframe } from 'betfinio_app/lib/types';
-import type { Stake, Stat } from 'betfinio_app/lib/types';
+import type { Stake, Stat, Timeframe } from 'betfinio_app/lib/types';
 import { useSupabase } from 'betfinio_app/supabase';
 import { toast } from 'betfinio_app/use-toast';
 import { useTranslation } from 'react-i18next';
-import { type Address, type Log, decodeEventLog } from 'viem';
+import type { Address } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { type Config, useConfig, useWatchContractEvent } from 'wagmi';
 
@@ -156,33 +155,9 @@ export const useStakes = (address: Address) => {
 };
 
 export const useClaims = (address: Address) => {
-	const queryClient = useQueryClient();
-	const { client: supabase } = useSupabase();
-	useWatchContractEvent({
-		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-		eventName: 'Claimed',
-		onLogs: async (logs: Log[]) => {
-			const event = decodeEventLog({
-				abi: ConservativeStakingContract.abi,
-				...logs[0],
-				strict: true,
-			});
-			const args = event.args as unknown as { staker: string };
-			if (args.staker.toLowerCase() === address?.toLowerCase()) {
-				await queryClient.invalidateQueries({
-					queryKey: ['staking', 'conservative', 'claims', address],
-				});
-				await queryClient.invalidateQueries({
-					queryKey: ['staking', 'conservative', 'claimable', address],
-				});
-			}
-		},
-	});
-
 	return useQuery({
 		queryKey: ['staking', 'conservative', 'claims', address],
-		queryFn: () => fetchClaims(address, { supabase }),
+		queryFn: () => fetchClaims(address),
 	});
 };
 

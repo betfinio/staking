@@ -1,25 +1,16 @@
+import logger from '@/src/config/logger';
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types.ts';
-import {
-	BetsMemoryContract,
-	ConservativeStakingContract,
-	ConservativeStakingPoolContract,
-	ZeroAddress,
-	arrayFrom,
-	defaultMulticall,
-	valueToNumber,
-} from '@betfinio/abi';
-import { call, multicall, readContract } from '@wagmi/core';
+import { BetsMemoryContract, ConservativeStakingContract, ConservativeStakingPoolContract, ZeroAddress, arrayFrom, valueToNumber } from '@betfinio/abi';
+import { multicall, readContract } from '@wagmi/core';
 import { fetchTotalStaked } from 'betfinio_app/lib/api/conservative';
 import { fetchBalance } from 'betfinio_app/lib/api/token';
-import type { Options, Stake, Stat } from 'betfinio_app/lib/types';
-import type { Timeframe } from 'betfinio_app/lib/types';
-import type { Claim } from 'betfinio_app/lib/types';
+import type { Claim, Options, Stake, Stat, Timeframe } from 'betfinio_app/lib/types';
 import { getBlockByTimestamp } from 'betfinio_app/lib/utils';
 import type { SupabaseClient } from 'betfinio_app/supabase';
 import { DateTime } from 'luxon';
 import type { Address } from 'viem';
 import type { Config } from 'wagmi';
-import { requestConservativeStakes } from '../../gql/conservative';
+import { requestConservativeClaims, requestConservativeStakes } from '../../gql/conservative';
 
 export const fetchPool = async (pool: Address, config: Config): Promise<ExtendedPoolInfo> => {
 	console.log('fetching pool conservative', pool);
@@ -104,22 +95,9 @@ export const fetchEarnings = async (address: Address, options: Options): Promise
 	);
 };
 
-export const fetchClaims = async (address: Address, options: Options): Promise<Claim[]> => {
-	if (!options.supabase) throw new Error('Supabase client is not defined');
-	const data = await options.supabase
-		.from('conservative_claims')
-		.select('amount::text, timestamp::text, transaction, member')
-		.eq('member', address.toLowerCase());
-
-	return (data.data || []).map(
-		(e) =>
-			({
-				timestamp: Number(e.timestamp),
-				staker: e.member,
-				transaction: e.transaction,
-				amount: BigInt(e.amount),
-			}) as Claim,
-	);
+export const fetchClaims = async (address: Address): Promise<Claim[]> => {
+	if (!address || address === ZeroAddress) return [];
+	return await requestConservativeClaims(address);
 };
 
 export const fetchProfit = async (address: Address | undefined, config: Config): Promise<bigint> => {
@@ -259,26 +237,13 @@ export async function fetchLuroContribution(config: Config): Promise<bigint> {
 }
 
 export const fetchStakes = async (address: Address, config: Config): Promise<Stake[]> => {
-	console.log('fetching stakes conservative ', address);
+	logger.start('[conservative]', 'fetching stakes ', address);
 	if (!address) {
 		return [];
 	}
-
 	const staked = await requestConservativeStakes(address);
 	if (!staked) return [];
-	return staked.map((stake) => {
-		const { end, start, pool, staker, amount, hash, reward } = stake;
-		return {
-			start,
-			end,
-			amount,
-			pool: pool,
-			reward: BigInt(reward),
-			staker: staker,
-			ended: false,
-			hash,
-		} as Stake;
-	});
+	return staked;
 };
 
 export const fetchCalculationsStat = async (timeframe: Timeframe, options: Options): Promise<Stat[]> => {
