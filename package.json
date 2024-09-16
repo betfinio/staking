@@ -16,7 +16,6 @@
 	"dependencies": {
 		"@betfinio/abi": "^1.0.5",
 		"@betfinio/ui": "^1.0.2",
-		"@graphql-mesh/transform-rename": "^0.102.5",
 		"@module-federation/enhanced": "^0.3.5",
 		"@nivo/line": "^0.87.0",
 		"@supabase/supabase-js": "^2.45.4",
@@ -54,15 +53,5 @@
 		"dotenv-cli": "^7.4.2",
 		"lefthook": "^1.7.15",
 		"typescript": "^5.6.2"
-	},
-	"resolutions": {
-		"@walletconnect/core": "2.14.0",
-		"@walletconnect/types": "2.14.0",
-		"@walletconnect/utils": "2.14.0"
-	},
-	"overrides": {
-		"@walletconnect/core": "2.14.0",
-		"@walletconnect/types": "2.14.0",
-		"@walletconnect/utils": "2.14.0"
 	}
 }
