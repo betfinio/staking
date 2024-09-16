@@ -14,7 +14,7 @@ import {
 import type { StakeParams } from '@/src/lib/query/conservative';
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types.ts';
 import { DynamicStakingPoolContract, PartnerContract } from '@betfinio/abi';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { type WriteContractErrorType, type WriteContractReturnType, writeContract } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
 import { fetchTotalStaked } from 'betfinio_app/lib/api/dynamic';
@@ -141,7 +141,6 @@ export const useStake = () => {
 	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
 	const config = useConfig();
 
-	const queryClient = useQueryClient();
 	return useMutation<WriteContractReturnType, WriteContractErrorType, StakeParams>({
 		mutationKey: ['staking', 'dynamic', 'stake'],
 		mutationFn: stake,
