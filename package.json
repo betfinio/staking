@@ -5,7 +5,7 @@
 	"scripts": {
 		"prebuild": "graphclient build",
 		"build": "rsbuild build",
-		"check": "biome check --write",
+		"check": "biome check",
 		"dev": "rsbuild dev --open",
 		"prod": "rsbuild dev --env-mode production --open",
 		"local": "rsbuild dev --env-mode localhost --open",
