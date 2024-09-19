@@ -308,3 +308,12 @@ export const fetchStakeStatus = async (address: Address, pool: Address, config: 
 	})) as [bigint, bigint, bigint, Address, boolean, boolean];
 	return status[4];
 };
+
+export const fetchPoolReward = async (address: Address, pool: Address, config: Config) => {
+	return (await readContract(config, {
+		abi: ConservativeStakingPoolContract.abi,
+		address: pool,
+		functionName: 'profit',
+		args: [address],
+	})) as bigint;
+};
