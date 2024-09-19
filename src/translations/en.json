@@ -13,6 +13,10 @@
 		"conservative": "Gains fees from shared betting",
 		"dynamic": "Liquidity for lotto games payouts"
 	},
+	"help": {
+		"howToStake": "How to stake",
+		"report": "Report"
+	},
 	"stat": {
 		"tvl": "Total locked",
 		"stakers": "Total stakers",
@@ -31,6 +35,10 @@
 	"total": {
 		"stakers": "{count, plural, =0 {No stakers} =1 {1 staker} other {# stakers}}",
 		"bets": "{count, plural, =0 {No bets} =1 {1 bet} other {# bets}}"
+	},
+	"toast": {
+		"insufficientAllowance": "Insufficient allowance",
+		"insufficientBalanceToStake": "Insufficient balance to stake"
 	},
 	"table": {
 		"title": "My Staking",
@@ -70,7 +78,14 @@
 		"claim": "Claim",
 		"loginText": "Please connect your wallet to stake BET token",
 		"login": "Connect wallet",
-		"pending": "to be credited next cycle"
+		"pending": "to be credited next cycle",
+		"stats": {
+			"conservativeGamesStats": "Conservative games stats",
+			"yourRevenues": "Your revenues",
+			"twoGames": "2 games",
+			"volume": "volume",
+			"inCycle": "In cycle"
+		}
 	},
 	"dynamic": {
 		"earn": "Nothing to claim yet",

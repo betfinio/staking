@@ -50,13 +50,13 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 			}
 		} else if (allowance < amount) {
 			toast({
-				title: 'Insufficient allowance',
+				title: t('toast.insufficientAllowance'),
 				variant: 'destructive',
 			});
 			requestAllowance?.('stake', amount);
 		} else {
 			toast({
-				description: 'Insufficient balance to stake',
+				description: t('toast.insufficientBalanceToStake'),
 				type: 'destructive',
 			});
 		}
