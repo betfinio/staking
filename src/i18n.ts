@@ -2,24 +2,24 @@ import * as i18 from 'i18next';
 import type { i18n } from 'i18next';
 import ICU from 'i18next-icu';
 import { initReactI18next } from 'react-i18next';
-import czJSON from './translations/cz.json';
-import enJSON from './translations/en.json';
-import ruJSON from './translations/ru.json';
+import czStaking from './translations/cz/staking.json';
+import enStaking from './translations/en/staking.json';
+import ruStaking from './translations/ru/staking.json';
 export const defaultNS = 'staking';
 
 import { sharedLang } from 'betfinio_app/locales/index';
 
 export const resources = {
 	en: {
-		staking: enJSON,
+		staking: ruStaking,
 		shared: sharedLang.en,
 	},
 	ru: {
-		staking: ruJSON,
+		staking: enStaking,
 		shared: sharedLang.ru,
 	},
 	cz: {
-		staking: czJSON,
+		staking: czStaking,
 		shared: sharedLang.cz,
 	},
 } as const;
