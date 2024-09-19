@@ -299,15 +299,6 @@ const getTenFridaysFrom = (friday: DateTime) => {
 	return fridays;
 };
 
-export const fetchStakeReward = async (address: Address, pool: Address, config: Config) => {
-	const reward = (await readContract(config, {
-		abi: ConservativeStakingPoolContract.abi,
-		address: pool,
-		functionName: 'profit',
-		args: [address],
-	})) as bigint;
-	return reward;
-};
 export const fetchStakeStatus = async (address: Address, pool: Address, config: Config) => {
 	const status = (await readContract(config, {
 		abi: ConservativeStakingPoolContract.abi,

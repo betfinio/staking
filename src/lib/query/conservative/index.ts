@@ -320,15 +320,6 @@ export const useDistributeProfit = () => {
 	});
 };
 
-export const useStakeReward = (address: Address, pool: Address, hash: Address) => {
-	const config = useConfig();
-	return useQuery({
-		queryKey: ['staking', 'conservative', 'reward', pool, address, hash],
-		queryFn: () => fetchStakeReward(address, pool, config),
-		refetchOnWindowFocus: false,
-		refetchOnMount: false,
-	});
-};
 export const useStakeStatus = (address: Address, pool: Address, hash: Address) => {
 	const config = useConfig();
 	return useQuery({
