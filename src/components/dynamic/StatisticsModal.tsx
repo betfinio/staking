@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 const DYNAMIC_STAKING_ADDRESS = import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS;
 
 const StatisticsModal: FC = () => {
-	const { t } = useTranslation('', { keyPrefix: 'staking' });
+	const { t } = useTranslation('staking');
 	const { data: totalProfit = 0n } = useTotalProfit();
 	return (
 		<div className={cx('rounded-lg bg-primaryLighter z-10 border border-gray-800 font-semibold text-white w-full mx-auto')}>

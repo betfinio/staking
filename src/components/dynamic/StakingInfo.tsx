@@ -33,7 +33,7 @@ const Counter: FC<{ from: number; to: number }> = ({ from, to }) => {
 };
 
 const StakingInfo: FC = () => {
-	const { t } = useTranslation('', { keyPrefix: 'staking.total' });
+	const { t } = useTranslation('staking', { keyPrefix: 'total' });
 	const { address = ZeroAddress } = useAccount();
 	const { data: totalVolume = 0n } = useTotalVolume();
 	const { data: totalBets = 0 } = useTotalBets();

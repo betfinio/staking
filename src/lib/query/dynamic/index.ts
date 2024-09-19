@@ -138,7 +138,7 @@ export const useStakes = (address: Address) => {
 // mutations
 
 export const useStake = () => {
-	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
+	const { t } = useTranslation('shared', { keyPrefix: 'errors' });
 	const config = useConfig();
 
 	return useMutation<WriteContractReturnType, WriteContractErrorType, StakeParams>({
@@ -184,7 +184,7 @@ export const stake = async ({ amount, config }: StakeParams): Promise<WriteContr
 
 export const useDistributeProfit = () => {
 	const config = useConfig();
-	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
+	const { t } = useTranslation('shared', { keyPrefix: 'errors' });
 
 	return useMutation<WriteContractReturnType, WriteContractErrorType, Address>({
 		mutationKey: ['staking', 'dynamic', 'distributeProfit'],

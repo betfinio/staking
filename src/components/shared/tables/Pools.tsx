@@ -20,7 +20,7 @@ const Pools: FC<{
 	isLoading: boolean;
 	type: StakingType;
 }> = ({ data, isLoading, type }) => {
-	const { t } = useTranslation('', { keyPrefix: 'staking' });
+	const { t } = useTranslation('staking');
 
 	const { mutate: distributeConservative } = useDistributeProfitConservative();
 	const { mutate: distributeDynamic } = useDistributeProfitDynamic();

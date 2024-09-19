@@ -15,7 +15,7 @@ export interface SingleIngoProps {
 
 const SingleIngo: FC<SingleIngoProps> = ({ className = '', label, amount, subtitle = '', percent = false, isLoading = false }) => {
 	const amountNumber = Number(amount);
-	const { t } = useTranslation('', { keyPrefix: 'staking' });
+	const { t } = useTranslation('staking');
 	const isSoon = label === t('games.soon');
 	return (
 		<div className={'relative'}>

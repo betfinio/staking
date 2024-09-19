@@ -8,7 +8,7 @@ import { type FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const Switcher: FC<{ type: StakingType }> = ({ type }) => {
-	const { t } = useTranslation('', { keyPrefix: 'staking' });
+	const { t } = useTranslation('staking');
 	return (
 		<Dialog>
 			<DialogTrigger>
@@ -36,7 +36,7 @@ const Switcher: FC<{ type: StakingType }> = ({ type }) => {
 export default Switcher;
 
 const SwitcherModal: FC<{ type: StakingType }> = ({ type }) => {
-	const { t } = useTranslation('', { keyPrefix: 'staking' });
+	const { t } = useTranslation('staking');
 	return (
 		<>
 			<div className={'flex flex-col p-3 gap-3'}>

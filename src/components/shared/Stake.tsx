@@ -14,7 +14,7 @@ import { NumericFormat } from 'react-number-format';
 import { useAccount, useConfig } from 'wagmi';
 
 const Stake: FC<{ type: StakingType }> = ({ type }) => {
-	const { t } = useTranslation('', { keyPrefix: 'staking' });
+	const { t } = useTranslation('staking');
 	const [value, setValue] = useState('');
 	const temp = Number(value.split(',').join(''));
 	const { address = ZeroAddress } = useAccount();
