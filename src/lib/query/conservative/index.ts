@@ -5,9 +5,9 @@ import {
 	fetchConservativePools,
 	fetchEarnings,
 	fetchLuroContribution,
+	fetchPoolReward,
 	fetchPredictContribution,
 	fetchProfit,
-	fetchStakeReward,
 	fetchStakeStatus,
 	fetchStaked,
 	fetchStakes,
@@ -325,6 +325,16 @@ export const useStakeStatus = (address: Address, pool: Address, hash: Address) =
 	return useQuery({
 		queryKey: ['staking', 'conservative', 'status', pool, address, hash],
 		queryFn: () => fetchStakeStatus(address, pool, config),
+		refetchOnWindowFocus: false,
+		refetchOnMount: false,
+	});
+};
+
+export const usePoolReward = (address: Address, pool: Address) => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['staking', 'conservative', 'status', pool, address],
+		queryFn: () => fetchPoolReward(address, pool, config),
 		refetchOnWindowFocus: false,
 		refetchOnMount: false,
 	});
