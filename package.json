@@ -13,8 +13,7 @@
 		"preview": "rsbuild preview",
 		"build:schema:local": "dotenv -e .env.localhost.local -- graphclient build",
 		"build:schema:dev": "dotenv -e .env.development.local -- graphclient build",
-		"build:schema:prod": "dotenv -e .env.production.local -- graphclient build",
-		"toc": "i18next-resources-for-ts toc -i ./src/translations/ -o ./src/@types/resources.ts"
+		"build:schema:prod": "dotenv -e .env.production.local -- graphclient build"
 	},
 	"dependencies": {
 		"@betfinio/abi": "^1.0.5",
@@ -31,7 +30,6 @@
 		"graphql": "^16.9.0",
 		"i18next": "^23.15.1",
 		"i18next-icu": "^2.3.0",
-		"i18next-resources-for-ts": "^1.5.0",
 		"intl-messageformat": "^10.5.14",
 		"lucide-react": "^0.417.0",
 		"luxon": "^3.5.0",
