@@ -9,8 +9,10 @@ import { motion } from 'framer-motion';
 import { CircleHelp } from 'lucide-react';
 import { DateTime } from 'luxon';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const CycleOverview: FC = () => {
+	const { t } = useTranslation();
 	const cycleId = Math.floor((Date.now() - 1000 * 60 * 60 * 36) / 1000 / 60 / 60 / 24 / 7);
 	const cycleStart = cycleId * 1000 * 60 * 60 * 24 * 7 + 1000 * 60 * 60 * 36;
 	const cycleEnd = (cycleId + 1) * 1000 * 60 * 60 * 24 * 7 + 1000 * 60 * 60 * 36;
@@ -31,7 +33,7 @@ export const CycleOverview: FC = () => {
 					<TooltipContent className={'bg-black px-4 py-2 rounded-md border border-yellow-400 text-white w-[350px]'}>
 						<div className={'text-sm'}>
 							<b className={'font-semibold text-yellow-400'}>Conservative staking cycle</b> is a period of{' '}
-							<b className={'font-semibold text-yellow-400'}>1 week</b> when players can join the{' '}
+							<b className={'font-semibold text-yellow-400'}>1 {t('week')}</b> when players can join the{' '}
 							<b className={'font-semibold text-yellow-400'}>conservative games</b> and generate <b className={'font-semibold text-yellow-400'}> Profit </b>{' '}
 							from winning fees to conservative staking.
 							<br />

@@ -60,8 +60,15 @@
 		"withdraw": "Withdraw",
 		"reward": "Rewards",
 		"totalStaked": "Total staked",
-		"ended": "Claimed"
+		"ended": "Claimed",
+		"claimedRewards": "Claimed rewards",
+		"active": "Active",
+		"end": "Ended"
 	},
+	"hour": "hour",
+	"day": "day",
+	"week": "week",
+
 	"conservative": {
 		"earn": "Nothing to claim yet",
 		"stakeBet": "Stake BET token",
@@ -85,7 +92,10 @@
 			"twoGames": "2 games",
 			"volume": "volume",
 			"inCycle": "In cycle"
-		}
+		},
+		"staked": "Staked",
+		"stakers": "Stakers",
+		"revenues": "Revenues"
 	},
 	"dynamic": {
 		"earn": "Nothing to claim yet",

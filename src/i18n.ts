@@ -11,11 +11,11 @@ import { sharedLang } from 'betfinio_app/locales/index';
 
 export const resources = {
 	en: {
-		staking: ruStaking,
+		staking: enStaking,
 		shared: sharedLang.en,
 	},
 	ru: {
-		staking: enStaking,
+		staking: ruStaking,
 		shared: sharedLang.ru,
 	},
 	cz: {

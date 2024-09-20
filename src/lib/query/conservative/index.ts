@@ -178,7 +178,7 @@ export type StakeParams = {
 	config: Config;
 };
 export const useStake = () => {
-	const { t } = useTranslation('staking');
+	const { t } = useTranslation('shared', { keyPrefix: 'errors' });
 	const config = useConfig();
 	const queryClient = useQueryClient();
 	return useMutation<WriteContractReturnType, WriteContractErrorType, StakeParams>({
@@ -299,7 +299,6 @@ export const useDistributeProfit = () => {
 				description: t(error),
 				variant: 'destructive',
 			});
-			return t(e.message as never);
 		},
 		onSuccess: async (data) => {
 			const { update } = toast({

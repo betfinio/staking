@@ -14,7 +14,7 @@ export interface HeaderProps {
 }
 
 const Header: FC<HeaderProps> = ({ type }) => {
-	const { t } = useTranslation('', { keyPrefix: 'staking.help' });
+	const { t } = useTranslation('staking', { keyPrefix: 'help' });
 	const handleReport = () => {
 		document.getElementById('live-chat-ai-button')?.click();
 	};
