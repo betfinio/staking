@@ -20,7 +20,7 @@ const StatisticsModal: FC = () => {
 		<div className={cx('rounded-lg bg-primaryLighter z-10 border border-gray-800 font-semibold text-white w-full mx-auto')}>
 			<div className={'py-5 px-7'}>
 				<div className={'flex justify-between items-center'}>
-					<p className={'text-sm '}>Dynamic staking</p>
+					<p className={'text-sm '}>{t('dynamic.statisticsModal.dynamicStaking')}</p>
 					<div>
 						<DialogClose>
 							<CloseModal className={'cursor-pointer hover:text-[#DD375F] transition-all duration-300'} />
@@ -34,7 +34,7 @@ const StatisticsModal: FC = () => {
 					</div>
 				</div>
 				<div className={'h-[2px] opacity-5 bg-white my-6'} />
-				<p className={'mb-3 text-center text-sm'}>Games contribution statistics</p>
+				<p className={'mb-3 text-center text-sm'}>{t('dynamic.statisticsModal.gamesContributionStatistics')}</p>
 				<SharedGameBlock
 					games={[
 						{ amount: 0n, label: t('games.roulette') },
@@ -44,7 +44,7 @@ const StatisticsModal: FC = () => {
 				/>
 				<div className={'h-[2px] opacity-5 bg-white my-6'} />
 
-				<p className={'text-center text-sm mb-4'}>Staking contract</p>
+				<p className={'text-center text-sm mb-4'}>{t('dynamic.statisticsModal.stakingContract')}</p>
 				<div className={'flex items-center justify-center gap-2 '}>
 					<ShieldCheckIcon className={'text-[#38BB7F] w-4 h-4'} />
 					<a

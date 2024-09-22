@@ -63,11 +63,33 @@
 		"ended": "Claimed",
 		"claimedRewards": "Claimed rewards",
 		"active": "Active",
-		"end": "Ended"
+		"end": "Ended",
+
+		"claims": {
+			"date": "Date",
+			"amount": "Amount",
+			"transaction": "Transaction"
+		},
+		"earnings": {
+			"date": "Date",
+			"amount": "Amount",
+			"transaction": "Transaction",
+			"pool": "Pool"
+		}
+	},
+	"pools": {
+		"openMenu": "Open menu",
+		"distributeProfit": "Distribute Profit"
+	},
+	"statistics": {
+		"totalRevenues": "Total Revenues",
+		"totalStaked": "Total Staked",
+		"totalStakers": "Total Stakers"
 	},
 	"hour": "hour",
 	"day": "day",
 	"week": "week",
+	"stakers": "stakers",
 
 	"conservative": {
 		"earn": "Nothing to claim yet",
@@ -95,7 +117,37 @@
 		},
 		"staked": "Staked",
 		"stakers": "Stakers",
-		"revenues": "Revenues"
+		"revenues": "Revenues",
+		"cycleOverview": {
+			"toolTip": "<b>Conservative staking cycle</b> is a period of <b>1 week</b> when players can join the <b>conservative games</b> and generate <b>Profit</b> from winning fees to conservative staking.<br /><br />Every <b>Friday at 12:00 UTC</b> there is a calculation window when the profit from winning fees is distributed among all the <b>conservative staking pools</b>.<br /><br />All the stakers have to <b>claim</b> those rewards afterwards.<br /><br />There <b>can not be a negative payout</b> and therefore there is no possibility to lose tokens in conservative staking.",
+			"conservativeCycle": "Conservative cycle",
+			"overview": "overview",
+			"cycleStart": "Cycle start",
+			"cycleEnd": "Cycle end"
+		},
+		"newStakes": {
+			"newStakes": "New stakes",
+			"stakers": "stakers",
+			"volumeStakedDuringCurrentCycle": "Volume staked during current cycle"
+		},
+		"gameProfit": {
+			"cycleRevenue": "Cycle revenue",
+			"volumeToDistributeBetweenStakers": "Volume to distribute between stakers"
+		},
+		"endingStakers": {
+			"endingStakes": "Ending stakes",
+			"stakers": "stakers"
+		},
+		"statisticsModal": {
+			"conservativeStaking": "Conservative staking",
+			"gamesContributionStatistics": "Games contribution statistics",
+			"stakingContract": "Staking contract"
+		},
+		"chart": {
+			"totalStaked": "Total staked",
+			"totalStakers": "Total stakers",
+			"totalRevenue": "Total revenue"
+		}
 	},
 	"dynamic": {
 		"earn": "Nothing to claim yet",
@@ -112,6 +164,46 @@
 		"claimTitle": "Claimable amount is {profit} BET",
 		"claim": "Claim",
 		"loginText": "Please connect your wallet to stake BET token",
-		"login": "Connect wallet"
+		"login": "Connect wallet",
+		"staked": "Staked",
+		"stakers": "Stakers",
+		"revenues": "Revenues",
+		"chart": {
+			"totalStaked": "Total staked",
+			"totalStakers": "Total stakers",
+			"totalRevenue": "Total revenue"
+		},
+		"cycleOverview": {
+			"toolTip": "<b>Dynamic staking cycle</b> is a period of <b>4 weeks</b> when players bet against stakers in <b>dynamic games</b> and generate <b>Profit and Loss</b> (PnL) to dynamic staking.<br /><br />Every <b>4th Monday at 12.00 UTC</b> there is a calculation window when the PnL is distributed among all the <b>dynamic pools.</b><br /><br />Staking rewards distribution is done automatically without claim, staking in drawdowns (when users won more than lost in a cycle) does not receive payout till the drawdown is covered.",
+			"dynamicCycle": "Dynamic cycle",
+			"overview": "overview",
+			"cycleStart": "Cycle start",
+			"cycleEnd": "Cycle end"
+		},
+		"newStakes": {
+			"newStakes": "New stakes",
+			"stakers": "stakers",
+			"volumeStakedDuringCurrentCycle": "Volume staked during current cycle"
+		},
+		"gameProfit": {
+			"cycleRevenue": "Cycle revenue",
+			"volumeToDistributeBetweenStakers": "Volume to distribute between stakers"
+		},
+		"endingStakers": {
+			"endingStakes": "Ending stakes",
+			"stakers": "stakers"
+		},
+		"stats": {
+			"dynamicGamesStats": "Dynamic games stats",
+			"yourRevenues": "Your revenues",
+			"game": "game",
+			"volume": "volume",
+			"inCycle": "In cycle"
+		},
+		"statisticsModal": {
+			"dynamicStaking": "Dynamic staking",
+			"gamesContributionStatistics": "Games contribution statistics",
+			"stakingContract": "Staking contract"
+		}
 	}
 }

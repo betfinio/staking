@@ -39,7 +39,7 @@ const Charts = () => {
 
 				<TabsContent value={'staked'} className={'h-full'}>
 					<Chart
-						label="Total staked"
+						label={t('conservative.chart.totalStaked')}
 						color={'#facc15'}
 						className={'h-full'}
 						values={totalStaked.map((e) => e.value)}
@@ -48,7 +48,7 @@ const Charts = () => {
 				</TabsContent>
 				<TabsContent value={'stakers'} className={'h-full'}>
 					<Chart
-						label={'Total stakers'}
+						label={t('dynamic.chart.totalStakers')}
 						color={'#6A6A9F'}
 						values={totalStakers.map((e) => e.value)}
 						labels={totalStakers.map((e) => DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'))}
@@ -56,7 +56,7 @@ const Charts = () => {
 				</TabsContent>
 				<TabsContent value={'revenues'} className={'h-full'}>
 					<Chart
-						label={'Total revenue'}
+						label={t('dynamic.chart.totalRevenue')}
 						values={totalProfit.map((e) => e.value)}
 						labels={totalProfit.map((e) => DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'))}
 					/>
