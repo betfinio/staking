@@ -12,7 +12,7 @@ import { StatusCell } from './StatusCell';
 const columnHelper = createColumnHelper<Stake>();
 
 const Stakes: FC<{ data: Stake[]; isLoading: boolean }> = ({ data, isLoading }) => {
-	const { t } = useTranslation('', { keyPrefix: 'staking' });
+	const { t } = useTranslation('staking');
 	const columns = [
 		columnHelper.accessor('start', {
 			header: t('table.date'),

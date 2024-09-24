@@ -14,7 +14,7 @@ import { NumericFormat } from 'react-number-format';
 import { useAccount, useConfig } from 'wagmi';
 
 const Stake: FC<{ type: StakingType }> = ({ type }) => {
-	const { t } = useTranslation('', { keyPrefix: 'staking' });
+	const { t } = useTranslation('staking');
 	const [value, setValue] = useState('');
 	const temp = Number(value.split(',').join(''));
 	const { address = ZeroAddress } = useAccount();
@@ -50,13 +50,13 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 			}
 		} else if (allowance < amount) {
 			toast({
-				title: 'Insufficient allowance',
+				title: t('toast.insufficientAllowance'),
 				variant: 'destructive',
 			});
 			requestAllowance?.('stake', amount);
 		} else {
 			toast({
-				description: 'Insufficient balance to stake',
+				description: t('toast.insufficientBalanceToStake'),
 				type: 'destructive',
 			});
 		}

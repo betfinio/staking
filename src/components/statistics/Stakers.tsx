@@ -8,8 +8,10 @@ import { UserIcon } from 'lucide-react';
 import { DateTime } from 'luxon';
 import millify from 'millify';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Stakers = () => {
+	const { t } = useTranslation('staking');
 	const [timeframe, setTimeframe] = useState<Timeframe>('day');
 	const { data: conservative = [] } = useTotalStakersStatConservative(timeframe);
 	const { data: dynamic = [] } = useTotalStakersStatDynamic(timeframe);
@@ -59,15 +61,15 @@ const Stakers = () => {
 	return (
 		<div className={'border border-gray-800 rounded-lg aspect-video p-2'}>
 			<div className={'text-lg flex flex-row justify-between'}>
-				<div className={'px-1'}>Total Stakers</div>
+				<div className={'px-1'}>{t('statistics.totalStakers')}</div>
 				<Select defaultValue={'day'} onValueChange={handleChange}>
 					<SelectTrigger className={'max-w-[100px]'}>
 						<SelectValue placeholder="Timeframe" />
 					</SelectTrigger>
 					<SelectContent>
-						<SelectItem value="hour">1 hour</SelectItem>
-						<SelectItem value="day">1 day</SelectItem>
-						<SelectItem value="week">1 week</SelectItem>
+						<SelectItem value="hour">1 {t('hour')}</SelectItem>
+						<SelectItem value="day">1 {t('day')}</SelectItem>
+						<SelectItem value="week">1 {t('week')}</SelectItem>
 					</SelectContent>
 				</Select>
 			</div>

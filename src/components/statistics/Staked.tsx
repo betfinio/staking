@@ -8,8 +8,10 @@ import cx from 'clsx';
 import { DateTime } from 'luxon';
 import millify from 'millify';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Staked = () => {
+	const { t } = useTranslation('staking');
 	const [timeframe, setTimeframe] = useState<Timeframe>('day');
 	const { data: conservative = [] } = useTotalStakedStatConservative(timeframe);
 	const { data: dynamic = [] } = useTotalStakedStatDynamic(timeframe);
@@ -52,15 +54,15 @@ const Staked = () => {
 	return (
 		<div className={'border border-gray-800 rounded-lg aspect-video p-2'}>
 			<div className={'text-lg flex flex-row justify-between'}>
-				<div className={'px-1'}>Total Staked</div>
+				<div className={'px-1'}>{t('statistics.totalStaked')}</div>
 				<Select defaultValue={'day'} onValueChange={handleChange}>
 					<SelectTrigger className={'max-w-[100px]'}>
 						<SelectValue placeholder="Timeframe" />
 					</SelectTrigger>
 					<SelectContent>
-						<SelectItem value="hour">1 hour</SelectItem>
-						<SelectItem value="day">1 day</SelectItem>
-						<SelectItem value="week">1 week</SelectItem>
+						<SelectItem value="hour">1 {t('hour')}</SelectItem>
+						<SelectItem value="day">1 {t('day')}</SelectItem>
+						<SelectItem value="week">1 {t('week')}</SelectItem>
 					</SelectContent>
 				</Select>
 			</div>

@@ -5,7 +5,7 @@ import Stakes from './Stakes';
 
 const StakesTable = () => {
 	const { address = ZeroAddress } = useAccount();
-	const { data = [], isLoading, isFetching, isRefetching } = useStakes(address);
+	const { data = [], isLoading } = useStakes(address);
 	return <Stakes data={data} isLoading={isLoading} />;
 };
 export default StakesTable;

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import StakesTable from './tables/Stakes/StakesTable';
 
 const Tables = () => {
-	const { t } = useTranslation('', { keyPrefix: 'staking.table' });
+	const { t } = useTranslation('staking', { keyPrefix: 'table' });
 
 	return (
 		<Tabs defaultValue="stakes">

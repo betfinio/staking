@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 const CONSERVATIVE_STAKING_ADDRESS = import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS;
 
 const StatisticsModal: FC = () => {
-	const { t } = useTranslation('', { keyPrefix: 'staking' });
+	const { t } = useTranslation('staking');
 	const { data: totalProfit } = useTotalProfit();
 	const { data: predictContribution = 0n } = usePredictContribution();
 	const { data: luroContribution = 0n } = useLuroContribution();
@@ -21,7 +21,7 @@ const StatisticsModal: FC = () => {
 		<div className={cx('rounded-lg bg-primaryLighter z-10 border border-gray-800 font-semibold text-white w-full mx-auto')}>
 			<div className={'py-5 px-7'}>
 				<div className={'flex justify-between items-center'}>
-					<div className={'text-sm '}>Conservative staking</div>
+					<div className={'text-sm '}>{t('conservative.statisticsModal.conservativeStaking')}</div>
 					<div>
 						<DialogClose>
 							<CloseModal className={'cursor-pointer hover:text-[#DD375F] transition-all duration-300'} />
@@ -35,7 +35,7 @@ const StatisticsModal: FC = () => {
 					</div>
 				</div>
 				<div className={'h-[2px] opacity-5 bg-white my-6'} />
-				<div className={'mb-3 text-center text-sm'}>Games contribution statistics</div>
+				<div className={'mb-3 text-center text-sm'}>{t('conservative.statisticsModal.gamesContributionStatistics')}</div>
 				<SharedGameBlock
 					games={[
 						{ amount: predictContribution, label: t('games.predict') },
@@ -44,7 +44,7 @@ const StatisticsModal: FC = () => {
 					]}
 				/>
 				<div className={'h-[2px] opacity-5 bg-white my-6'} />
-				<div className={'text-center text-sm mb-4'}>Staking contract</div>
+				<div className={'text-center text-sm mb-4'}>{t('conservative.statisticsModal.stakingContract')}</div>
 				<div className={'flex items-center justify-center gap-2 '}>
 					<ShieldCheckIcon className={'text-[#38BB7F] w-4 h-4'} />
 					<a

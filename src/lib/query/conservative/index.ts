@@ -5,9 +5,9 @@ import {
 	fetchConservativePools,
 	fetchEarnings,
 	fetchLuroContribution,
+	fetchPoolReward,
 	fetchPredictContribution,
 	fetchProfit,
-	fetchStakeReward,
 	fetchStakeStatus,
 	fetchStaked,
 	fetchStakes,
@@ -178,7 +178,7 @@ export type StakeParams = {
 	config: Config;
 };
 export const useStake = () => {
-	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
+	const { t } = useTranslation('shared', { keyPrefix: 'errors' });
 	const config = useConfig();
 	const queryClient = useQueryClient();
 	return useMutation<WriteContractReturnType, WriteContractErrorType, StakeParams>({
@@ -191,7 +191,7 @@ export const useStake = () => {
 				description: t(error),
 				variant: 'destructive',
 			});
-			return t(e.message);
+			return t(e.message as never);
 		},
 		onSuccess: async (data) => {
 			const { update } = toast({
@@ -217,7 +217,7 @@ export const useStake = () => {
 };
 
 export const useClaim = () => {
-	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
+	const { t } = useTranslation('shared', { keyPrefix: 'errors' });
 	const config = useConfig();
 	const queryClient = useQueryClient();
 	return useMutation<WriteContractReturnType>({
@@ -230,7 +230,7 @@ export const useClaim = () => {
 				description: t(error),
 				variant: 'destructive',
 			});
-			return t(e.message);
+			return t(e.message as never);
 		},
 		onSuccess: async (data) => {
 			const { update } = toast({
@@ -281,7 +281,7 @@ export const useCalculationsStat = (timeframe: Timeframe) => {
 
 export const useDistributeProfit = () => {
 	const config = useConfig();
-	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
+	const { t } = useTranslation('shared', { keyPrefix: 'errors' });
 
 	return useMutation<WriteContractReturnType, WriteContractErrorType, Address>({
 		mutationKey: ['staking', 'conservative', 'distributeProfit'],
@@ -299,7 +299,6 @@ export const useDistributeProfit = () => {
 				description: t(error),
 				variant: 'destructive',
 			});
-			return t(e.message);
 		},
 		onSuccess: async (data) => {
 			const { update } = toast({
@@ -320,20 +319,21 @@ export const useDistributeProfit = () => {
 	});
 };
 
-export const useStakeReward = (address: Address, pool: Address, hash: Address) => {
-	const config = useConfig();
-	return useQuery({
-		queryKey: ['staking', 'conservative', 'reward', pool, address, hash],
-		queryFn: () => fetchStakeReward(address, pool, config),
-		refetchOnWindowFocus: false,
-		refetchOnMount: false,
-	});
-};
 export const useStakeStatus = (address: Address, pool: Address, hash: Address) => {
 	const config = useConfig();
 	return useQuery({
 		queryKey: ['staking', 'conservative', 'status', pool, address, hash],
 		queryFn: () => fetchStakeStatus(address, pool, config),
+		refetchOnWindowFocus: false,
+		refetchOnMount: false,
+	});
+};
+
+export const usePoolReward = (address: Address, pool: Address) => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['staking', 'conservative', 'status', pool, address],
+		queryFn: () => fetchPoolReward(address, pool, config),
 		refetchOnWindowFocus: false,
 		refetchOnMount: false,
 	});
