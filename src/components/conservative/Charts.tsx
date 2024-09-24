@@ -5,8 +5,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'b
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
 import { DateTime } from 'luxon';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Charts = () => {
+	const { t } = useTranslation('staking');
 	const [timeframe, setTimeframe] = useState<Timeframe>('day');
 	const { data: totalStaked = [], error } = useTotalStakedStat(timeframe);
 	const { data: totalStakers = [] } = useTotalStakersStat(timeframe);
@@ -18,18 +20,18 @@ const Charts = () => {
 		<div className={'flex flex-col col-span-2 md:col-span-1'}>
 			<Tabs defaultValue="staked">
 				<TabsList className={'flex flex-row gap-2 text-sm'}>
-					<TabsTrigger value={'staked'}>Staked</TabsTrigger>
-					<TabsTrigger value={'stakers'}>Stakers</TabsTrigger>
-					<TabsTrigger value={'revenues'}>Revenues</TabsTrigger>
+					<TabsTrigger value={'staked'}>{t('conservative.staked')}</TabsTrigger>
+					<TabsTrigger value={'stakers'}>{t('conservative.stakers')}</TabsTrigger>
+					<TabsTrigger value={'revenues'}>{t('conservative.revenues')}</TabsTrigger>
 					<div className={'flex-grow flex justify-end'}>
 						<Select defaultValue={'day'} onValueChange={handleChange}>
 							<SelectTrigger className={'max-w-[100px]'}>
 								<SelectValue placeholder="Timeframe" />
 							</SelectTrigger>
 							<SelectContent>
-								<SelectItem value="hour">1 hour</SelectItem>
-								<SelectItem value="day">1 day</SelectItem>
-								<SelectItem value="week">1 week</SelectItem>
+								<SelectItem value="hour">1 {t('hour')}</SelectItem>
+								<SelectItem value="day">1 {t('day')}</SelectItem>
+								<SelectItem value="week">1 {t('week')}</SelectItem>
 							</SelectContent>
 						</Select>
 					</div>
@@ -37,7 +39,7 @@ const Charts = () => {
 
 				<TabsContent value={'staked'} className={'h-full'}>
 					<Chart
-						label="Total staked"
+						label={t('conservative.chart.totalStaked')}
 						color={'#facc15'}
 						className={'h-full'}
 						values={totalStaked.map((e) => e.value)}
@@ -46,7 +48,7 @@ const Charts = () => {
 				</TabsContent>
 				<TabsContent value={'stakers'} className={'h-full'}>
 					<Chart
-						label={'Total stakers'}
+						label={t('dynamic.chart.totalStakers')}
 						color={'#6A6A9F'}
 						values={totalStakers.map((e) => e.value)}
 						labels={totalStakers.map((e) => DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'))}
@@ -54,7 +56,7 @@ const Charts = () => {
 				</TabsContent>
 				<TabsContent value={'revenues'} className={'h-full'}>
 					<Chart
-						label={'Total revenue'}
+						label={t('dynamic.chart.totalRevenue')}
 						values={totalProfit.map((e) => e.value)}
 						labels={totalProfit.map((e) => DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'))}
 					/>

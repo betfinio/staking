@@ -1,0 +1,209 @@
+{
+	"title": {
+		"conservative": "Conservative staking",
+		"dynamic": "Dynamic staking"
+	},
+	"games": {
+		"predict": "Crypto Predict",
+		"roulette": "Roulette",
+		"luro": "Lucky Round",
+		"soon": "Soon"
+	},
+	"subtitle": {
+		"conservative": "Gains fees from shared betting",
+		"dynamic": "Liquidity for lotto games payouts"
+	},
+	"help": {
+		"howToStake": "How to stake",
+		"report": "Report"
+	},
+	"stat": {
+		"tvl": "Total locked",
+		"stakers": "Total stakers",
+		"profit": "Total earned"
+	},
+	"links": {
+		"conservative": "Conservative Staking",
+		"dynamic": "Dynamic Staking"
+	},
+	"stats": {
+		"title": "Your Conservative Staking",
+		"staking": "Your staking",
+		"share": "Your share",
+		"earnings": "Your earnings"
+	},
+	"total": {
+		"stakers": "{count, plural, =0 {No stakers} =1 {1 staker} other {# stakers}}",
+		"bets": "{count, plural, =0 {No bets} =1 {1 bet} other {# bets}}"
+	},
+	"toast": {
+		"insufficientAllowance": "Insufficient allowance",
+		"insufficientBalanceToStake": "Insufficient balance to stake"
+	},
+	"table": {
+		"title": "My Staking",
+		"tabs": {
+			"staking": "My Staking",
+			"claims": "My Claims",
+			"earnings": "My Earnings",
+			"unstakes": "My Unstakes",
+			"pools": "Pools"
+		},
+		"date": "Staking Date",
+		"amount": "Amount",
+		"profit": "Profit",
+		"capacity": "Capacity",
+		"unlockDate": "Unlock Date",
+		"pool": "Pool",
+		"status": "Status",
+		"noData": "There is no data to display",
+		"withdraw": "Withdraw",
+		"reward": "Rewards",
+		"totalStaked": "Total staked",
+		"ended": "Claimed",
+		"claimedRewards": "Claimed rewards",
+		"active": "Active",
+		"end": "Ended",
+
+		"claims": {
+			"date": "Date",
+			"amount": "Amount",
+			"transaction": "Transaction"
+		},
+		"earnings": {
+			"date": "Date",
+			"amount": "Amount",
+			"transaction": "Transaction",
+			"pool": "Pool"
+		}
+	},
+	"pools": {
+		"openMenu": "Open menu",
+		"distributeProfit": "Distribute Profit"
+	},
+	"statistics": {
+		"totalRevenues": "Total Revenues",
+		"totalStaked": "Total Staked",
+		"totalStakers": "Total Stakers"
+	},
+	"hour": "hour",
+	"day": "day",
+	"week": "week",
+	"stakers": "stakers",
+
+	"conservative": {
+		"earn": "Nothing to claim yet",
+		"stakeBet": "Stake BET token",
+		"unstake": "Claim",
+		"stake": "Stake",
+		"stakingPeriod": "Staking period is fixed for 80 weeks",
+		"unlock": "Unlock",
+		"unlockTitle": "Increase BET token allowance to stake",
+		"zeroBalance": "There is not enough token on your balance to stake. Please use faucet to get some.",
+		"faucet": "Faucet",
+		"profitTitle": "Claim ",
+		"placeholder": "{count, plural, other {Amount to Stake}}",
+		"claimTitle": "Claimable amount is {profit} BET",
+		"claim": "Claim",
+		"loginText": "Please connect your wallet to stake BET token",
+		"login": "Connect wallet",
+		"pending": "to be credited next cycle",
+		"stats": {
+			"conservativeGamesStats": "Conservative games stats",
+			"yourRevenues": "Your revenues",
+			"twoGames": "2 games",
+			"volume": "volume",
+			"inCycle": "In cycle"
+		},
+		"staked": "Staked",
+		"stakers": "Stakers",
+		"revenues": "Revenues",
+		"cycleOverview": {
+			"toolTip": "<b>Conservative staking cycle</b> is a period of <b>1 week</b> when players can join the <b>conservative games</b> and generate <b>Profit</b> from winning fees to conservative staking.<br /><br />Every <b>Friday at 12:00 UTC</b> there is a calculation window when the profit from winning fees is distributed among all the <b>conservative staking pools</b>.<br /><br />All the stakers have to <b>claim</b> those rewards afterwards.<br /><br />There <b>can not be a negative payout</b> and therefore there is no possibility to lose tokens in conservative staking.",
+			"conservativeCycle": "Conservative cycle",
+			"overview": "overview",
+			"cycleStart": "Cycle start",
+			"cycleEnd": "Cycle end"
+		},
+		"newStakes": {
+			"newStakes": "New stakes",
+			"stakers": "stakers",
+			"volumeStakedDuringCurrentCycle": "Volume staked during current cycle"
+		},
+		"gameProfit": {
+			"cycleRevenue": "Cycle revenue",
+			"volumeToDistributeBetweenStakers": "Volume to distribute between stakers"
+		},
+		"endingStakers": {
+			"endingStakes": "Ending stakes",
+			"stakers": "stakers"
+		},
+		"statisticsModal": {
+			"conservativeStaking": "Conservative staking",
+			"gamesContributionStatistics": "Games contribution statistics",
+			"stakingContract": "Staking contract"
+		},
+		"chart": {
+			"totalStaked": "Total staked",
+			"totalStakers": "Total stakers",
+			"totalRevenue": "Total revenue"
+		}
+	},
+	"dynamic": {
+		"earn": "Nothing to claim yet",
+		"stakeBet": "Stake BET token",
+		"unstake": "Claim",
+		"stake": "Stake",
+		"stakingPeriod": "Staking period is fixed for 80 weeks",
+		"unlock": "Unlock",
+		"unlockTitle": "Increase BET token allowance to stake",
+		"zeroBalance": "There is not enough token on your balance to stake. Please use faucet to get some.",
+		"faucet": "Faucet",
+		"profitTitle": "Claim {profit} BET",
+		"placeholder": "Amount to Stake",
+		"claimTitle": "Claimable amount is {profit} BET",
+		"claim": "Claim",
+		"loginText": "Please connect your wallet to stake BET token",
+		"login": "Connect wallet",
+		"staked": "Staked",
+		"stakers": "Stakers",
+		"revenues": "Revenues",
+		"chart": {
+			"totalStaked": "Total staked",
+			"totalStakers": "Total stakers",
+			"totalRevenue": "Total revenue"
+		},
+		"cycleOverview": {
+			"toolTip": "<b>Dynamic staking cycle</b> is a period of <b>4 weeks</b> when players bet against stakers in <b>dynamic games</b> and generate <b>Profit and Loss</b> (PnL) to dynamic staking.<br /><br />Every <b>4th Monday at 12.00 UTC</b> there is a calculation window when the PnL is distributed among all the <b>dynamic pools.</b><br /><br />Staking rewards distribution is done automatically without claim, staking in drawdowns (when users won more than lost in a cycle) does not receive payout till the drawdown is covered.",
+			"dynamicCycle": "Dynamic cycle",
+			"overview": "overview",
+			"cycleStart": "Cycle start",
+			"cycleEnd": "Cycle end"
+		},
+		"newStakes": {
+			"newStakes": "New stakes",
+			"stakers": "stakers",
+			"volumeStakedDuringCurrentCycle": "Volume staked during current cycle"
+		},
+		"gameProfit": {
+			"cycleRevenue": "Cycle revenue",
+			"volumeToDistributeBetweenStakers": "Volume to distribute between stakers"
+		},
+		"endingStakers": {
+			"endingStakes": "Ending stakes",
+			"stakers": "stakers"
+		},
+		"stats": {
+			"dynamicGamesStats": "Dynamic games stats",
+			"yourRevenues": "Your revenues",
+			"game": "game",
+			"volume": "volume",
+			"inCycle": "In cycle"
+		},
+		"statisticsModal": {
+			"dynamicStaking": "Dynamic staking",
+			"gamesContributionStatistics": "Games contribution statistics",
+			"stakingContract": "Staking contract"
+		}
+	}
+}

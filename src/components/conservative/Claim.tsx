@@ -15,7 +15,7 @@ interface ClaimProps {
 }
 
 const Claim: FC<ClaimProps> = ({ className }) => {
-	const { t } = useTranslation('', { keyPrefix: 'staking' });
+	const { t } = useTranslation('staking');
 	const { address = ZeroAddress } = useAccount();
 	const { data: staked = 0n, isLoading: isStakedLoading } = useStaked(address);
 	const { data: claimable = 0n, isLoading: isClaimableLoading } = useClaimable(address);

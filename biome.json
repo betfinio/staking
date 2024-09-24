@@ -34,7 +34,10 @@
 			"correctness": {
 				"useExhaustiveDependencies": "off"
 			},
-			"recommended": true
+			"recommended": true,
+			"security": {
+				"noDangerouslySetInnerHtml": "off"
+			}
 		}
 	}
 }
