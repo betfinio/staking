@@ -6,12 +6,15 @@ import Header from '@/src/components/shared/Header';
 import InfoBlock from '@/src/components/shared/InfoBlock';
 import Stake from '@/src/components/shared/Stake';
 import { createFileRoute } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 
 export const Route = createFileRoute('/conservative/')({
 	component: ConservativeStakingPage,
 });
 
 function ConservativeStakingPage() {
+	const { t } = useTranslation('shared', { keyPrefix: 'errors' });
+	console.log(t('unknown'));
 	return (
 		<div className={'w-full h-full p-2 md:p-3 lg:p-4 gap-2 flex flex-col lg:gap-4'}>
 			<Header type={'conservative'} />

@@ -9,8 +9,10 @@ import { motion } from 'framer-motion';
 import { CircleHelp } from 'lucide-react';
 import { DateTime } from 'luxon';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const CycleOverview: FC = () => {
+	const { t } = useTranslation();
 	const cycleId = Math.floor((Date.now() - 1000 * 60 * 60 * 36) / 1000 / 60 / 60 / 24 / 7);
 	const cycleStart = cycleId * 1000 * 60 * 60 * 24 * 7 + 1000 * 60 * 60 * 36;
 	const cycleEnd = (cycleId + 1) * 1000 * 60 * 60 * 24 * 7 + 1000 * 60 * 60 * 36;
@@ -29,33 +31,20 @@ export const CycleOverview: FC = () => {
 						<CircleHelp className={'w-5 h-5 text-yellow-400 cursor-pointer'} />
 					</TooltipTrigger>
 					<TooltipContent className={'bg-black px-4 py-2 rounded-md border border-yellow-400 text-white w-[350px]'}>
-						<div className={'text-sm'}>
-							<b className={'font-semibold text-yellow-400'}>Conservative staking cycle</b> is a period of{' '}
-							<b className={'font-semibold text-yellow-400'}>1 week</b> when players can join the{' '}
-							<b className={'font-semibold text-yellow-400'}>conservative games</b> and generate <b className={'font-semibold text-yellow-400'}> Profit </b>{' '}
-							from winning fees to conservative staking.
-							<br />
-							<br />
-							Every <b className={'font-semibold text-yellow-400'}>Friday at 12:00 UTC</b> there is a calculation window when the profit from winning fees is
-							distributed among all the <b className={'font-semibold text-yellow-400'}>conservative staking pools</b>
-							.
-							<br />
-							<br />
-							All the stakers have to <b className={'font-semibold text-yellow-400'}>claim</b> those rewards afterwards.
-							<br />
-							<br />
-							There <b className={'font-semibold text-yellow-400'}>can not be a negative payout</b> and therefore there is no possibility to lost tokens in
-							conservative staking.
-						</div>
+						<div
+							className={'text-sm [&_b]:font-semibold [&_b]:text-yellow-400'}
+							dangerouslySetInnerHTML={{ __html: t('conservative.cycleOverview.toolTip') }}
+						/>
 					</TooltipContent>
 				</Tooltip>
 				<h1 className={'text-left font-normal text-sm lg:text-base md:font-semibold'}>
-					Conservative cycle <span className={'underline cursor-pointer'}>#{cycleId}</span> overview
+					{t('conservative.cycleOverview.conservativeCycle')} <span className={'underline cursor-pointer'}>#{cycleId}</span>{' '}
+					{t('conservative.cycleOverview.overview')}
 				</h1>
 				<div>
 					<div className={'flex justify-between text-[#6A6F84] text-xs font-semibold'}>
-						<span>Cycle start</span>
-						<span>Cycle end</span>
+						<span> {t('conservative.cycleOverview.cycleStart')}</span>
+						<span> {t('conservative.cycleOverview.cycleEnd')}</span>
 					</div>
 					<div className={'my-[4px]'}>
 						<CycleProgress start={cycleStart} end={cycleEnd} />
@@ -70,24 +59,24 @@ export const CycleOverview: FC = () => {
 						games={[
 							{
 								amount: newStaked[0],
-								label: 'New stakes',
+								label: t('conservative.newStakes.newStakes'),
 								isLoading: isNewStakedFetching,
 								className: 'border border-yellow-400',
-								subtitle: `+${newStaked[1]} stakers`,
+								subtitle: `+${newStaked[1]} ${t('stakers')}`,
 							},
 							{
 								amount: newProfit[0],
-								label: 'Cycle revenues',
+								label: t('conservative.gameProfit.cycleRevenue'),
 								isLoading: isNewProfitFetching,
 								className: 'border border-green-400',
 								subtitle: `(${Number.isNaN(diff) ? '0' : diff.toFixed(2)}%)`,
 							},
 							{
 								amount: 0n,
-								label: 'Ending stakes',
+								label: t('conservative.endingStakers.endingStakes'),
 								isLoading: false,
 								className: 'border border-red-roulette',
-								subtitle: '0 stakers',
+								subtitle: `0 ${t('stakers')}`,
 							},
 						]}
 					/>
@@ -136,25 +125,31 @@ export const CycleProgress: FC<{ start: number; end: number }> = ({ start, end }
 
 const NewStakes: FC<{ cycleStart: number }> = ({ cycleStart }) => {
 	const { data: newStaked = [0n, 0n] } = useTotalStakedDiff(cycleStart / 1000);
+	const { t } = useTranslation('staking', { keyPrefix: 'conservative' });
 	return (
 		<Tooltip>
 			<TooltipTrigger>
 				<div className={'shrink-0 border border-yellow-400 py-4 px-3 rounded-md bg-primary text-sm text-[#6A6F84]'}>
-					<div className={'font-semibold text-center leading-[10px]'}>New stakes</div>
+					<div className={'font-semibold text-center leading-[10px]'}> {t('newStakes.newStakes')}</div>
 					<div className={'mt-5'}>
 						<div className={'flex justify-center text-yellow-400'}>
 							+<BetValue value={valueToNumber(newStaked[0])} withIcon={true} />
 						</div>
-						<div className={'text-center '}>({Number(newStaked[1])} stakers)</div>
+						<div className={'text-center '}>
+							({Number(newStaked[1])} {t('newStakes.stakers')})
+						</div>
 					</div>
 				</div>
 			</TooltipTrigger>
-			<TooltipContent className={'bg-black text-white p-2 text-sm border-yellow-400 border rounded-md'}>Volume staked during current cycle</TooltipContent>
+			<TooltipContent className={'bg-black text-white p-2 text-sm border-yellow-400 border rounded-md'}>
+				{t('newStakes.volumeStakedDuringCurrentCycle')}
+			</TooltipContent>
 		</Tooltip>
 	);
 };
 
 const GamesProfit = () => {
+	const { t } = useTranslation('staking', { keyPrefix: 'conservative' });
 	const { data: newProfit = [0n, 0n] } = useTotalProfitDiff();
 	const { data: totalStaked = 1n } = useTotalStaked();
 	const diff = (valueToNumber(newProfit[0]) / valueToNumber(totalStaked)) * 100;
@@ -163,7 +158,7 @@ const GamesProfit = () => {
 		<Tooltip>
 			<TooltipTrigger>
 				<div className={'border border-green-500 py-4 px-3 rounded-md bg-primary text-sm text-[#6A6F84]'}>
-					<div className={'font-semibold text-center leading-[10px]'}>Cycle revenues</div>
+					<div className={'font-semibold text-center leading-[10px]'}>{t('gameProfit.cycleRevenue')}</div>
 					<div className={'mt-5'}>
 						<div className={'flex justify-center text-green-500'}>
 							+<BetValue value={valueToNumber(newProfit[0])} withIcon={true} />
@@ -172,21 +167,24 @@ const GamesProfit = () => {
 					</div>
 				</div>
 			</TooltipTrigger>
-			<TooltipContent className={'bg-black text-white p-2 text-sm border-yellow-400 border rounded-md'}>Volume to distribute between stakers</TooltipContent>
+			<TooltipContent className={'bg-black text-white p-2 text-sm border-yellow-400 border rounded-md'}>
+				{t('gameProfit.volumeToDistributeBetweenStakers')}
+			</TooltipContent>
 		</Tooltip>
 	);
 };
 
 const EndingStakes = () => {
+	const { t } = useTranslation('staking');
 	// todo
 	return (
 		<div className={'border border-red-roulette py-4 px-3 rounded-md bg-primary text-sm text-[#6A6F84]'}>
-			<div className={'font-semibold text-center leading-[10px]'}>Ending stakes</div>
+			<div className={'font-semibold text-center leading-[10px]'}>{t('conservative.endingStakers.endingStakes')}</div>
 			<div className={'mt-5'}>
 				<div className={'flex justify-center text-red-roulette'}>
 					<BetValue value={0} withIcon={true} />
 				</div>
-				<div className={'text-center '}>0 stakers</div>
+				<div className={'text-center '}>0 {t('conservative.endingStakers.stakers')}</div>
 			</div>
 		</div>
 	);

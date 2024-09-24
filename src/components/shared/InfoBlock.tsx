@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { useAccount } from 'wagmi';
 
 const InfoBlock: FC<{ type: StakingType }> = ({ type }) => {
-	const { t } = useTranslation('', { keyPrefix: 'staking' });
+	const { t } = useTranslation('staking');
 
 	const { address } = useAccount();
 

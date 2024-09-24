@@ -9,8 +9,10 @@ import cx from 'clsx';
 import { DateTime } from 'luxon';
 import millify from 'millify';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Revenues = () => {
+	const { t } = useTranslation('staking');
 	const [timeframe, setTimeframe] = useState<Timeframe>('day');
 	const { data: conservative = [] } = useTotalProfitStatConservative(timeframe);
 	const { data: dynamic = [] } = useTotalProfitStatDynamic(timeframe);
@@ -63,15 +65,15 @@ const Revenues = () => {
 	return (
 		<div className={'border border-gray-800 rounded-lg p-2 w-full h-[400px] pb-[40px]'}>
 			<div className={'text-lg flex flex-row justify-between'}>
-				<div className={'px-1'}>Total Revenues</div>
+				<div className={'px-1'}>{t('statistics.totalRevenues')}</div>
 				<Select defaultValue={'day'} onValueChange={handleChange}>
 					<SelectTrigger className={'max-w-[100px]'}>
 						<SelectValue placeholder="Timeframe" />
 					</SelectTrigger>
 					<SelectContent>
-						<SelectItem value="hour">1 hour</SelectItem>
-						<SelectItem value="day">1 day</SelectItem>
-						<SelectItem value="week">1 week</SelectItem>
+						<SelectItem value="hour">1 {t('hour')}</SelectItem>
+						<SelectItem value="day">1 {t('day')}</SelectItem>
+						<SelectItem value="week">1 {t('week')}</SelectItem>
 					</SelectContent>
 				</Select>
 			</div>
