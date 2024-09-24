@@ -24,7 +24,7 @@ const Analytics: FC<{ type: StakingType }> = ({ type }) => {
 	const stakers = type === 'conservative' ? stakersC : stakersD;
 	const profit = type === 'conservative' ? profitC : profitD;
 
-	const { t } = useTranslation('', { keyPrefix: 'staking' });
+	const { t } = useTranslation('staking');
 
 	return (
 		<div className={'flex-grow flex-row items-center gap-4 lg:gap-8 justify-end whitespace-nowrap hidden md:flex'}>

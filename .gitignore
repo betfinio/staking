@@ -19,3 +19,6 @@ bun.lockb
 .firebase/
 
 @mf-types/
+
+.graphclient
+src/gql
