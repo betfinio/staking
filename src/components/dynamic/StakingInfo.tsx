@@ -33,7 +33,7 @@ const Counter: FC<{ from: number; to: number }> = ({ from, to }) => {
 };
 
 const StakingInfo: FC = () => {
-	const { t } = useTranslation('', { keyPrefix: 'staking.total' });
+	const { t } = useTranslation('staking');
 	const { address = ZeroAddress } = useAccount();
 	const { data: totalVolume = 0n } = useTotalVolume();
 	const { data: totalBets = 0 } = useTotalBets();
@@ -65,23 +65,23 @@ const StakingInfo: FC = () => {
 	return (
 		<div className={'cursor-pointer bg-primaryLighter border border-gray-800 rounded-lg'}>
 			<div className={'font-semibold text-center text-sm lg:text-base whitespace-nowrap lg:text-left p-4 hidden md:flex flex-row items-center justify-between'}>
-				Dynamic games stats
-				<div className={''}>Your revenues:</div>
+				{t('dynamic.stats.dynamicGamesStats')}
+				<div className={''}>{t('dynamic.stats.yourRevenues')}:</div>
 			</div>
 			<div className={'rounded-lg flex justify-between font-semibold p-3'}>
 				<div className={'flex items-center justify-center flex-row gap-3 h-full text-sm lg:text-base'}>
 					<CoinLarge className={'hidden md:block text-yellow-400 w-20 h-20'} />
 					<div className={'flex flex-col gap-[18px] md:gap-4 lg:text-sm xl:text-base justify-between items-start h-full'}>
 						<div className={cx(' flex flex-row items-center gap-2')}>
-							<CalculatorIcon className={'w-6 h-6 md:w-5 md:h-5 text-yellow-400'} /> 1 game
+							<CalculatorIcon className={'w-6 h-6 md:w-5 md:h-5 text-yellow-400'} />1 {t('dynamic.stats.game')}
 						</div>
 						<div className={cx('flex ml-1 flex-row items-center gap-2 font-semibold')}>
 							<Blackjack className={'w-6 h-6 md:w-4 md:h-4 text-yellow-400'} />
-							{t('bets', { count: totalBets })}
+							{t('total.bets', { count: totalBets })}
 						</div>
 						<div className={cx('flex flex-row items-center gap-2')}>
 							<Coins className={'w-6 h-6 md:w-5 md:h-5 text-yellow-400'} />
-							<BetValue value={valueToNumber(totalVolume)} precision={2} withIcon /> volume
+							<BetValue value={valueToNumber(totalVolume)} precision={2} withIcon /> {t('dynamic.stats.volume')}
 						</div>
 					</div>
 				</div>
@@ -95,7 +95,9 @@ const StakingInfo: FC = () => {
 						<Counter from={from} to={to} />
 						<Bet className={'w-4 h-4'} />
 					</div>
-					<div className={'text-gray-500 text-xs'}>In cycle #{cycleId}</div>
+					<div className={'text-gray-500 text-xs'}>
+						{t('dynamic.stats.inCycle')} #{cycleId}
+					</div>
 				</div>
 			</div>
 		</div>

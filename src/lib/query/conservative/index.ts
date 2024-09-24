@@ -5,8 +5,10 @@ import {
 	fetchConservativePools,
 	fetchEarnings,
 	fetchLuroContribution,
+	fetchPoolReward,
 	fetchPredictContribution,
 	fetchProfit,
+	fetchStakeStatus,
 	fetchStaked,
 	fetchStakes,
 	fetchTotalBets,
@@ -19,15 +21,14 @@ import {
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types';
 import { ConservativeStakingContract, ConservativeStakingPoolContract, GameContract, PartnerContract } from '@betfinio/abi';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { type WriteContractReturnType, writeContract } from '@wagmi/core';
 import type { WriteContractErrorType } from '@wagmi/core';
+import { type WriteContractReturnType, writeContract } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
-import type { Timeframe } from 'betfinio_app/lib/types';
-import type { Stake, Stat } from 'betfinio_app/lib/types';
+import type { Stake, Stat, Timeframe } from 'betfinio_app/lib/types';
 import { useSupabase } from 'betfinio_app/supabase';
 import { toast } from 'betfinio_app/use-toast';
 import { useTranslation } from 'react-i18next';
-import { type Address, type Log, decodeEventLog } from 'viem';
+import type { Address } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { type Config, useConfig, useWatchContractEvent } from 'wagmi';
 
@@ -117,47 +118,8 @@ export const useClaimable = (address: Address) => {
 };
 
 export const useStaked = (address?: Address) => {
-	const queryClient = useQueryClient();
 	const config = useConfig();
-	useWatchContractEvent({
-		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-		eventName: 'Staked',
-		onLogs: async (log: Log[]) => {
-			const event = decodeEventLog({
-				abi: ConservativeStakingContract.abi,
-				...log[0],
-				strict: true,
-			});
-			const { staker } = event.args as unknown as { staker: string };
-			if (staker.toLowerCase() === address?.toLowerCase()) {
-				await queryClient.invalidateQueries({
-					queryKey: ['staking', 'conservative', 'staked', address],
-				});
-			}
-		},
-	});
-	useWatchContractEvent({
-		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-		eventName: 'Withdraw',
-		onLogs: async (log: Log[]) => {
-			const event = decodeEventLog({
-				abi: ConservativeStakingContract.abi,
-				...log[0],
-				strict: true,
-			});
-			const { staker } = event.args as unknown as { staker: string };
-			if (staker.toLowerCase() === address?.toLowerCase()) {
-				await queryClient.invalidateQueries({
-					queryKey: ['staking', 'conservative', 'staked', address],
-				});
-				await queryClient.invalidateQueries({
-					queryKey: ['staking', 'conservative', 'stakes', address],
-				});
-			}
-		},
-	});
+
 	return useQuery<bigint>({
 		queryKey: ['staking', 'conservative', 'staked', address],
 		queryFn: () => fetchStaked(address, config),
@@ -183,26 +145,7 @@ export const useEarnings = (address: Address) => {
 };
 
 export const useStakes = (address: Address) => {
-	const queryClient = useQueryClient();
 	const config = useConfig();
-	useWatchContractEvent({
-		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-		eventName: 'Staked',
-		onLogs: async (log: Log[]) => {
-			const event = decodeEventLog({
-				abi: ConservativeStakingContract.abi,
-				...log[0],
-				strict: true,
-			});
-			const { staker } = event.args as unknown as { staker: string };
-			if (staker.toLowerCase() === address.toLowerCase()) {
-				await queryClient.invalidateQueries({
-					queryKey: ['staking', 'conservative', 'stakes', address],
-				});
-			}
-		},
-	});
 	return useQuery<Stake[]>({
 		queryKey: ['staking', 'conservative', 'stakes', address],
 		queryFn: () => fetchStakes(address, config),
@@ -212,33 +155,9 @@ export const useStakes = (address: Address) => {
 };
 
 export const useClaims = (address: Address) => {
-	const queryClient = useQueryClient();
-	const { client: supabase } = useSupabase();
-	useWatchContractEvent({
-		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
-		eventName: 'Claimed',
-		onLogs: async (logs: Log[]) => {
-			const event = decodeEventLog({
-				abi: ConservativeStakingContract.abi,
-				...logs[0],
-				strict: true,
-			});
-			const args = event.args as unknown as { staker: string };
-			if (args.staker.toLowerCase() === address?.toLowerCase()) {
-				await queryClient.invalidateQueries({
-					queryKey: ['staking', 'conservative', 'claims', address],
-				});
-				await queryClient.invalidateQueries({
-					queryKey: ['staking', 'conservative', 'claimable', address],
-				});
-			}
-		},
-	});
-
 	return useQuery({
 		queryKey: ['staking', 'conservative', 'claims', address],
-		queryFn: () => fetchClaims(address, { supabase }),
+		queryFn: () => fetchClaims(address),
 	});
 };
 
@@ -259,8 +178,9 @@ export type StakeParams = {
 	config: Config;
 };
 export const useStake = () => {
-	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
+	const { t } = useTranslation('shared', { keyPrefix: 'errors' });
 	const config = useConfig();
+	const queryClient = useQueryClient();
 	return useMutation<WriteContractReturnType, WriteContractErrorType, StakeParams>({
 		mutationKey: ['staking', 'conservative', 'stake'],
 		mutationFn: stake,
@@ -271,7 +191,7 @@ export const useStake = () => {
 				description: t(error),
 				variant: 'destructive',
 			});
-			return t(e.message);
+			return t(e.message as never);
 		},
 		onSuccess: async (data) => {
 			const { update } = toast({
@@ -281,7 +201,11 @@ export const useStake = () => {
 				duration: 10000,
 				action: getTransactionLink(data),
 			});
-			await waitForTransactionReceipt(config.getClient(), { hash: data });
+			await waitForTransactionReceipt(config.getClient(), { hash: data, confirmations: 3 });
+
+			queryClient.invalidateQueries({
+				queryKey: ['staking', 'conservative'],
+			});
 			update({
 				title: 'Staked successful',
 				variant: 'default',
@@ -293,7 +217,7 @@ export const useStake = () => {
 };
 
 export const useClaim = () => {
-	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
+	const { t } = useTranslation('shared', { keyPrefix: 'errors' });
 	const config = useConfig();
 	const queryClient = useQueryClient();
 	return useMutation<WriteContractReturnType>({
@@ -306,7 +230,7 @@ export const useClaim = () => {
 				description: t(error),
 				variant: 'destructive',
 			});
-			return t(e.message);
+			return t(e.message as never);
 		},
 		onSuccess: async (data) => {
 			const { update } = toast({
@@ -357,7 +281,7 @@ export const useCalculationsStat = (timeframe: Timeframe) => {
 
 export const useDistributeProfit = () => {
 	const config = useConfig();
-	const { t } = useTranslation('', { keyPrefix: 'shared.errors' });
+	const { t } = useTranslation('shared', { keyPrefix: 'errors' });
 
 	return useMutation<WriteContractReturnType, WriteContractErrorType, Address>({
 		mutationKey: ['staking', 'conservative', 'distributeProfit'],
@@ -375,7 +299,6 @@ export const useDistributeProfit = () => {
 				description: t(error),
 				variant: 'destructive',
 			});
-			return t(e.message);
 		},
 		onSuccess: async (data) => {
 			const { update } = toast({
@@ -393,5 +316,25 @@ export const useDistributeProfit = () => {
 				duration: 5000,
 			});
 		},
+	});
+};
+
+export const useStakeStatus = (address: Address, pool: Address, hash: Address) => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['staking', 'conservative', 'status', pool, address, hash],
+		queryFn: () => fetchStakeStatus(address, pool, config),
+		refetchOnWindowFocus: false,
+		refetchOnMount: false,
+	});
+};
+
+export const usePoolReward = (address: Address, pool: Address) => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['staking', 'conservative', 'status', pool, address],
+		queryFn: () => fetchPoolReward(address, pool, config),
+		refetchOnWindowFocus: false,
+		refetchOnMount: false,
 	});
 };

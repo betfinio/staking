@@ -4,6 +4,7 @@ import type { StakingType } from '@/src/lib/types.ts';
 import { Button } from 'betfinio_app/button';
 import { CircleAlert, CircleHelp } from 'lucide-react';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const LINK_HOW_TO_STAKE =
 	'https://betfin.gitbook.io/betfin-public/v/staking-manual/staking-user-manual/conservative-staking-manual/example-of-conservative-staking';
@@ -13,6 +14,7 @@ export interface HeaderProps {
 }
 
 const Header: FC<HeaderProps> = ({ type }) => {
+	const { t } = useTranslation('staking', { keyPrefix: 'help' });
 	const handleReport = () => {
 		document.getElementById('live-chat-ai-button')?.click();
 	};
@@ -26,7 +28,7 @@ const Header: FC<HeaderProps> = ({ type }) => {
 				<Button variant={'link'} className={'text-white md:hover:text-yellow-400 md:text-yellow-400 !p-0'} asChild>
 					<a target={'_blank'} href={LINK_HOW_TO_STAKE} className={'flex flex-col  items-center justify-center cursor-pointer'} rel="noreferrer">
 						<CircleHelp className={'w-6'} />
-						<span className={'hidden lg:inline text-xs whitespace-nowrap'}>How to stake</span>
+						<span className={'hidden lg:inline text-xs whitespace-nowrap'}>{t('howToStake')}</span>
 					</a>
 				</Button>
 				<Button
@@ -35,7 +37,7 @@ const Header: FC<HeaderProps> = ({ type }) => {
 					className={'text-white md:hover:text-yellow-400 md:text-yellow-400 flex flex-col items-center justify-center p-0'}
 				>
 					<CircleAlert className={'w-6'} />
-					<span className={'hidden lg:inline text-xs whitespace-nowrap'}>Report</span>
+					<span className={'hidden lg:inline text-xs whitespace-nowrap'}>{t('report')}</span>
 				</Button>
 			</div>
 		</div>

@@ -28,6 +28,7 @@ export default defineConfig({
 	},
 	tools: {
 		rspack: {
+			ignoreWarnings: [/Critical dependency: the request of a dependency is an expression/],
 			output: {
 				uniqueName: 'betfinio_staking',
 			},
@@ -35,6 +36,7 @@ export default defineConfig({
 				TanStackRouterRspack(),
 				new ModuleFederationPlugin({
 					name: 'betfinio_staking',
+
 					remotes: {
 						betfinio_app: getApp(),
 					},
