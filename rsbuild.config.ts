@@ -89,6 +89,10 @@ export default defineConfig({
 							singleton: true,
 							requiredVersion: dependencies.wagmi,
 						},
+						'i18next-browser-languagedetector': {
+							singleton: true,
+							requiredVersion: dependencies['i18next-browser-languagedetector'],
+						},
 					},
 				}),
 			],
