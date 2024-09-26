@@ -4,89 +4,206 @@
 		"dynamic": "Dynamický staking"
 	},
 	"games": {
-		"predict": "Krypto Predikce",
+		"predict": "Crypto Predict",
 		"roulette": "Ruleta",
-		"luro": "Šťastné kolo",
+		"luro": "Lucky Round",
 		"soon": "Brzy"
 	},
 	"subtitle": {
-		"conservative": "Zisky z poplatků ze sdíleného sázení",
-		"dynamic": "Likvidita pro výplaty loterijních her"
+		"conservative": "Získává poplatky ze sdíleného sázení",
+		"dynamic": "Likvidita pro výplaty v loterijních hrách"
+	},
+	"help": {
+		"howToStake": "Jak stakovat",
+		"report": "Nahlásit"
 	},
 	"stat": {
 		"tvl": "Celkově uzamčeno",
-		"stakers": "Celkový počet stakingu",
-		"profit": "Celkově vyděláno"
+		"stakers": "Celkový počet stakerů",
+		"profit": "Celkový zisk"
 	},
 	"links": {
-		"conservative": "Konzervativní Staking",
-		"dynamic": "Dynamický Staking"
+		"conservative": "Konzervativní staking",
+		"dynamic": "Dynamický staking"
 	},
 	"stats": {
-		"title": "Váš Konzervativní Staking",
-		"staking": "Váš staking",
-		"share": "Váš podíl",
-		"earnings": "Vaše výdělky"
+		"title": "Tvůj konzervativní staking",
+		"staking": "Tvůj staking",
+		"share": "Tvůj podíl",
+		"earnings": "Tvoje výdělky"
 	},
 	"total": {
-		"stakers": "{count, plural, =0 {Žádní stakeři} =1 {1 staker} other {# stakerů}}",
-		"bets": "{count, plural, =0 {Žádné sázky} =1 {1 sázka} other {# sázek}}"
+		"stakers": "{count, plural, =0 {Žádní stakeři} =1 {1 staker} other {# stakeři}}",
+		"bets": "{count, plural, =0 {Žádné sázky} =1 {1 sázka} other {# sázky}}"
+	},
+	"toast": {
+		"insufficientAllowance": "Nedostatečný povolený limit",
+		"insufficientBalanceToStake": "Nedostatečný zůstatek pro staking"
 	},
 	"table": {
-		"title": "Můj Staking",
+		"title": "Můj staking",
 		"tabs": {
-			"staking": "Můj Staking",
-			"claims": "Moje Nároky",
-			"earnings": "Moje Výdělky",
-			"unstakes": "Moje Odsázení",
-			"pools": "Pondy"
+			"staking": "Můj staking",
+			"claims": "Moje výběry",
+			"earnings": "Moje výdělky",
+			"unstakes": "Moje unstaky",
+			"pools": "Pooly"
 		},
-		"date": "Datum Stakingu",
+		"date": "Datum stakingu",
 		"amount": "Částka",
 		"profit": "Zisk",
 		"capacity": "Kapacita",
-		"unlockDate": "Datum Odemčení",
-		"pool": "Pond",
+		"unlockDate": "Datum odemknutí",
+		"pool": "Pool",
 		"status": "Stav",
-		"noData": "Žádná data k zobrazení",
+		"noData": "Nejsou k dispozici žádná data",
 		"withdraw": "Vybrat",
 		"reward": "Odměny",
-		"totalStaked": "Celkově stakováno",
-		"ended": "Nárokováno"
+		"totalStaked": "Celkem stakováno",
+		"ended": "Vybráno",
+		"claimedRewards": "Vybrané odměny",
+		"active": "Aktivní",
+		"end": "Ukončeno",
+
+		"claims": {
+			"date": "Datum",
+			"amount": "Částka",
+			"transaction": "Transakce"
+		},
+		"earnings": {
+			"date": "Datum",
+			"amount": "Částka",
+			"transaction": "Transakce",
+			"pool": "Pool"
+		}
 	},
+	"pools": {
+		"openMenu": "Otevřít menu",
+		"distributeProfit": "Rozdělit zisk"
+	},
+	"statistics": {
+		"totalRevenues": "Celkové příjmy",
+		"totalStaked": "Celkově stakováno",
+		"totalStakers": "Celkový počet stakerů"
+	},
+	"hour": "hodina",
+	"day": "den",
+	"week": "týden",
+	"stakers": "stakeři",
+
 	"conservative": {
-		"earn": "Zatím není co nárokovat",
-		"stakeBet": "Stakovat BET token",
-		"unstake": "Nárokovat",
-		"stake": "Stakovat",
-		"stakingPeriod": "Doba stakingu je pevně stanovena na 80 týdnů",
+		"earn": "Zatím není nic k vybrání",
+		"stakeBet": "Stake BET token",
+		"unstake": "Vybrat",
+		"stake": "Stake",
+		"stakingPeriod": "Stakingové období je pevně stanoveno na 80 týdnů",
 		"unlock": "Odemknout",
-		"unlockTitle": "Zvyšte povolení BET tokenů pro staking",
-		"zeroBalance": "Na vašem účtu není dostatek tokenů pro staking. Použijte faucet pro získání dalších.",
+		"unlockTitle": "Zvýšit povolený limit BET tokenů pro staking",
+		"zeroBalance": "Na tvém zůstatku není dostatek tokenů pro staking. Použij faucet pro získání tokenů.",
 		"faucet": "Faucet",
-		"profitTitle": "Nárokovat ",
-		"placeholder": "{count, plural, other {Částka k Stakování}}",
-		"claimTitle": "Nárokovatelná částka je {profit} BET",
-		"claim": "Nárokovat",
-		"loginText": "Prosím připojte svou peněženku pro staking BET tokenů",
+		"profitTitle": "Vybrat ",
+		"placeholder": "{count, plural, other {Částka pro staking}}",
+		"claimTitle": "Vybratelná částka je {profit} BET",
+		"claim": "Vybrat",
+		"loginText": "Připoj svou peněženku pro staking BET tokenů",
 		"login": "Připojit peněženku",
-		"pending": "bude připsáno v dalším cyklu"
+		"pending": "bude připsáno v dalším cyklu",
+		"stats": {
+			"conservativeGamesStats": "Statistiky konzervativních her",
+			"yourRevenues": "Tvoje příjmy",
+			"twoGames": "2 hry",
+			"volume": "objem",
+			"inCycle": "V cyklu"
+		},
+		"staked": "Stakováno",
+		"stakers": "Stakeři",
+		"revenues": "Příjmy",
+		"cycleOverview": {
+			"toolTip": "<b>Konzervativní stakingový cyklus</b> je období <b>1 týdne</b>, kdy se hráči mohou připojit ke <b>konzervativním hrám</b> a generovat <b>zisk</b> z poplatků za výhry do konzervativního stakingu.<br /><br />Každý <b>pátek v 12:00 UTC</b> probíhá výpočetní okno, kdy jsou zisky z poplatků za výhry rozděleny mezi všechny <b>konzervativní staking pooly</b>.<br /><br />Všichni stakeři musí následně <b>vybrat</b> tyto odměny.<br /><br />Nemůže být negativní výplata</b>, takže není možné ztratit tokeny v konzervativním stakingu.",
+			"conservativeCycle": "Konzervativní cyklus",
+			"overview": "přehled",
+			"cycleStart": "Začátek cyklu",
+			"cycleEnd": "Konec cyklu"
+		},
+		"newStakes": {
+			"newStakes": "Nové stakey",
+			"stakers": "stakeři",
+			"volumeStakedDuringCurrentCycle": "Objem stakovaný během aktuálního cyklu"
+		},
+		"gameProfit": {
+			"cycleRevenue": "Příjem z cyklu",
+			"volumeToDistributeBetweenStakers": "Objem k rozdělení mezi stakeři"
+		},
+		"endingStakers": {
+			"endingStakes": "Konec stakeů",
+			"stakers": "stakeři"
+		},
+		"statisticsModal": {
+			"conservativeStaking": "Konzervativní staking",
+			"gamesContributionStatistics": "Statistiky příspěvků her",
+			"stakingContract": "Stakingová smlouva"
+		},
+		"chart": {
+			"totalStaked": "Celkem stakováno",
+			"totalStakers": "Celkový počet stakerů",
+			"totalRevenue": "Celkový příjem"
+		}
 	},
 	"dynamic": {
-		"earn": "Zatím není co nárokovat",
-		"stakeBet": "Stakovat BET token",
-		"unstake": "Nárokovat",
-		"stake": "Stakovat",
-		"stakingPeriod": "Doba stakingu je pevně stanovena na 80 týdnů",
+		"earn": "Zatím není nic k vybrání",
+		"stakeBet": "Stake BET token",
+		"unstake": "Vybrat",
+		"stake": "Stake",
+		"stakingPeriod": "Stakingové období je pevně stanoveno na 80 týdnů",
 		"unlock": "Odemknout",
-		"unlockTitle": "Zvyšte povolení BET tokenů pro staking",
-		"zeroBalance": "Na vašem účtu není dostatek tokenů pro staking. Použijte faucet pro získání dalších.",
+		"unlockTitle": "Zvýšit povolený limit BET tokenů pro staking",
+		"zeroBalance": "Na tvém zůstatku není dostatek tokenů pro staking. Použij faucet pro získání tokenů.",
 		"faucet": "Faucet",
-		"profitTitle": "Nárokovat {profit} BET",
-		"placeholder": "Částka k Stakování",
-		"claimTitle": "Nárokovatelná částka je {profit} BET",
-		"claim": "Nárokovat",
-		"loginText": "Prosím připojte svou peněženku pro staking BET tokenů",
-		"login": "Připojit peněženku"
+		"profitTitle": "Vybrat {profit} BET",
+		"placeholder": "Částka pro staking",
+		"claimTitle": "Vybratelná částka je {profit} BET",
+		"claim": "Vybrat",
+		"loginText": "Připoj svou peněženku pro staking BET tokenů",
+		"login": "Připojit peněženku",
+		"staked": "Stakováno",
+		"stakers": "Stakeři",
+		"revenues": "Příjmy",
+		"chart": {
+			"totalStaked": "Celkem stakováno",
+			"totalStakers": "Celkový počet stakerů",
+			"totalRevenue": "Celkový příjem"
+		},
+		"cycleOverview": {
+			"toolTip": "<b>Dynamický stakingový cyklus</b> je období <b>4 týdnů</b>, kdy hráči sázejí proti stakerům v <b>dynamických hrách</b> a generují <b>zisk a ztrátu</b> (PnL) pro dynamický staking.<br /><br />Každý <b>4. pondělí v 12:00 UTC</b> probíhá výpočetní okno, kdy jsou PnL rozděleny mezi všechny <b>dynamické pooly</b>.<br /><br />Rozdělení odměn ze stakingu probíhá automaticky bez vybrání, staking v propadu (když uživatelé vyhráli více než prohráli v cyklu) neobdrží výplatu, dokud není propad pokryt.",
+			"dynamicCycle": "Dynamický cyklus",
+			"overview": "přehled",
+			"cycleStart": "Začátek cyklu",
+			"cycleEnd": "Konec cyklu"
+		},
+		"newStakes": {
+			"newStakes": "Nové stakey",
+			"stakers": "stakeři",
+			"volumeStakedDuringCurrentCycle": "Objem stakovaný během aktuálního cyklu"
+		},
+		"gameProfit": {
+			"cycleRevenue": "Příjem z cyklu",
+			"volumeToDistributeBetweenStakers": "Objem k rozdělení mezi stakeři"
+		},
+		"endingStakers": {
+			"endingStakes": "Konec stakeů",
+			"stakers": "stakeři"
+		},
+		"stats": {
+			"dynamicGamesStats": "Statistiky dynamických her",
+			"yourRevenues": "Tvoje příjmy",
+			"game": "hra",
+			"volume": "objem",
+			"inCycle": "V cyklu"
+		},
+		"statisticsModal": {
+			"dynamicStaking": "Dynamický staking",
+			"gamesContributionStatistics": "Statistiky příspěvků her",
+			"stakingContract": "Stakingová smlouva"
+		}
 	}
 }
