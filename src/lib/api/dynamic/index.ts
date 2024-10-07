@@ -80,16 +80,15 @@ export const fetchStakes = async (address: Address): Promise<Stake[]> => {
 	if (!address) {
 		return [];
 	}
-
 	const staked = await requestDynamicStakes(address);
-
 	const stakedByPools = staked.reduce(
 		(acc, stake) => {
 			if (!acc[stake.pool]) {
 				acc[stake.pool] = stake;
+			} else {
+				acc[stake.pool].amount += stake.amount;
+				acc[stake.pool].reward = (stake.reward || 0n) > (acc[stake.pool].reward || 0n) ? stake.reward : acc[stake.pool].reward;
 			}
-			acc[stake.pool].amount += stake.amount;
-			acc[stake.pool].reward = (stake.reward || 0n) > (acc[stake.pool].reward || 0n) ? stake.reward : acc[stake.pool].reward;
 			return acc;
 		},
 		{} as Record<Address, Stake>,
