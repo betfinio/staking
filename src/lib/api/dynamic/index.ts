@@ -83,8 +83,20 @@ export const fetchStakes = async (address: Address): Promise<Stake[]> => {
 
 	const staked = await requestDynamicStakes(address);
 
+	const stakedByPools = staked.reduce(
+		(acc, stake) => {
+			if (!acc[stake.pool]) {
+				acc[stake.pool] = stake;
+			}
+			acc[stake.pool].amount += stake.amount;
+			acc[stake.pool].reward = (stake.reward || 0n) > (acc[stake.pool].reward || 0n) ? stake.reward : acc[stake.pool].reward;
+			return acc;
+		},
+		{} as Record<Address, Stake>,
+	);
+
 	if (!staked) return [];
-	return staked.map((stake) => {
+	return Object.values(stakedByPools).map((stake) => {
 		const { start, end, amount, staker, pool, reward, hash } = stake;
 		return {
 			start: start,

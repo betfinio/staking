@@ -70,7 +70,7 @@ const StakingInfo: FC = () => {
 		<div className={'cursor-pointer bg-primaryLighter border border-gray-800 rounded-lg'}>
 			<div className={'font-semibold text-center text-sm lg:text-base whitespace-nowrap lg:text-left p-4 hidden md:flex flex-row items-center justify-between'}>
 				{t('conservative.stats.conservativeGamesStats')}
-				<div className={''}>{t('conservative.stats.conservativeGamesStats')}:</div>
+				<div className={''}>{t('conservative.stats.yourRevenues')}:</div>
 			</div>
 			<div className={'rounded-lg flex justify-between font-semibold p-3'}>
 				<div className={'flex items-center justify-center flex-row gap-3 h-full text-sm lg:text-base'}>
