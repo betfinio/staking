@@ -126,7 +126,7 @@
 			"cycleEnd": "Konec cyklu"
 		},
 		"newStakes": {
-			"newStakes": "Nové stakey",
+			"newStakes": "Nové staky",
 			"stakers": "stakeři",
 			"volumeStakedDuringCurrentCycle": "Objem stakovaný během aktuálního cyklu"
 		},
@@ -135,7 +135,7 @@
 			"volumeToDistributeBetweenStakers": "Objem k rozdělení mezi stakeři"
 		},
 		"endingStakers": {
-			"endingStakes": "Konec stakeů",
+			"endingStakes": "Konec staků",
 			"stakers": "stakeři"
 		},
 		"statisticsModal": {
@@ -181,7 +181,7 @@
 			"cycleEnd": "Konec cyklu"
 		},
 		"newStakes": {
-			"newStakes": "Nové stakey",
+			"newStakes": "Nové staky",
 			"stakers": "stakeři",
 			"volumeStakedDuringCurrentCycle": "Objem stakovaný během aktuálního cyklu"
 		},
@@ -190,7 +190,7 @@
 			"volumeToDistributeBetweenStakers": "Objem k rozdělení mezi stakeři"
 		},
 		"endingStakers": {
-			"endingStakes": "Konec stakeů",
+			"endingStakes": "Konec staků",
 			"stakers": "stakeři"
 		},
 		"stats": {
