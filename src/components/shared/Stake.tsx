@@ -83,6 +83,7 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 
 	const allowanceValue = valueToNumber(allowance);
 	const maxAllowed = Math.min(valueToNumber(balance), valueToNumber(allowance));
+
 	return (
 		<div className={'flex w-full  p-3 md:p-8 md:py-6 bg-unstake-background bg-no-repeat bg-cover rounded-lg flex-col justify-between items relative'}>
 			<h2 className={'text-xl font-semibold opacity-90'}>{t('conservative.stakeBet')}</h2>
@@ -110,7 +111,7 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 					<div
 						className={'text-xs cursor-pointer text-yellow-400'}
 						onClick={() => {
-							setValue(Math.floor(Number(balance)).toFixed(0));
+							setValue(Math.floor(valueToNumber(balance)).toFixed(0));
 						}}
 					>
 						MAX

@@ -19,6 +19,10 @@ export const resources = {
 		staking: ruStaking,
 		shared: sharedLang.ru,
 	},
+	cs: {
+		staking: czStaking,
+		shared: sharedLang.cz,
+	},
 	cz: {
 		staking: czStaking,
 		shared: sharedLang.cz,
