@@ -12,7 +12,8 @@ import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const CycleOverview: FC = () => {
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+	const currentLocale = i18n.language;
 	const cycleId = Math.floor((Date.now() - 1000 * 60 * 60 * 36) / 1000 / 60 / 60 / 24 / 7);
 	const cycleStart = cycleId * 1000 * 60 * 60 * 24 * 7 + 1000 * 60 * 60 * 36;
 	const cycleEnd = (cycleId + 1) * 1000 * 60 * 60 * 24 * 7 + 1000 * 60 * 60 * 36;
@@ -50,8 +51,16 @@ export const CycleOverview: FC = () => {
 						<CycleProgress start={cycleStart} end={cycleEnd} />
 					</div>
 					<div className={'flex justify-between text-[#6A6F84] text-xs'}>
-						<span>{DateTime.fromMillis(cycleStart).toFormat('DD T')}</span>
-						<span>{DateTime.fromMillis(cycleEnd).toFormat('DD T')}</span>
+						<span>
+							{DateTime.fromMillis(cycleStart).toFormat('DD T', {
+								locale: currentLocale === 'cz' ? 'cs' : currentLocale,
+							})}
+						</span>
+						<span>
+							{DateTime.fromMillis(cycleEnd).toFormat('DD T', {
+								locale: currentLocale === 'cz' ? 'cs' : currentLocale,
+							})}
+						</span>
 					</div>
 				</div>
 				<div className={'md:hidden'}>

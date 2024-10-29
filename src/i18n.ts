@@ -22,6 +22,10 @@ export const resources = {
 		staking: czStaking,
 		shared: sharedLang.cz,
 	},
+	cz: {
+		staking: czStaking,
+		shared: sharedLang.cz,
+	},
 } as const;
 
 const instance: i18n = i18.createInstance();
