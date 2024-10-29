@@ -9,7 +9,6 @@ import enStaking from './translations/en/staking.json';
 import ruStaking from './translations/ru/staking.json';
 
 export const defaultNS = 'staking';
-
 export const resources = {
 	en: {
 		staking: enStaking,
@@ -36,6 +35,11 @@ instance
 	.use(ICU)
 	.init({
 		resources,
+		detection: {
+			order: ['localStorage', 'navigator'],
+			convertDetectedLanguage: (lng) => lng.split('-')[0],
+		},
+		supportedLngs: ['en', 'ru', 'cs'],
 		fallbackLng: 'en',
 		defaultNS,
 		interpolation: { escapeValue: false },
