@@ -38,7 +38,8 @@
 	},
 	"toast": {
 		"insufficientAllowance": "Insufficient allowance",
-		"insufficientBalanceToStake": "Insufficient balance to stake"
+		"insufficientBalanceToStake": "Insufficient balance to stake",
+		"minimumStake": "Minimum stake is 10 000 BET"
 	},
 	"table": {
 		"title": "My Staking",
