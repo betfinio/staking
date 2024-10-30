@@ -41,6 +41,25 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 	}, [requested]);
 	const config = useConfig();
 	const handleStake = async () => {
+		const lowerThanLimit = temp < 10000;
+
+		if (lowerThanLimit) {
+			toast({
+				title: t('toast.minimumStake'),
+				variant: 'destructive',
+			});
+			return;
+		}
+
+		const isMoreThanBalance = BigInt(temp) * 10n ** 18n > balance;
+		if (isMoreThanBalance) {
+			toast({
+				title: t('toast.insufficientBalanceToStake'),
+				variant: 'destructive',
+			});
+			return;
+		}
+
 		const amount = BigInt(temp) * 10n ** 18n;
 		if (balance >= amount && allowance >= amount) {
 			if (type === 'dynamic') {
@@ -64,6 +83,7 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 
 	const allowanceValue = valueToNumber(allowance);
 	const maxAllowed = Math.min(valueToNumber(balance), valueToNumber(allowance));
+
 	return (
 		<div className={'flex w-full  p-3 md:p-8 md:py-6 bg-unstake-background bg-no-repeat bg-cover rounded-lg flex-col justify-between items relative'}>
 			<h2 className={'text-xl font-semibold opacity-90'}>{t('conservative.stakeBet')}</h2>
@@ -91,7 +111,7 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 					<div
 						className={'text-xs cursor-pointer text-yellow-400'}
 						onClick={() => {
-							setValue(Math.floor(maxAllowed).toFixed(0));
+							setValue(Math.floor(valueToNumber(balance)).toFixed(0));
 						}}
 					>
 						MAX
@@ -100,7 +120,7 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 				<button
 					type={'button'}
 					onClick={handleStake}
-					disabled={temp < 10000 || BigInt(temp) * 10n ** 18n > balance}
+					disabled={temp === 0}
 					className={
 						'rounded-lg px-6 p-2 md:py-4 min-w-[90px] flex flex-row justify-center items-center text-sm md:text-base h-[52px] font-semibold bg-green-500  disabled:bg-gray-800 disabled:cursor-not-allowed'
 					}

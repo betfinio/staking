@@ -18,9 +18,9 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { type WriteContractErrorType, type WriteContractReturnType, writeContract } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
 import { fetchTotalStaked } from 'betfinio_app/lib/api/dynamic';
+import { getBlockByTimestamp } from 'betfinio_app/lib/gql';
 import type { Stake } from 'betfinio_app/lib/types';
-import { getBlockByTimestamp } from 'betfinio_app/lib/utils';
-import { type SupabaseClient, useSupabase } from 'betfinio_app/supabase';
+import { useSupabase } from 'betfinio_app/supabase';
 import { toast } from 'betfinio_app/use-toast';
 import { useTranslation } from 'react-i18next';
 import type { Address } from 'viem';
@@ -34,11 +34,10 @@ for (let i = 0; i <= 80; i++) {
 }
 
 export const useTotalStakedDiff = () => {
-	const { client } = useSupabase();
 	const config = useConfig();
 	return useQuery({
 		queryKey: ['staking', 'dynamic', 'totalStaked', 'diff'],
-		queryFn: () => fetchTotalStakedDiff(client, config),
+		queryFn: () => fetchTotalStakedDiff(config),
 	});
 };
 
@@ -50,10 +49,9 @@ export const useUnrealizedProfit = () => {
 	});
 };
 
-export const fetchTotalStakedDiff = async (supabase: SupabaseClient | undefined, config: Config): Promise<bigint[]> => {
-	if (!supabase) throw new Error('Supabase client is not defined');
+export const fetchTotalStakedDiff = async (config: Config): Promise<bigint[]> => {
 	const cycleStart = (starts.findLast((e) => e * 1000 < Date.now()) || 0) * 1000;
-	const block = await getBlockByTimestamp(Math.floor(cycleStart / 1000), supabase);
+	const block = await getBlockByTimestamp(Math.floor(cycleStart / 1000));
 	try {
 		const stakedNow = await fetchTotalStaked(config);
 		const stakedThen = await fetchTotalStaked(config, block);

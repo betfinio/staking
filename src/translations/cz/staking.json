@@ -38,7 +38,8 @@
 	},
 	"toast": {
 		"insufficientAllowance": "Nedostatečný povolený limit",
-		"insufficientBalanceToStake": "Nedostatečný zůstatek pro staking"
+		"insufficientBalanceToStake": "Nedostatečný zůstatek pro staking",
+		"minimumStake": "Minimální staking je 10 000 BET"
 	},
 	"table": {
 		"title": "Můj staking",
