@@ -17,3 +17,17 @@ query GetClaims($staker: Bytes) {
 		amount
 	}
 }
+
+query GetStakingStats($timeSeriesType: String!, $first: Int) {
+	totalStakingStatistics_collection(where: { timeSeriesType: $timeSeriesType }, first: $first, orderBy: timestamp, orderDirection: desc) {
+		conservativeTotalStaking
+		dynamicTotalStaking
+		id
+		timeSeriesType
+		timestamp
+		dynamicTotalStakers
+		conservativeTotalStakers
+		dynamicTotalRevenues
+		conservativeTotalRevenues
+	}
+}

@@ -1,7 +1,7 @@
+import { useStakersStatisticsCurrent, useStakingStatistics } from '@/src/lib/query/statistics';
 import { ResponsiveLine, type Serie, type SliceTooltipProps } from '@nivo/line';
-import { useTotalStakersStat as useTotalStakersStatConservative } from 'betfinio_app/lib/query/conservative';
-import { useTotalStakersStat as useTotalStakersStatDynamic } from 'betfinio_app/lib/query/dynamic';
-import type { Stat, Timeframe } from 'betfinio_app/lib/types';
+
+import type { Timeframe } from 'betfinio_app/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'betfinio_app/select';
 import cx from 'clsx';
 import { UserIcon } from 'lucide-react';
@@ -13,43 +13,46 @@ import { useTranslation } from 'react-i18next';
 const Stakers = () => {
 	const { t } = useTranslation('staking');
 	const [timeframe, setTimeframe] = useState<Timeframe>('day');
-	const { data: conservative = [] } = useTotalStakersStatConservative(timeframe);
-	const { data: dynamic = [] } = useTotalStakersStatDynamic(timeframe);
+	const { data: statistics = [] } = useStakingStatistics(timeframe);
+	const { data: currentStatistic } = useStakersStatisticsCurrent();
 
 	const conservativeData = useMemo(() => {
-		return conservative.map((item: Stat) => {
+		if (!currentStatistic) return [];
+		const calculated = statistics.map((item) => {
 			return {
-				x: item.time,
-				y: item.value,
+				y: item.conservativeTotalStakers,
+				x: item.timestamp,
 			};
 		});
-	}, [conservative]);
+
+		calculated.push({ x: currentStatistic.timestamp, y: currentStatistic?.conservativeTotalStakers });
+
+		return calculated;
+	}, [statistics, currentStatistic]);
 
 	const dynamicData = useMemo(() => {
-		return dynamic.map((item: Stat) => {
+		if (!currentStatistic) return [];
+
+		const calculated = statistics.map((item) => {
 			return {
-				x: item.time,
-				y: item.value,
+				y: item.dynamicTotalStakers,
+				x: item.timestamp,
 			};
 		});
-	}, [dynamic]);
+		calculated.push({ x: currentStatistic.timestamp, y: currentStatistic.dynamicTotalStakers });
 
-	const { min, max } = useMemo(() => {
-		return {
-			min: Math.min(...conservativeData.map((e) => e.y), ...dynamicData.map((e) => e.y)),
-			max: Math.max(...conservativeData.map((e) => e.y), ...dynamicData.map((e) => e.y)),
-		};
-	}, [conservativeData, dynamicData]);
+		return calculated;
+	}, [statistics, currentStatistic]);
 
 	const data: Serie[] = [
 		{
-			id: 'Conservative',
-			color: '#facc15',
+			id: t('statistics.conservative'),
+			color: 'hsl(var(--chart-1))',
 			data: conservativeData,
 		},
 		{
-			id: 'Dynamic',
-			color: '#6A6A9F',
+			id: t('statistics.dynamic'),
+			color: 'hsl(var(--chart-2))',
 			data: dynamicData,
 		},
 	];
@@ -59,7 +62,7 @@ const Stakers = () => {
 	};
 
 	return (
-		<div className={'border border-gray-800 rounded-lg aspect-video p-2'}>
+		<div className={'border border-border rounded-lg aspect-video p-2'}>
 			<div className={'text-lg flex flex-row justify-between'}>
 				<div className={'px-1'}>{t('statistics.totalStakers')}</div>
 				<Select defaultValue={'day'} onValueChange={handleChange}>
@@ -75,6 +78,7 @@ const Stakers = () => {
 			</div>
 			<ResponsiveLine
 				data={data}
+				key={timeframe}
 				margin={{ top: 20, right: 30, bottom: 50, left: 50 }}
 				curve={'monotoneX'}
 				colors={{ datum: 'color' }}
@@ -90,8 +94,8 @@ const Stakers = () => {
 					tickRotation: 45,
 				}}
 				yScale={{
-					min,
-					max,
+					//   min,
+					//   max,
 					type: 'linear',
 				}}
 				animate={true}
@@ -134,7 +138,7 @@ export default Stakers;
 
 const Tooltip = ({ slice }: SliceTooltipProps) => {
 	return (
-		<div className={'flex flex-col gap-1 bg-primaryLighter rounded-lg text-white px-2 py-1 text-sm '}>
+		<div className={'flex flex-col gap-1 bg-card rounded-lg  px-2 py-1 text-sm '}>
 			<div className={'text-xs'}>{DateTime.fromSeconds(Number(slice.points[0].data.x)).toFormat('dd.MM HH:mm')}</div>
 			{slice.points.map((point, id) => (
 				<div className={'flex flex-row items-center  justify-between gap-3'} key={id}>

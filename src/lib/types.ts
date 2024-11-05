@@ -45,3 +45,5 @@ export interface StakedInfo {
 	reward: number;
 	transactionHash: Address;
 }
+
+export type Timeframe = 'hour' | 'day' | 'week';

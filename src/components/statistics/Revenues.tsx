@@ -1,8 +1,7 @@
-import { useCalculationsStat as useCalculationsStatConservative } from '@/src/lib/query/conservative';
+import { useRevenueStatisticsCurrent, useStakingStatistics } from '@/src/lib/query/statistics';
 import { Bet } from '@betfinio/ui/dist/icons';
-import { type PointSymbolProps, ResponsiveLine, type Serie, type SliceTooltipProps } from '@nivo/line';
-import { useTotalProfitStat as useTotalProfitStatConservative } from 'betfinio_app/lib/query/conservative';
-import { useTotalProfitStat as useTotalProfitStatDynamic } from 'betfinio_app/lib/query/dynamic';
+import { ResponsiveLine, type Serie, type SliceTooltipProps } from '@nivo/line';
+
 import type { Stat, Timeframe } from 'betfinio_app/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'betfinio_app/select';
 import cx from 'clsx';
@@ -14,48 +13,45 @@ import { useTranslation } from 'react-i18next';
 const Revenues = () => {
 	const { t } = useTranslation('staking');
 	const [timeframe, setTimeframe] = useState<Timeframe>('day');
-	const { data: conservative = [] } = useTotalProfitStatConservative(timeframe);
-	const { data: dynamic = [] } = useTotalProfitStatDynamic(timeframe);
-	const { data: calcConservative = [] } = useCalculationsStatConservative(timeframe);
+	const { data: statistics = [] } = useStakingStatistics(timeframe);
+	const { data: currentStatistic } = useRevenueStatisticsCurrent();
 
 	const conservativeData = useMemo(() => {
-		return [
-			...conservative.map((item: Stat) => {
-				return {
-					x: item.time,
-					y: Math.floor(item.value),
-					calc: false,
-				};
-			}),
-			...calcConservative.map((item: Stat) => {
-				return {
-					x: item.time,
-					y: Math.floor(item.value),
-					calc: true,
-				};
-			}),
-		];
-	}, [conservative, calcConservative]);
-
-	const dynamicData = useMemo(() => {
-		return dynamic.map((item: Stat) => {
+		if (!currentStatistic) return [];
+		const calculated = statistics.map((item) => {
 			return {
-				x: item.time,
-				y: Math.floor(item.value),
+				x: item.timestamp,
+				y: item.conservativeTotalRevenue,
 			};
 		});
-	}, [dynamic]);
+
+		calculated.push({ x: currentStatistic.timestamp, y: currentStatistic.conservativeTotalrevenue });
+		return calculated;
+	}, [statistics, currentStatistic]);
+
+	const dynamicData = useMemo(() => {
+		if (!currentStatistic) return [];
+		const calculated = statistics.map((item) => {
+			return {
+				x: item.timestamp,
+				y: item.dynamicTotalRevenue,
+			};
+		});
+
+		calculated.push({ x: currentStatistic.timestamp, y: currentStatistic.dynamicTotalRevenue });
+		return calculated;
+	}, [statistics, currentStatistic]);
 
 	const data: Serie[] = [
 		{
-			id: 'Conservative',
-			color: '#facc15',
-			data: conservativeData.sort((a, b) => a.x - b.x),
+			id: t('statistics.conservative'),
+			color: 'hsl(var(--chart-1))',
+			data: conservativeData,
 		},
 		{
-			id: 'Dynamic',
-			color: '#6A6A9F',
-			data: dynamicData.sort((a, b) => a.x - b.x),
+			id: t('statistics.dynamic'),
+			color: 'hsl(var(--chart-2))',
+			data: dynamicData,
 		},
 	];
 
@@ -63,7 +59,7 @@ const Revenues = () => {
 		setTimeframe(val);
 	};
 	return (
-		<div className={'border border-gray-800 rounded-lg p-2 w-full h-[400px] pb-[40px]'}>
+		<div className={'border border-border rounded-lg p-2 w-full h-[400px] pb-[40px]'}>
 			<div className={'text-lg flex flex-row justify-between'}>
 				<div className={'px-1'}>{t('statistics.totalRevenues')}</div>
 				<Select defaultValue={'day'} onValueChange={handleChange}>
@@ -78,15 +74,13 @@ const Revenues = () => {
 				</Select>
 			</div>
 			<ResponsiveLine
+				key={timeframe}
 				data={data}
 				margin={{ top: 20, right: 30, bottom: 50, left: 50 }}
 				curve={'monotoneX'}
 				colors={{ datum: 'color' }}
 				enableGridX={false}
 				enableGridY={false}
-				pointSymbol={(props: PointSymbolProps) => {
-					return <circle r={props.datum.calc ? '5' : '0'} cx="0" cy="0" fill={props.color} />;
-				}}
 				axisTop={null}
 				isInteractive={true}
 				axisRight={null}
@@ -106,6 +100,7 @@ const Revenues = () => {
 				enableSlices={'x'}
 				sliceTooltip={Tooltip}
 				useMesh={true}
+				pointSize={0}
 				legends={[
 					{
 						anchor: 'bottom',
@@ -140,7 +135,7 @@ export default Revenues;
 
 const Tooltip = ({ slice }: SliceTooltipProps) => {
 	return (
-		<div className={'flex flex-col gap-1 bg-primaryLighter rounded-lg text-white px-2 py-1 text-sm '}>
+		<div className={'flex flex-col gap-1 bg-card rounded-lg  px-2 py-1 text-sm '}>
 			<div className={'text-xs'}>{DateTime.fromSeconds(Number(slice.points[0].data.x)).toFormat('dd.MM HH:mm')}</div>
 			{slice.points.map((point, id) => (
 				<div className={'flex flex-row items-center  justify-between gap-3'} key={id}>
@@ -154,28 +149,4 @@ const Tooltip = ({ slice }: SliceTooltipProps) => {
 			))}
 		</div>
 	);
-};
-
-const getLastFriday = () => {
-	let lastFriday = DateTime.now().set({
-		weekday: 5,
-		hour: 12,
-		minute: 0,
-		second: 0,
-		millisecond: 0,
-	});
-
-	// If it's Friday today, adjust to get the *previous* Friday
-	if (lastFriday > DateTime.now()) {
-		lastFriday = lastFriday.minus({ weeks: 1 });
-	}
-	return lastFriday;
-};
-
-const getTenFridaysFrom = (friday: DateTime) => {
-	const fridays = [];
-	for (let i = 0; i < 10; i++) {
-		fridays.push(friday.minus({ weeks: i }));
-	}
-	return fridays.map((f) => f.toSeconds());
 };

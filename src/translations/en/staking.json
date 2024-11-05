@@ -85,7 +85,20 @@
 	"statistics": {
 		"totalRevenues": "Total Revenues",
 		"totalStaked": "Total Staked",
-		"totalStakers": "Total Stakers"
+		"totalStakers": "Total Stakers",
+		"bonusPool": "Bonus Pool",
+		"initialAirDropPool": "Initial Airdrop Pool",
+		"foundersTeam": "Founders Team",
+		"affilatePool": "Affilate Pool",
+		"partnersPool": "Partners Pool",
+		"conservative": "Conservative",
+		"dynamic": "Dynamic",
+		"totalMembers": "Total Members",
+		"totalMembersTooltip": "Total Members Tooltip",
+		"totalEarned": "Total Earned",
+		"totalEarnedTooltip": "Total Earned Tooltip",
+		"totalStakedTooltip": "Total Staked Tooltip",
+		"totalStakersTooltip": "Total Stakers Tooltip"
 	},
 	"hour": "hour",
 	"day": "day",
