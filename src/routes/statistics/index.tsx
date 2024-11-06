@@ -1,5 +1,6 @@
 import { BetTokenEmissionChart } from '@/src/components/statistics/BetTokenEmission';
 import Revenues from '@/src/components/statistics/Revenues';
+import { TotalMembers } from '@/src/components/statistics/SmallCards/TotalMemebrs';
 import { TotalRevenueCard } from '@/src/components/statistics/SmallCards/TotalRevenueCard';
 import { TotalStakedCard } from '@/src/components/statistics/SmallCards/TotalStakedCard';
 import { TotalStakersCard } from '@/src/components/statistics/SmallCards/TotalStakersCard';
@@ -18,6 +19,7 @@ function StatisticsPage() {
 				<TotalStakedCard />
 				<TotalStakersCard />
 				<TotalRevenueCard />
+				<TotalMembers />
 			</div>
 			<div className={'grid grid-cols-1 gap-2 md:gap-3 lg:gap-4'}>
 				<Revenues />

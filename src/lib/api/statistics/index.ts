@@ -1,4 +1,13 @@
-import { AffiliateContract, ConservativeStakingContract, ConservativeStakingPoolContract, DynamicStakingContract, valueToNumber } from '@betfinio/abi';
+import {
+	AffiliateContract,
+	AffiliateFundContract,
+	ConservativeStakingContract,
+	ConservativeStakingPoolContract,
+	DynamicStakingContract,
+	PassContract,
+	TokenContract,
+	valueToNumber,
+} from '@betfinio/abi';
 import { multicall, readContract } from '@wagmi/core';
 import type { Address } from 'viem';
 import type { Config } from 'wagmi';
@@ -122,14 +131,26 @@ export const fetchRevenueStatisticsTotalCurrent = async (config: Config) => {
 };
 export const fetchTotalMembers = async (config: Config) => {
 	const result = await readContract(config, {
-		abi: AffiliateContract.abi,
-		address: import.meta.env.PUBLIC_AFFILIATE_ADDRESS as Address,
+		abi: PassContract.abi,
+		address: import.meta.env.PUBLIC_PASS_ADDRESS as Address,
 		functionName: 'getMembersCount',
 	});
 
 	if (!result) {
 		return;
 	}
+	return Number(result);
+};
+export const fetchTotalAffiliatePaid = async (config: Config) => {
+	const result = (await readContract(config, {
+		abi: TokenContract.abi,
+		address: import.meta.env.PUBLIC_TOKEN_ADDRESS as Address,
+		functionName: 'balanceOf',
+		args: [import.meta.env.PUBLIC_AFFILIATE_FUND_ADDRESS as Address],
+	})) as bigint;
 
-	return result;
+	if (!result) {
+		return;
+	}
+	return 381111111111n * 10n ** 18n - result;
 };

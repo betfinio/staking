@@ -13,7 +13,7 @@ export const TotalMembers = () => {
 				blur: isLoading,
 			})}
 		>
-			<InfoCard titleType="user" title={0} header={t('totalMembers')} tooltipContent={[t('totalMembersTooltip')]} />
+			<InfoCard titleType="user" title={data ?? 0} header={t('totalMembers')} tooltipContent={[t('totalMembersTooltip')]} />
 		</div>
 	);
 };
