@@ -7,6 +7,18 @@ sources:
     handler:
       graphql:
         endpoint: ${PUBLIC_STATISTICKS_GRAPH_URL}
+  - name: bets-memmory
+    handler:
+      graphql:
+        endpoint: ${PUBLIC_BETS_MEMORY_GRAPH_URL}
+  - name: dynamic-staking
+    handler:
+      graphql:
+        endpoint: ${PUBLIC_DYNAMIC_STAKING_GRAPH_URL}
+  - name: conservative-staking
+    handler:
+      graphql:
+        endpoint: ${PUBLIC_CONSERVATIVE_STAKING_GRAPH_URL}
 
 codegen:
   scalars:

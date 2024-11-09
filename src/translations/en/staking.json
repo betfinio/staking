@@ -98,11 +98,19 @@
 		"totalEarned": "Total Earned",
 		"totalEarnedTooltip": "Total Earned Tooltip",
 		"totalStakedTooltip": "Total Staked Tooltip",
-		"totalStakersTooltip": "Total Stakers Tooltip"
+		"totalStakersTooltip": "Total Stakers Tooltip",
+		"totalPlayers": "Total Players",
+		"totalPlayersTooltip": "Total Players Tooltip",
+		"totalAffiliatePaid": "Total Affiliate Paid",
+		"totalAffiliatePaidTooltip": "Total Affiliate Paid Tooltip",
+		"dynamicStakingPayouts": "Dynamic Staking Payouts",
+		"conservativeStakingPayouts": "Conservative Staking Payouts",
+		"cycle": "cycle"
 	},
 	"hour": "hour",
 	"day": "day",
 	"week": "week",
+
 	"stakers": "stakers",
 
 	"conservative": {

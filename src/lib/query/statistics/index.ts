@@ -4,9 +4,16 @@ import {
 	fetchRevenueStatisticsTotalCurrent,
 	fetchStakedStatisticsTotalCurrent,
 	fetchStakerStatisticsTotalCurrent,
+	fetchTotalAffiliatePaid,
 	fetchTotalMembers,
 } from '../../api/statistics';
-import { fetchStatisticsTotalStaking } from '../../gql/statistics';
+import {
+	type DateRange,
+	fetchConservativeStakingTotalDistribution,
+	fetchDynamicStakingTotalDistribution,
+	fetchStatisticsTotalStaking,
+	fetchTotalPlayers,
+} from '../../gql/statistics';
 import type { Timeframe } from '../../types';
 
 export const useStakingStatistics = (time: Timeframe) => {
@@ -49,6 +56,43 @@ export const useGetTotalMemebrs = () => {
 	return useQuery({
 		queryKey: ['statistics', 'totalMembers'],
 		queryFn: () => fetchTotalMembers(config),
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
+	});
+};
+export const useGetTotalPlayers = () => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['statistics', 'totalPlayers'],
+		queryFn: () => fetchTotalPlayers(),
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
+	});
+};
+
+export const useGetTotalAffiliatePaid = () => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['statistics', 'totalAffiliatePaid'],
+		queryFn: () => fetchTotalAffiliatePaid(config),
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
+	});
+};
+export const useGetTotalDynamicDistribution = (range: DateRange[]) => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['statistics', 'dynamic', 'totalDistribution', range],
+		queryFn: () => fetchDynamicStakingTotalDistribution(range),
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
+	});
+};
+export const useGetTotalConservativeDistribution = (range: DateRange[]) => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['statistics', 'conservative', 'totalDistribution', range],
+		queryFn: () => fetchConservativeStakingTotalDistribution(range),
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 	});

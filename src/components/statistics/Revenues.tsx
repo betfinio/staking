@@ -60,8 +60,8 @@ const Revenues = () => {
 	};
 	return (
 		<div className={'border border-border rounded-lg p-2 w-full h-[400px] pb-[40px]'}>
-			<div className={'text-lg flex flex-row justify-between'}>
-				<div className={'px-1'}>{t('statistics.totalRevenues')}</div>
+			<div className={'text-lg flex flex-row justify-end'}>
+				{/* <div className={'px-1'}>{t('statistics.totalRevenues')}</div> */}
 				<Select defaultValue={'day'} onValueChange={handleChange}>
 					<SelectTrigger className={'max-w-[100px]'}>
 						<SelectValue placeholder="Timeframe" />

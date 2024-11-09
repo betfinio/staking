@@ -4,7 +4,7 @@ import cx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { InfoCard } from './InfoCard';
 
-export const TotalMembers = () => {
+export const TotalMembersCard = () => {
 	const { data, isLoading } = useGetTotalMemebrs();
 	const { t } = useTranslation('staking', { keyPrefix: 'statistics' });
 	return (

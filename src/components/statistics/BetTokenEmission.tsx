@@ -17,31 +17,31 @@ export const BetTokenEmissionChart = () => {
 			id: 'bonusPool',
 			label: t('bonusPool'),
 			value: 46666666667,
-			color: 'hsl(var(--chart-1))',
+			color: 'hsl(var(--chart-2))',
 		},
 		{
 			id: 'initialAirdropPool',
 			label: t('initialAirDropPool'),
 			value: 163333333333,
-			color: 'hsl(var(--chart-2))',
+			color: 'hsl(var(--chart-1))',
 		},
 		{
 			id: 'foundersTeam',
 			label: t('foundersTeam'),
 			value: 140000000000,
-			color: 'hsl(var(--chart-3))',
+			color: 'hsl(var(--chart-2))',
 		},
 		{
 			id: 'affilatePool',
 			label: t('affilatePool'),
 			value: 381111111111,
-			color: 'hsl(var(--chart-4))',
+			color: 'hsl(var(--chart-1))',
 		},
 		{
 			id: 'partnersPool',
 			label: t('partnersPool'),
 			value: 46666666667,
-			color: 'hsl(var(--chart-5))',
+			color: 'hsl(var(--chart-2))',
 		},
 	];
 	// Calculate total value for percentage calculation
@@ -61,7 +61,7 @@ export const BetTokenEmissionChart = () => {
 				data={data}
 				margin={{ right: 90, left: 90 }}
 				activeOuterRadiusOffset={4}
-				borderWidth={0}
+				borderWidth={2}
 				colors={{ datum: 'data.color' }}
 				arcLinkLabel={(d) => `${d.label}`}
 				arcLinkLabelsSkipAngle={10}
@@ -78,7 +78,7 @@ export const BetTokenEmissionChart = () => {
 				// Show percentage in arc label
 				arcLabel={(d) => {
 					const percentage = ((d.value / totalValue) * 100).toFixed(1); // Calculate percentage
-					return `${percentage}%`; // Return percentage
+					return ''; //`${percentage}%`; // Return percentage
 				}}
 				// Set custom tooltip
 				tooltip={Tooltip}

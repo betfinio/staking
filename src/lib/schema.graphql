@@ -1,33 +1,60 @@
 query GetStaked($staker: Bytes, $staking: Bytes) {
-	stakeds(where: { staker: $staker, address: $staking }, orderBy: blockTimestamp, orderDirection: desc) {
-		transactionHash
-		blockTimestamp
-		unlock
-		pool
-		amount
-		staker
-		reward
-	}
+  stakeds(where: { staker: $staker, address: $staking }, orderBy: blockTimestamp, orderDirection: desc) {
+    transactionHash
+    blockTimestamp
+    unlock
+    pool
+    amount
+    staker
+    reward
+  }
 }
 
 query GetClaims($staker: Bytes) {
-	claimeds(where: { staker: $staker }, orderBy: blockTimestamp, orderDirection: desc) {
-		transactionHash
-		blockTimestamp
-		amount
-	}
+  claimeds(where: { staker: $staker }, orderBy: blockTimestamp, orderDirection: desc) {
+    transactionHash
+    blockTimestamp
+    amount
+  }
 }
 
 query GetStakingStats($timeSeriesType: String!, $first: Int) {
-	totalStakingStatistics_collection(where: { timeSeriesType: $timeSeriesType }, first: $first, orderBy: timestamp, orderDirection: desc) {
-		conservativeTotalStaking
-		dynamicTotalStaking
-		id
-		timeSeriesType
-		timestamp
-		dynamicTotalStakers
-		conservativeTotalStakers
-		dynamicTotalRevenues
-		conservativeTotalRevenues
-	}
+  totalStakingStatistics_collection(
+    where: { timeSeriesType: $timeSeriesType }
+    first: $first
+    orderBy: timestamp
+    orderDirection: desc
+  ) {
+    conservativeTotalStaking
+    dynamicTotalStaking
+    id
+    timeSeriesType
+    timestamp
+    dynamicTotalStakers
+    conservativeTotalStakers
+    dynamicTotalRevenues
+    conservativeTotalRevenues
+  }
+}
+query GetTotalPlayers {
+  statistics_collection {
+    totalPlayers
+  }
+}
+
+query GetTotalDynamicDistributions($start: BigInt!, $end: BigInt!) {
+  profitDistributions(where: { blockTimestamp_gt: $start, blockTimestamp_lt: $end }) {
+    pool
+    amount
+    blockNumber
+  }
+}
+
+
+query GetTotalConservativeDistributions($start: BigInt!, $end: BigInt!) {
+  profitDistributions(where: { blockTimestamp_gt: $start, blockTimestamp_lt: $end }) {
+    pool
+    amount
+    blockNumber
+  }
 }

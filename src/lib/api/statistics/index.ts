@@ -154,3 +154,15 @@ export const fetchTotalAffiliatePaid = async (config: Config) => {
 	}
 	return 381111111111n * 10n ** 18n - result;
 };
+
+const starts = [1715601600];
+const secondsInWeek = 60 * 60 * 24 * 7;
+
+for (let i = 0; i <= 80; i++) {
+	starts.push(starts[starts.length - 1] + secondsInWeek * 4);
+}
+
+export const fetchDynamicStakingPayouts = async (config: Config) => {
+	const cycleStart = (starts.findLast((e) => e * 1000 < Date.now()) || 0) * 1000;
+	const cycleEnd = cycleStart + secondsInWeek * 4 * 1000;
+};
