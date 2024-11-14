@@ -19,6 +19,10 @@ sources:
     handler:
       graphql:
         endpoint: ${PUBLIC_CONSERVATIVE_STAKING_GRAPH_URL}
+  - name: uniswap
+    handler:
+      graphql:
+        endpoint: ${PUBLIC_UNISWAP_URL}
 
 codegen:
   scalars:

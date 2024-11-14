@@ -1,13 +1,4 @@
-import {
-	AffiliateContract,
-	AffiliateFundContract,
-	ConservativeStakingContract,
-	ConservativeStakingPoolContract,
-	DynamicStakingContract,
-	PassContract,
-	TokenContract,
-	valueToNumber,
-} from '@betfinio/abi';
+import { ConservativeStakingContract, DynamicStakingContract, PassContract, TokenContract, valueToNumber } from '@betfinio/abi';
 import { multicall, readContract } from '@wagmi/core';
 import type { Address } from 'viem';
 import type { Config } from 'wagmi';
@@ -155,14 +146,62 @@ export const fetchTotalAffiliatePaid = async (config: Config) => {
 	return 381111111111n * 10n ** 18n - result;
 };
 
-const starts = [1715601600];
-const secondsInWeek = 60 * 60 * 24 * 7;
+export const fetchLiquidityInPool = async (config: Config) => {
+	const betResult = (await readContract(config, {
+		abi: TokenContract.abi,
+		address: import.meta.env.PUBLIC_TOKEN_ADDRESS as Address,
+		functionName: 'balanceOf',
+		args: [import.meta.env.PUBLIC_LIQUIDITY_POOL_ADDRESS as Address],
+	})) as bigint;
+	const usdtResult = (await readContract(config, {
+		abi: TokenContract.abi,
+		address: import.meta.env.PUBLIC_USDT_TOKEN_ADDRESS as Address,
+		functionName: 'balanceOf',
+		args: [import.meta.env.PUBLIC_LIQUIDITY_POOL_ADDRESS as Address],
+	})) as bigint;
+	console.log(usdtResult, 'usdtResult');
+	if (!betResult || !betResult) {
+		return { betResult: 0n, usdtResult: 0n };
+	}
 
-for (let i = 0; i <= 80; i++) {
-	starts.push(starts[starts.length - 1] + secondsInWeek * 4);
-}
+	return { betResult, usdtResult };
+};
 
-export const fetchDynamicStakingPayouts = async (config: Config) => {
-	const cycleStart = (starts.findLast((e) => e * 1000 < Date.now()) || 0) * 1000;
-	const cycleEnd = cycleStart + secondsInWeek * 4 * 1000;
+export const fetchCurrentDistribution = async (config: Config) => {
+	const bonusPool = (await readContract(config, {
+		abi: TokenContract.abi,
+		address: import.meta.env.PUBLIC_TOKEN_ADDRESS as Address,
+		functionName: 'balanceOf',
+		args: [import.meta.env.PUBLIC_BONUS_POOL_ADDRESS as Address],
+	})) as bigint;
+	const partnersPool = (await readContract(config, {
+		abi: TokenContract.abi,
+		address: import.meta.env.PUBLIC_TOKEN_ADDRESS as Address,
+		functionName: 'balanceOf',
+		args: [import.meta.env.PUBLIC_PARTNERS_POOL_ADDRESS as Address],
+	})) as bigint;
+	const teamPool = (await readContract(config, {
+		abi: TokenContract.abi,
+		address: import.meta.env.PUBLIC_TOKEN_ADDRESS as Address,
+		functionName: 'balanceOf',
+		args: [import.meta.env.PUBLIC_TEAM_POOL_ADDRESS as Address],
+	})) as bigint;
+
+	const affiliatePool = (await readContract(config, {
+		abi: TokenContract.abi,
+		address: import.meta.env.PUBLIC_TOKEN_ADDRESS as Address,
+		functionName: 'balanceOf',
+		args: [import.meta.env.PUBLIC_AFFILIATE_FUND_ADDRESS as Address],
+	})) as bigint;
+
+	const staked = (await fetchStakedStatisticsTotalCurrent(config))?.sum ?? 0;
+
+	const lockedLiquidity = (await fetchLiquidityInPool(config))?.betResult ?? 0n;
+
+	const formattedData = [bonusPool || 0n, BigInt(staked) * 10n ** 18n, lockedLiquidity, teamPool, affiliatePool, partnersPool];
+	const formattedDataSum = formattedData.reduce((acc, item) => acc + item, 0n);
+	const freeBetTokens = 777777777777n * 10n ** 18n - formattedDataSum;
+	formattedData.splice(1, 0, freeBetTokens);
+
+	return formattedData.map((value) => valueToNumber(value));
 };

@@ -3,7 +3,7 @@ import { type PieTooltipProps, ResponsivePie } from '@nivo/pie';
 import millify from 'millify';
 import { useTranslation } from 'react-i18next';
 
-interface IDataPoint {
+export interface IDataPoint {
 	id: string;
 	label: string;
 	value: number;
@@ -71,6 +71,7 @@ export const BetTokenEmissionChart = () => {
 				arcLabelsSkipAngle={10}
 				arcLinkLabelsStraightLength={2}
 				arcLinkLabelsDiagonalLength={8}
+				innerRadius={0.4}
 				arcLabelsTextColor={{
 					from: 'color',
 					modifiers: [['darker', 2]],

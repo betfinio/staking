@@ -7,11 +7,14 @@ import {
 	type GetTotalDynamicDistributionsQueryVariables,
 	GetTotalPlayersDocument,
 	type GetTotalPlayersQuery,
+	GetTradingVolumeDocument,
+	type GetTradingVolumeQuery,
 	execute,
 } from '@/.graphclient';
 import logger from '@/src/config/logger';
 import { valueToNumber } from '@betfinio/abi';
 import type { ExecutionResult } from 'graphql/execution';
+import { Address } from 'viem';
 import type { Timeframe } from '../../types';
 export const fetchStatisticsTotalStaking = async (timeSeriesType: Timeframe) => {
 	logger.start('[statistics]', 'fetching stakes statistics');
@@ -178,4 +181,24 @@ const mapAndSumResponse = (response: ProfitConservativeDistributionResponse['dat
 			value: valueToNumber(totalAmount), // Convert to a regular number for the chart
 		};
 	});
+};
+
+// Helper function to sum the volumes
+const sumVolumes = (distribution: Array<{ volumeToken0: string }>) => {
+	console.log(distribution, 'distribution');
+	return distribution.reduce((total, { volumeToken0 }) => total + Number(volumeToken0), 0);
+};
+export const fetchTradingVolume = async () => {
+	const data: ExecutionResult<GetTradingVolumeQuery> = await execute(GetTradingVolumeDocument, {
+		first: 30,
+		pool: '0x549bb7e94da23bc31e5fc4685548587f4f7c9b16',
+	});
+
+	if (!data?.data?.pool?.poolDayData) {
+		return 0n;
+	}
+
+	const sum = sumVolumes(data.data.pool?.poolDayData);
+
+	return sum;
 };

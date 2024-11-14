@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useConfig } from 'wagmi';
 import {
+	fetchCurrentDistribution,
+	fetchLiquidityInPool,
 	fetchRevenueStatisticsTotalCurrent,
 	fetchStakedStatisticsTotalCurrent,
 	fetchStakerStatisticsTotalCurrent,
@@ -13,6 +15,7 @@ import {
 	fetchDynamicStakingTotalDistribution,
 	fetchStatisticsTotalStaking,
 	fetchTotalPlayers,
+	fetchTradingVolume,
 } from '../../gql/statistics';
 import type { Timeframe } from '../../types';
 
@@ -93,6 +96,36 @@ export const useGetTotalConservativeDistribution = (range: DateRange[]) => {
 	return useQuery({
 		queryKey: ['statistics', 'conservative', 'totalDistribution', range],
 		queryFn: () => fetchConservativeStakingTotalDistribution(range),
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
+	});
+};
+
+export const useGetLiquidtyInPool = () => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['statistics', 'liquidityInPool'],
+		queryFn: () => fetchLiquidityInPool(config),
+		initialData: { betResult: 0n, usdtResult: 0n },
+		refetchOnMount: true,
+		refetchOnWindowFocus: false,
+	});
+};
+
+export const useGetTradingVolume = () => {
+	return useQuery({
+		queryKey: ['statistics', 'tradingVolume'],
+		queryFn: () => fetchTradingVolume(),
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
+	});
+};
+
+export const useGetCurrentDistribution = () => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['statistics', 'currentDistribution'],
+		queryFn: () => fetchCurrentDistribution(config),
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 	});

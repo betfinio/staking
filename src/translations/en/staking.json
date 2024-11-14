@@ -105,7 +105,16 @@
 		"totalAffiliatePaidTooltip": "Total Affiliate Paid Tooltip",
 		"dynamicStakingPayouts": "Dynamic Staking Payouts",
 		"conservativeStakingPayouts": "Conservative Staking Payouts",
-		"cycle": "cycle"
+		"cycle": "cycle",
+		"freeBetCircle": "Free BET Circ",
+		"freeBetCircleTooltip": "Free BET Circ Tooltip",
+		"liquidityInPool": "Liquidity in Pool",
+		"liquidityInPoolTooltip": "Liquidity in Pool Tooltip",
+		"tradingVolume": "30D trading volume",
+		"tradingVolumeTooltip": "30D trading volume tooltip",
+		"free": "Free",
+		"inStaking": "In staking",
+		"lockedLiquidity": "Locked liquidity"
 	},
 	"hour": "hour",
 	"day": "day",

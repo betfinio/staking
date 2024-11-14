@@ -1,4 +1,4 @@
-import { useGetTotalAffiliatePaid, useGetTotalMemebrs } from '@/src/lib/query/statistics';
+import { useGetTotalAffiliatePaid } from '@/src/lib/query/statistics';
 
 import cx from 'clsx';
 import { useTranslation } from 'react-i18next';
