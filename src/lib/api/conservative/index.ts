@@ -4,8 +4,8 @@ import { BetsMemoryContract, ConservativeStakingContract, ConservativeStakingPoo
 import { multicall, readContract } from '@wagmi/core';
 import { fetchTotalStaked } from 'betfinio_app/lib/api/conservative';
 import { fetchBalance } from 'betfinio_app/lib/api/token';
+import { getBlockByTimestamp } from 'betfinio_app/lib/gql';
 import type { Claim, Options, Stake, Stat, Timeframe } from 'betfinio_app/lib/types';
-import { getBlockByTimestamp } from 'betfinio_app/lib/utils';
 import type { SupabaseClient } from 'betfinio_app/supabase';
 import { DateTime } from 'luxon';
 import type { Address } from 'viem';
@@ -145,7 +145,7 @@ export const fetchStaked = async (address: Address | undefined, config: Config):
 
 export const fetchTotalStakedDiff = async (start: number, supabase: SupabaseClient | undefined, config: Config): Promise<bigint[]> => {
 	if (!supabase) throw new Error('Supabase client is not defined');
-	const block = await getBlockByTimestamp(start, supabase);
+	const block = await getBlockByTimestamp(start);
 	try {
 		const stakedNow = await fetchTotalStaked(config);
 		const stakedThen = await fetchTotalStaked(config, block);

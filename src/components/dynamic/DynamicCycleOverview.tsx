@@ -19,7 +19,8 @@ for (let i = 0; i <= 80; i++) {
 }
 
 export const CycleOverview: FC = () => {
-	const { t } = useTranslation('staking');
+	const { t, i18n } = useTranslation('staking');
+	const currentLocale = i18n.language;
 	const { data: newStaked = [0n, 0n], isFetching: isNewStakedFetching } = useTotalStakedDiff();
 	const { data: staked = 0n } = useTotalStaked();
 	const { data: profit = 0n, isFetching: isProfitFetching } = useUnrealizedProfit();
@@ -54,8 +55,16 @@ export const CycleOverview: FC = () => {
 						<CycleProgress start={cycleStart} end={cycleEnd} />
 					</div>
 					<div className={'flex justify-between text-[#6A6F84] text-xs'}>
-						<span>{DateTime.fromMillis(cycleStart).toFormat('DD')}</span>
-						<span>{DateTime.fromMillis(cycleEnd).toFormat('DD')}</span>
+						<span>
+							{DateTime.fromMillis(cycleStart).toFormat('DD', {
+								locale: currentLocale === 'cz' ? 'cs' : currentLocale,
+							})}
+						</span>
+						<span>
+							{DateTime.fromMillis(cycleEnd).toFormat('DD', {
+								locale: currentLocale === 'cz' ? 'cs' : currentLocale,
+							})}
+						</span>
 					</div>
 				</div>
 				<div className={'md:hidden'}>
