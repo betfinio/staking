@@ -143,7 +143,7 @@ const Tooltip = ({ slice }: SliceTooltipProps) => {
 						{point.serieId}
 					</div>
 					<div className={'flex flex-row items-center gap-1'}>
-						{point.data.y.toLocaleString()} <Bet className={'w-3 h-3'} />
+						{point.data.y.toLocaleString()} <Bet className={'w-3 h-3 text-accent-secondary-foreground'} />
 					</div>
 				</div>
 			))}

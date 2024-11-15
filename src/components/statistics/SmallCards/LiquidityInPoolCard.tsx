@@ -6,7 +6,6 @@ import { InfoCard } from './InfoCard';
 export const LiquidityInPoolCard: React.FC = () => {
 	const { data, isLoading } = useGetLiquidtyInPool();
 	const { t } = useTranslation('staking', { keyPrefix: 'statistics' });
-	console.log('liquidiyt', data);
 
 	const title2 = data.usdtResult;
 	return (

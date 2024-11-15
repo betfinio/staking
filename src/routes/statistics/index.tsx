@@ -32,19 +32,11 @@ function StatisticsPage() {
 	return (
 		<div className={'p-2 md:p-3 lg:p-4 flex flex-col gap-2 md:gap-3 lg:gap-4'}>
 			<div className={'grid grid-cols-3 lg:grid-cols-3 gap-2 md:gap-3 lg:gap-4'}>
-				<TotalStakedCard />
-				<TotalStakersCard />
-				<TotalRevenueCard />
 				<TotalMembersCard />
+				<TotalStakersCard />
 				<TotalPlayersCard />
-				<TotalAffiliatePaid />
-				<FreeBetCirculation />
-				<LiquidityInPoolCard />
-				<TradingVolumeCard />
 			</div>
-			<div className={'grid grid-cols-1 gap-2 md:gap-3 lg:gap-4'}>
-				<Revenues />
-			</div>
+
 			<div className={'grid grid-cols-1 gap-2 md:gap-3 lg:gap-4'}>
 				<Tabs value={payoutsTab}>
 					<TabsList className={'md:flex flex-row gap-2 text-sm hidden'}>
@@ -80,10 +72,20 @@ function StatisticsPage() {
 					</TabsContent>
 				</Tabs>
 			</div>
+			<div className={'grid grid-cols-3 lg:grid-cols-3 gap-2 md:gap-3 lg:gap-4'}>
+				<TotalStakedCard />
+				<TotalRevenueCard />
+				<TotalAffiliatePaid />
+			</div>
 
 			<div className={'grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-3 lg:gap-4'}>
 				<Staked />
 				<Stakers />
+			</div>
+			<div className={'grid grid-cols-3 lg:grid-cols-3 gap-2 md:gap-3 lg:gap-4'}>
+				<FreeBetCirculation />
+				<TradingVolumeCard />
+				<LiquidityInPoolCard />
 			</div>
 
 			<div className={'grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3 lg:gap-4'}>

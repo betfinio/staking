@@ -20,7 +20,12 @@ export const fetchStakedStatisticsTotalCurrent = async (config: Config) => {
 	});
 
 	if (!result) {
-		return;
+		return {
+			conservativeTotalStaking: 0,
+			dynamicTotalStaking: 0,
+			timestamp: 0,
+			sum: 0,
+		};
 	}
 
 	const data = result.reduce(
@@ -59,7 +64,12 @@ export const fetchStakerStatisticsTotalCurrent = async (config: Config) => {
 	});
 
 	if (!result) {
-		return;
+		return {
+			conservativeTotalStaking: 0,
+			dynamicTotalStaking: 0,
+			timestamp: 0,
+			sum: 0,
+		};
 	}
 
 	const data = result.reduce(
@@ -167,39 +177,45 @@ export const fetchLiquidityInPool = async (config: Config) => {
 	return { betResult, usdtResult };
 };
 
-export const fetchCurrentDistribution = async (config: Config) => {
-	const bonusPool = (await readContract(config, {
-		abi: TokenContract.abi,
-		address: import.meta.env.PUBLIC_TOKEN_ADDRESS as Address,
-		functionName: 'balanceOf',
-		args: [import.meta.env.PUBLIC_BONUS_POOL_ADDRESS as Address],
-	})) as bigint;
-	const partnersPool = (await readContract(config, {
-		abi: TokenContract.abi,
-		address: import.meta.env.PUBLIC_TOKEN_ADDRESS as Address,
-		functionName: 'balanceOf',
-		args: [import.meta.env.PUBLIC_PARTNERS_POOL_ADDRESS as Address],
-	})) as bigint;
-	const teamPool = (await readContract(config, {
-		abi: TokenContract.abi,
-		address: import.meta.env.PUBLIC_TOKEN_ADDRESS as Address,
-		functionName: 'balanceOf',
-		args: [import.meta.env.PUBLIC_TEAM_POOL_ADDRESS as Address],
-	})) as bigint;
+export const fetchCurrentDistribution = async (config: Config): Promise<number[]> => {
+	const promises = [
+		readContract(config, {
+			abi: TokenContract.abi,
+			address: import.meta.env.PUBLIC_TOKEN_ADDRESS as Address,
+			functionName: 'balanceOf',
+			args: [import.meta.env.PUBLIC_BONUS_POOL_ADDRESS as Address],
+		}) as Promise<bigint>,
+		readContract(config, {
+			abi: TokenContract.abi,
+			address: import.meta.env.PUBLIC_TOKEN_ADDRESS as Address,
+			functionName: 'balanceOf',
+			args: [import.meta.env.PUBLIC_PARTNERS_POOL_ADDRESS as Address],
+		}) as Promise<bigint>,
+		readContract(config, {
+			abi: TokenContract.abi,
+			address: import.meta.env.PUBLIC_TOKEN_ADDRESS as Address,
+			functionName: 'balanceOf',
+			args: [import.meta.env.PUBLIC_TEAM_POOL_ADDRESS as Address],
+		}) as Promise<bigint>,
+		readContract(config, {
+			abi: TokenContract.abi,
+			address: import.meta.env.PUBLIC_TOKEN_ADDRESS as Address,
+			functionName: 'balanceOf',
+			args: [import.meta.env.PUBLIC_AFFILIATE_FUND_ADDRESS as Address],
+		}) as Promise<bigint>,
+	];
 
-	const affiliatePool = (await readContract(config, {
-		abi: TokenContract.abi,
-		address: import.meta.env.PUBLIC_TOKEN_ADDRESS as Address,
-		functionName: 'balanceOf',
-		args: [import.meta.env.PUBLIC_AFFILIATE_FUND_ADDRESS as Address],
-	})) as bigint;
+	const [bonusPool, partnersPool, teamPool, affiliatePool] = await Promise.all(promises);
 
-	const staked = (await fetchStakedStatisticsTotalCurrent(config))?.sum ?? 0;
+	const stakedData = await fetchStakedStatisticsTotalCurrent(config);
+	const liquidityData = await fetchLiquidityInPool(config);
 
-	const lockedLiquidity = (await fetchLiquidityInPool(config))?.betResult ?? 0n;
+	const staked = stakedData.sum || 0;
+	const lockedLiquidity = liquidityData.betResult || 0n;
 
-	const formattedData = [bonusPool || 0n, BigInt(staked) * 10n ** 18n, lockedLiquidity, teamPool, affiliatePool, partnersPool];
+	const formattedData = [bonusPool, BigInt(staked) * 10n ** 18n, lockedLiquidity, teamPool, affiliatePool, partnersPool];
 	const formattedDataSum = formattedData.reduce((acc, item) => acc + item, 0n);
+
 	const freeBetTokens = 777777777777n * 10n ** 18n - formattedDataSum;
 	formattedData.splice(1, 0, freeBetTokens);
 

@@ -6,7 +6,7 @@ sources:
   - name: statistics
     handler:
       graphql:
-        endpoint: ${PUBLIC_STATISTICKS_GRAPH_URL}
+        endpoint: ${PUBLIC_STATISTICS_GRAPH_URL}
   - name: bets-memmory
     handler:
       graphql:
@@ -22,7 +22,7 @@ sources:
   - name: uniswap
     handler:
       graphql:
-        endpoint: ${PUBLIC_UNISWAP_URL}
+        endpoint: ${PUBLIC_UNISWAP_GRAPH_URL}
 
 codegen:
   scalars:

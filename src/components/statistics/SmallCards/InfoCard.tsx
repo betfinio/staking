@@ -29,8 +29,14 @@ export const InfoCard: FC<IInfoCardProps> = ({ header, title, title2, subtitle, 
 						{titleType === 'currency' && <BetValue value={title as bigint} withIcon />}
 						{titleType === 'currencyPair' && (
 							<>
-								<BetValue value={title as bigint} withIcon />+
-								<BetValue value={valueToNumber(title2, 6)} postfix="USD" />
+								<BetValue value={title as bigint} withIcon />
+
+								{
+									<span className="hidden sm:flex gap-1 pl-1">
+										+
+										<BetValue value={valueToNumber(title2, 6)} postfix="USD" />
+									</span>
+								}
 							</>
 						)}
 						{titleType === 'user' && (

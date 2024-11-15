@@ -99,7 +99,7 @@ const Tooltip = (props: BarTooltipProps<{ label: number; value: number }>) => {
 				</div>
 				<div className="text-xs flex gap-1 items-center">
 					{data.value.toLocaleString()}
-					<Bet className={'w-3 h-3'} />
+					<Bet className={'w-3 h-3 text-accent-secondary-foreground'} />
 				</div>
 			</div>
 		</div>
