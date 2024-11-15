@@ -39,6 +39,7 @@ export default defineConfig({
 
 					remotes: {
 						betfinio_app: getApp(),
+						betfinio_statistics: `betfinio_statistics@${process.env.PUBLIC_STATISTICS_URL}/mf-manifest.json`,
 					},
 					shared: {
 						react: {

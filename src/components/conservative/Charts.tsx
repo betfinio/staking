@@ -1,8 +1,8 @@
 import Chart from '@/src/components/shared/Chart';
-import { useRevenueStatisticsCurrent, useStakedStatisticsCurrent, useStakersStatisticsCurrent, useStakingStatistics } from '@/src/lib/query/statistics';
 import type { Timeframe } from 'betfinio_app/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'betfinio_app/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
+import { useRevenueStatisticsCurrent, useStakedStatisticsCurrent, useStakersStatisticsCurrent, useStakingStatistics } from 'betfinio_statistics/query';
 import { DateTime } from 'luxon';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
