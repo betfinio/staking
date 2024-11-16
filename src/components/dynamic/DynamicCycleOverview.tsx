@@ -30,8 +30,6 @@ export const CycleOverview: FC = () => {
 	const cycleEnd = cycleStart + secondsInWeek * 1000 * 4;
 	const cycleId = Math.floor(cycleStart / (secondsInWeek * 1000) / 4);
 
-	console.log(cycleStart, 'cycleStart overview');
-	console.log(starts, 'cycleStart starts overview');
 	return (
 		<TooltipProvider delayDuration={0}>
 			<div className={'col-span-2 md:col-span-1 p-3 md:p-5 relative  bg-primaryLighter border border-gray-800 rounded-lg flex justify-between flex-col gap-4'}>
