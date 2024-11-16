@@ -18,49 +18,4 @@ query GetClaims($staker: Bytes) {
   }
 }
 
-query GetStakingStats($timeSeriesType: String!, $first: Int) {
-  totalStakingStatistics_collection(
-    where: { timeSeriesType: $timeSeriesType }
-    first: $first
-    orderBy: timestamp
-    orderDirection: desc
-  ) {
-    conservativeTotalStaking
-    dynamicTotalStaking
-    id
-    timeSeriesType
-    timestamp
-    dynamicTotalStakers
-    conservativeTotalStakers
-    dynamicTotalRevenues
-    conservativeTotalRevenues
-  }
-}
-query GetTotalPlayers {
-  statistics_collection {
-    totalPlayers
-  }
-}
 
-query GetTotalDynamicDistributions($start: BigInt!, $end: BigInt!) {
-  profitDistributions(where: { blockTimestamp_gt: $start, blockTimestamp_lt: $end }) {
-    pool
-    amount
-    blockNumber
-  }
-}
-
-query GetTotalConservativeDistributions($start: BigInt!, $end: BigInt!) {
-  profitDistributions(where: { blockTimestamp_gt: $start, blockTimestamp_lt: $end }) {
-    pool
-    amount
-    blockNumber
-  }
-}
-query GetTradingVolume($pool:ID!,$first:Int!) {
-  pool(id: $pool) {
-    poolDayData(orderBy: date, orderDirection: desc, first: $first) {
-      volumeToken0
-    }
-  }
-}

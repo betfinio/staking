@@ -4,8 +4,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
 import { DateTime } from 'luxon';
 import { useMemo, useState } from 'react';
 
-import { useRevenueStatisticsCurrent, useStakedStatisticsCurrent, useStakersStatisticsCurrent, useStakingStatistics } from '@/src/lib/query/statistics';
 import type { Timeframe } from 'betfinio_app/lib/types';
+import { useRevenueStatisticsCurrent, useStakedStatisticsCurrent, useStakersStatisticsCurrent, useStakingStatistics } from 'betfinio_statistics/query';
 import { useTranslation } from 'react-i18next';
 
 const Charts = () => {
