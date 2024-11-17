@@ -1,4 +1,5 @@
 import Chart from '@/src/components/shared/Chart';
+import { getConservativeCycle } from '@/src/utils';
 import type { Timeframe } from 'betfinio_app/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'betfinio_app/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
@@ -6,27 +7,32 @@ import { useRevenueStatisticsCurrent, useStakedStatisticsCurrent, useStakersStat
 import { DateTime } from 'luxon';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+const { cycleStart } = getConservativeCycle();
 
+const secondsInWeek = 60 * 60 * 24 * 7;
 const Charts = () => {
 	const { t } = useTranslation('staking');
 	const [timeframe, setTimeframe] = useState<Timeframe>('day');
+
 	const { data: currentStakedStatistic } = useStakedStatisticsCurrent();
 	const { data: currentStakersStatistic } = useStakersStatisticsCurrent();
 	const { data: currentRevenueStatistic } = useRevenueStatisticsCurrent();
 
-	const { data: statistics = [] } = useStakingStatistics(timeframe);
+	const { data: statistics = [] } = useStakingStatistics(timeframe, 'conservative', cycleStart);
 	const handleChange = (val: Timeframe) => {
 		setTimeframe(val);
 	};
 
+	const timeFormat = timeframe === 'hour' || timeframe === 'cycle' ? 'HH:mm' : 'dd.MM';
+
 	const totalStaked = useMemo(() => {
 		const calculated = {
 			values: statistics.map((e) => e.conservativeTotalStaked),
-			labels: statistics.map((e) => DateTime.fromMillis(e.timestamp * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM')),
+			labels: statistics.map((e) => DateTime.fromSeconds(e.timestamp).toFormat(timeFormat)),
 		};
 
 		if (currentStakedStatistic) {
-			calculated.labels.push(DateTime.fromMillis(currentStakedStatistic.timestamp * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'));
+			calculated.labels.push(DateTime.fromSeconds(currentStakedStatistic.timestamp).toFormat(timeFormat));
 			calculated.values.push(currentStakedStatistic.conservativeTotalStaking);
 		}
 		return calculated;
@@ -34,11 +40,11 @@ const Charts = () => {
 	const totalStakers = useMemo(() => {
 		const calculated = {
 			values: statistics.map((e) => e.conservativeTotalStakers),
-			labels: statistics.map((e) => DateTime.fromMillis(e.timestamp * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM')),
+			labels: statistics.map((e) => DateTime.fromMillis(e.timestamp * 1000).toFormat(timeFormat)),
 		};
 
 		if (currentStakersStatistic) {
-			calculated.labels.push(DateTime.fromMillis(currentStakersStatistic.timestamp * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'));
+			calculated.labels.push(DateTime.fromMillis(currentStakersStatistic.timestamp * 1000).toFormat(timeFormat));
 			calculated.values.push(currentStakersStatistic.conservativeTotalStakers);
 		}
 		return calculated;
@@ -46,11 +52,11 @@ const Charts = () => {
 	const totalRevenue = useMemo(() => {
 		const calculated = {
 			values: statistics.map((e) => e.conservativeTotalRevenue),
-			labels: statistics.map((e) => DateTime.fromMillis(e.timestamp * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM')),
+			labels: statistics.map((e) => DateTime.fromMillis(e.timestamp * 1000).toFormat(timeFormat)),
 		};
 
 		if (currentRevenueStatistic) {
-			calculated.labels.push(DateTime.fromMillis(currentRevenueStatistic.timestamp * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'));
+			calculated.labels.push(DateTime.fromMillis(currentRevenueStatistic.timestamp * 1000).toFormat(timeFormat));
 			calculated.values.push(currentRevenueStatistic.conservativeTotalrevenue);
 		}
 		return calculated;
@@ -71,6 +77,7 @@ const Charts = () => {
 								<SelectItem value="hour">1 {t('hour')}</SelectItem>
 								<SelectItem value="day">1 {t('day')}</SelectItem>
 								<SelectItem value="week">1 {t('week')}</SelectItem>
+								<SelectItem value="cycle">1 {t('cycle')}</SelectItem>
 							</SelectContent>
 						</Select>
 					</div>

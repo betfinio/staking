@@ -6,7 +6,10 @@ import { useMemo, useState } from 'react';
 
 import type { Timeframe } from 'betfinio_app/lib/types';
 import { useRevenueStatisticsCurrent, useStakedStatisticsCurrent, useStakersStatisticsCurrent, useStakingStatistics } from 'betfinio_statistics/query';
+import { getDynamicCycles } from 'betfinio_statistics/utils';
 import { useTranslation } from 'react-i18next';
+
+const { cycleStart } = getDynamicCycles();
 
 const Charts = () => {
 	const { t } = useTranslation('staking');
@@ -16,19 +19,19 @@ const Charts = () => {
 	const { data: currentStakersStatistic } = useStakersStatisticsCurrent();
 	const { data: currentRevenueStatistic } = useRevenueStatisticsCurrent();
 
-	const { data: statistics = [] } = useStakingStatistics(timeframe);
+	const { data: statistics = [] } = useStakingStatistics(timeframe, 'dynamic', cycleStart);
 	const handleChange = (val: Timeframe) => {
 		setTimeframe(val);
 	};
-
+	const timeFormat = timeframe === 'hour' ? 'HH:mm' : 'dd.MM';
 	const totalStaked = useMemo(() => {
 		const calculated = {
 			values: statistics.map((e) => e.dynamicTotalStaked),
-			labels: statistics.map((e) => DateTime.fromMillis(e.timestamp * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM')),
+			labels: statistics.map((e) => DateTime.fromSeconds(e.timestamp).toFormat(timeFormat)),
 		};
 
 		if (currentStakedStatistic) {
-			calculated.labels.push(DateTime.fromMillis(currentStakedStatistic.timestamp * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'));
+			calculated.labels.push(DateTime.fromSeconds(currentStakedStatistic.timestamp).toFormat(timeFormat));
 			calculated.values.push(currentStakedStatistic.dynamicTotalStaking);
 		}
 		return calculated;
@@ -36,11 +39,11 @@ const Charts = () => {
 	const totalStakers = useMemo(() => {
 		const calculated = {
 			values: statistics.map((e) => e.dynamicTotalStakers),
-			labels: statistics.map((e) => DateTime.fromMillis(e.timestamp * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM')),
+			labels: statistics.map((e) => DateTime.fromSeconds(e.timestamp).toFormat(timeFormat)),
 		};
 
 		if (currentStakersStatistic) {
-			calculated.labels.push(DateTime.fromMillis(currentStakersStatistic.timestamp * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'));
+			calculated.labels.push(DateTime.fromSeconds(currentStakersStatistic.timestamp).toFormat(timeFormat));
 			calculated.values.push(currentStakersStatistic.dynamicTotalStakers);
 		}
 		return calculated;
@@ -48,11 +51,11 @@ const Charts = () => {
 	const totalRevenue = useMemo(() => {
 		const calculated = {
 			values: statistics.map((e) => e.dynamicTotalRevenue),
-			labels: statistics.map((e) => DateTime.fromMillis(e.timestamp * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM')),
+			labels: statistics.map((e) => DateTime.fromSeconds(e.timestamp).toFormat(timeFormat)),
 		};
 
 		if (currentRevenueStatistic) {
-			calculated.labels.push(DateTime.fromMillis(currentRevenueStatistic.timestamp * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'));
+			calculated.labels.push(DateTime.fromSeconds(currentRevenueStatistic.timestamp).toFormat(timeFormat));
 			calculated.values.push(currentRevenueStatistic.dynamicTotalRevenue);
 		}
 		return calculated;
@@ -74,6 +77,7 @@ const Charts = () => {
 								<SelectItem value="hour">1 {t('hour')}</SelectItem>
 								<SelectItem value="day">1 {t('day')}</SelectItem>
 								<SelectItem value="week">1 {t('week')}</SelectItem>
+								<SelectItem value="cycle">1 {t('cycle')}</SelectItem>
 							</SelectContent>
 						</Select>
 					</div>
