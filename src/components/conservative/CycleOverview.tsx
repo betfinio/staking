@@ -1,5 +1,6 @@
 import SharedGameBlock from '@/src/components/shared/SharedGameBlock.tsx';
 import { useTotalProfitDiff, useTotalStakedDiff } from '@/src/lib/query/conservative';
+import { getConservativeCycle } from '@/src/utils';
 import { valueToNumber } from '@betfinio/abi';
 import { BetValue } from 'betfinio_app/BetValue';
 import { useTotalStaked } from 'betfinio_app/lib/query/conservative';
@@ -10,13 +11,11 @@ import { CircleHelp } from 'lucide-react';
 import { DateTime } from 'luxon';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+const { cycleEnd, cycleId, cycleStart } = getConservativeCycle();
 
 export const CycleOverview: FC = () => {
 	const { t, i18n } = useTranslation();
 	const currentLocale = i18n.language;
-	const cycleId = Math.floor((Date.now() - 1000 * 60 * 60 * 36) / 1000 / 60 / 60 / 24 / 7);
-	const cycleStart = cycleId * 1000 * 60 * 60 * 24 * 7 + 1000 * 60 * 60 * 36;
-	const cycleEnd = (cycleId + 1) * 1000 * 60 * 60 * 24 * 7 + 1000 * 60 * 60 * 36;
 
 	const { data: totalStaked = 1n } = useTotalStaked();
 
