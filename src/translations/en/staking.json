@@ -82,14 +82,12 @@
 		"openMenu": "Open menu",
 		"distributeProfit": "Distribute Profit"
 	},
-	"statistics": {
-		"totalRevenues": "Total Revenues",
-		"totalStaked": "Total Staked",
-		"totalStakers": "Total Stakers"
-	},
+
 	"hour": "hour",
 	"day": "day",
 	"week": "week",
+	"cycle": "cycle",
+
 	"stakers": "stakers",
 
 	"conservative": {

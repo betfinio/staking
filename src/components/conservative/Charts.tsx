@@ -1,21 +1,66 @@
 import Chart from '@/src/components/shared/Chart';
-import { useTotalProfitStat, useTotalStakedStat, useTotalStakersStat } from 'betfinio_app/lib/query/conservative';
+import { getConservativeCycle } from '@/src/utils';
 import type { Timeframe } from 'betfinio_app/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'betfinio_app/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
+import { useRevenueStatisticsCurrent, useStakedStatisticsCurrent, useStakersStatisticsCurrent, useStakingStatistics } from 'betfinio_statistics/query';
 import { DateTime } from 'luxon';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+const { cycleStart } = getConservativeCycle();
 
+const secondsInWeek = 60 * 60 * 24 * 7;
 const Charts = () => {
 	const { t } = useTranslation('staking');
 	const [timeframe, setTimeframe] = useState<Timeframe>('day');
-	const { data: totalStaked = [], error } = useTotalStakedStat(timeframe);
-	const { data: totalStakers = [] } = useTotalStakersStat(timeframe);
-	const { data: totalProfit = [] } = useTotalProfitStat(timeframe);
+
+	const { data: currentStakedStatistic } = useStakedStatisticsCurrent();
+	const { data: currentStakersStatistic } = useStakersStatisticsCurrent();
+	const { data: currentRevenueStatistic } = useRevenueStatisticsCurrent();
+
+	const { data: statistics = [] } = useStakingStatistics(timeframe, 'conservative', cycleStart);
 	const handleChange = (val: Timeframe) => {
 		setTimeframe(val);
 	};
+
+	const timeFormat = timeframe === 'hour' || timeframe === 'cycle' ? 'HH:mm' : 'dd.MM';
+
+	const totalStaked = useMemo(() => {
+		const calculated = {
+			values: statistics.map((e) => e.conservativeTotalStaked),
+			labels: statistics.map((e) => DateTime.fromSeconds(e.timestamp).toFormat(timeFormat)),
+		};
+
+		if (currentStakedStatistic) {
+			calculated.labels.push(DateTime.fromSeconds(currentStakedStatistic.timestamp).toFormat(timeFormat));
+			calculated.values.push(currentStakedStatistic.conservativeTotalStaking);
+		}
+		return calculated;
+	}, [currentStakedStatistic, statistics]);
+	const totalStakers = useMemo(() => {
+		const calculated = {
+			values: statistics.map((e) => e.conservativeTotalStakers),
+			labels: statistics.map((e) => DateTime.fromMillis(e.timestamp * 1000).toFormat(timeFormat)),
+		};
+
+		if (currentStakersStatistic) {
+			calculated.labels.push(DateTime.fromMillis(currentStakersStatistic.timestamp * 1000).toFormat(timeFormat));
+			calculated.values.push(currentStakersStatistic.conservativeTotalStakers);
+		}
+		return calculated;
+	}, [currentStakersStatistic, statistics]);
+	const totalRevenue = useMemo(() => {
+		const calculated = {
+			values: statistics.map((e) => e.conservativeTotalRevenue),
+			labels: statistics.map((e) => DateTime.fromMillis(e.timestamp * 1000).toFormat(timeFormat)),
+		};
+
+		if (currentRevenueStatistic) {
+			calculated.labels.push(DateTime.fromMillis(currentRevenueStatistic.timestamp * 1000).toFormat(timeFormat));
+			calculated.values.push(currentRevenueStatistic.conservativeTotalrevenue);
+		}
+		return calculated;
+	}, [currentRevenueStatistic, statistics]);
 	return (
 		<div className={'flex flex-col col-span-2 md:col-span-1'}>
 			<Tabs defaultValue="staked">
@@ -32,34 +77,20 @@ const Charts = () => {
 								<SelectItem value="hour">1 {t('hour')}</SelectItem>
 								<SelectItem value="day">1 {t('day')}</SelectItem>
 								<SelectItem value="week">1 {t('week')}</SelectItem>
+								<SelectItem value="cycle">1 {t('cycle')}</SelectItem>
 							</SelectContent>
 						</Select>
 					</div>
 				</TabsList>
 
 				<TabsContent value={'staked'} className={'h-full'}>
-					<Chart
-						label={t('conservative.chart.totalStaked')}
-						color={'#facc15'}
-						className={'h-full'}
-						values={totalStaked.map((e) => e.value)}
-						labels={totalStaked.map((e) => DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'))}
-					/>
+					<Chart label={t('conservative.chart.totalStaked')} color={'#facc15'} className={'h-full'} {...totalStaked} />
 				</TabsContent>
 				<TabsContent value={'stakers'} className={'h-full'}>
-					<Chart
-						label={t('dynamic.chart.totalStakers')}
-						color={'#6A6A9F'}
-						values={totalStakers.map((e) => e.value)}
-						labels={totalStakers.map((e) => DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'))}
-					/>
+					<Chart label={t('conservative.chart.totalStakers')} color={'#6A6A9F'} {...totalStakers} />
 				</TabsContent>
 				<TabsContent value={'revenues'} className={'h-full'}>
-					<Chart
-						label={t('dynamic.chart.totalRevenue')}
-						values={totalProfit.map((e) => e.value)}
-						labels={totalProfit.map((e) => DateTime.fromMillis(e.time * 1000).toFormat(timeframe === 'hour' ? 'HH:mm' : 'dd.MM'))}
-					/>
+					<Chart label={t('conservative.chart.totalRevenue')} {...totalRevenue} />
 				</TabsContent>
 			</Tabs>
 		</div>
