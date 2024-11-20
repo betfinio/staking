@@ -3,6 +3,7 @@ sources:
     handler:
       graphql:
         endpoint: ${PUBLIC_STAKING_GRAPH_URL}
+ 
 
 codegen:
   scalars:
