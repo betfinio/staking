@@ -13,7 +13,6 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as StakingImport } from './routes/staking'
 import { Route as IndexImport } from './routes/index'
-import { Route as StatisticsIndexImport } from './routes/statistics/index'
 import { Route as DynamicIndexImport } from './routes/dynamic/index'
 import { Route as ConservativeIndexImport } from './routes/conservative/index'
 
@@ -28,12 +27,6 @@ const StakingRoute = StakingImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const StatisticsIndexRoute = StatisticsIndexImport.update({
-  id: '/statistics/',
-  path: '/statistics/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -81,13 +74,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DynamicIndexImport
       parentRoute: typeof rootRoute
     }
-    '/statistics/': {
-      id: '/statistics/'
-      path: '/statistics'
-      fullPath: '/statistics'
-      preLoaderRoute: typeof StatisticsIndexImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -98,7 +84,6 @@ export interface FileRoutesByFullPath {
   '/staking': typeof StakingRoute
   '/conservative': typeof ConservativeIndexRoute
   '/dynamic': typeof DynamicIndexRoute
-  '/statistics': typeof StatisticsIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -106,7 +91,6 @@ export interface FileRoutesByTo {
   '/staking': typeof StakingRoute
   '/conservative': typeof ConservativeIndexRoute
   '/dynamic': typeof DynamicIndexRoute
-  '/statistics': typeof StatisticsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -115,21 +99,14 @@ export interface FileRoutesById {
   '/staking': typeof StakingRoute
   '/conservative/': typeof ConservativeIndexRoute
   '/dynamic/': typeof DynamicIndexRoute
-  '/statistics/': typeof StatisticsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/staking' | '/conservative' | '/dynamic' | '/statistics'
+  fullPaths: '/' | '/staking' | '/conservative' | '/dynamic'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/staking' | '/conservative' | '/dynamic' | '/statistics'
-  id:
-    | '__root__'
-    | '/'
-    | '/staking'
-    | '/conservative/'
-    | '/dynamic/'
-    | '/statistics/'
+  to: '/' | '/staking' | '/conservative' | '/dynamic'
+  id: '__root__' | '/' | '/staking' | '/conservative/' | '/dynamic/'
   fileRoutesById: FileRoutesById
 }
 
@@ -138,7 +115,6 @@ export interface RootRouteChildren {
   StakingRoute: typeof StakingRoute
   ConservativeIndexRoute: typeof ConservativeIndexRoute
   DynamicIndexRoute: typeof DynamicIndexRoute
-  StatisticsIndexRoute: typeof StatisticsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -146,7 +122,6 @@ const rootRouteChildren: RootRouteChildren = {
   StakingRoute: StakingRoute,
   ConservativeIndexRoute: ConservativeIndexRoute,
   DynamicIndexRoute: DynamicIndexRoute,
-  StatisticsIndexRoute: StatisticsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -162,8 +137,7 @@ export const routeTree = rootRoute
         "/",
         "/staking",
         "/conservative/",
-        "/dynamic/",
-        "/statistics/"
+        "/dynamic/"
       ]
     },
     "/": {
@@ -177,9 +151,6 @@ export const routeTree = rootRoute
     },
     "/dynamic/": {
       "filePath": "dynamic/index.tsx"
-    },
-    "/statistics/": {
-      "filePath": "statistics/index.tsx"
     }
   }
 }

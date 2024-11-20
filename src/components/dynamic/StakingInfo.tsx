@@ -93,7 +93,7 @@ const StakingInfo: FC = () => {
 					/>
 					<div className={cx('mt-3 flex flex-row items-center gap-1 text-sm xl:text-base mx-auto', { 'text-green-400': isTotalProfitFetching || glow })}>
 						<Counter from={from} to={to} />
-						<Bet className={'w-4 h-4'} />
+						<Bet className={'w-4 h-4 text-accent-secondary-foreground'} />
 					</div>
 					<div className={'text-gray-500 text-xs'}>
 						{t('dynamic.stats.inCycle')} #{cycleId}

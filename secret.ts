@@ -16,13 +16,11 @@ const sharedResponse = await client.send(
 		SecretId: shared_name,
 	}),
 );
-console.log('fetched shared');
 const environmentResponse = await client.send(
 	new GetSecretValueCommand({
 		SecretId: environment_name,
 	}),
 );
-console.log('fetched environment');
 
 const shared = JSON.parse(sharedResponse.SecretString || '');
 const environment = JSON.parse(environmentResponse.SecretString || '');
@@ -39,9 +37,7 @@ for (const line of template.split('\n')) {
 		const key = data[0];
 		output += `${data[0]}=${environment[key] || shared[key]}\n`;
 	} else {
-		console.log('skipping:', line);
 	}
 }
 const file = `.env.${shared_name}.local`;
 await Bun.write(file, output);
-console.log('done');
