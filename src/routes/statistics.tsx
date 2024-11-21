@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
-import * as React from 'react';
+import { PUBLIC_STATISTICS_MAIN_URL } from '../globals';
 
 export const Route = createFileRoute('/statistics')({
 	component: RouteComponent,
 	beforeLoad: () => {
-		window.location.href = `${window.location.origin}/statistics`;
+		window.location.href = PUBLIC_STATISTICS_MAIN_URL;
 	},
 });
 
