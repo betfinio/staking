@@ -1,6 +1,6 @@
 import Chart from '@/src/components/shared/Chart';
+import type { Timeframe } from '@/src/lib/types';
 import { getConservativeCycle } from '@/src/utils';
-import type { Timeframe } from 'betfinio_app/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'betfinio_app/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
 import { useRevenueStatisticsCurrent, useStakedStatisticsCurrent, useStakersStatisticsCurrent, useStakingStatistics } from 'betfinio_statistics/query';
@@ -57,7 +57,7 @@ const Charts = () => {
 
 		if (currentRevenueStatistic) {
 			calculated.labels.push(DateTime.fromMillis(currentRevenueStatistic.timestamp * 1000).toFormat(timeFormat));
-			calculated.values.push(currentRevenueStatistic.conservativeTotalrevenue);
+			calculated.values.push(currentRevenueStatistic.conservativeTotalRevenue);
 		}
 		return calculated;
 	}, [currentRevenueStatistic, statistics]);
