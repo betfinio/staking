@@ -13,7 +13,7 @@ const { cycleStart } = getDynamicCycles();
 
 const Charts = () => {
 	const { t } = useTranslation('staking');
-	const [timeframe, setTimeframe] = useState<Timeframe>('day');
+	const [timeframe, setTimeframe] = useState<Timeframe>('week');
 
 	const { data: currentStakedStatistic } = useStakedStatisticsCurrent();
 	const { data: currentStakersStatistic } = useStakersStatisticsCurrent();

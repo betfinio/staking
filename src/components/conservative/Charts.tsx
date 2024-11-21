@@ -12,7 +12,7 @@ const { cycleStart } = getConservativeCycle();
 const secondsInWeek = 60 * 60 * 24 * 7;
 const Charts = () => {
 	const { t } = useTranslation('staking');
-	const [timeframe, setTimeframe] = useState<Timeframe>('day');
+	const [timeframe, setTimeframe] = useState<Timeframe>('week');
 
 	const { data: currentStakedStatistic } = useStakedStatisticsCurrent();
 	const { data: currentStakersStatistic } = useStakersStatisticsCurrent();
