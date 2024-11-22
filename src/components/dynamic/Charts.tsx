@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import { useMemo, useState } from 'react';
 
 import type { Timeframe } from 'betfinio_app/lib/types';
-import { useRevenueStatisticsCurrent, useStakedStatisticsCurrent, useStakersStatisticsCurrent, useStakingStatistics } from 'betfinio_statistics/query';
+import { useStakingStatistics } from 'betfinio_statistics/query';
 import { getDynamicCycles } from 'betfinio_statistics/utils';
 import { useTranslation } from 'react-i18next';
 
@@ -15,51 +15,29 @@ const Charts = () => {
 	const { t } = useTranslation('staking');
 	const [timeframe, setTimeframe] = useState<Timeframe>('day');
 
-	const { data: currentStakedStatistic } = useStakedStatisticsCurrent();
-	const { data: currentStakersStatistic } = useStakersStatisticsCurrent();
-	const { data: currentRevenueStatistic } = useRevenueStatisticsCurrent();
-
 	const { data: statistics = [] } = useStakingStatistics(timeframe, 'dynamic', cycleStart);
 	const handleChange = (val: Timeframe) => {
 		setTimeframe(val);
 	};
 	const timeFormat = timeframe === 'hour' ? 'HH:mm' : 'dd.MM';
 	const totalStaked = useMemo(() => {
-		const calculated = {
+		return {
 			values: statistics.map((e) => e.dynamicTotalStaked),
 			labels: statistics.map((e) => DateTime.fromSeconds(e.timestamp).toFormat(timeFormat)),
 		};
-
-		if (currentStakedStatistic) {
-			calculated.labels.push(DateTime.fromSeconds(currentStakedStatistic.timestamp).toFormat(timeFormat));
-			calculated.values.push(currentStakedStatistic.dynamicTotalStaking);
-		}
-		return calculated;
-	}, [currentStakedStatistic, statistics]);
+	}, [statistics]);
 	const totalStakers = useMemo(() => {
-		const calculated = {
+		return {
 			values: statistics.map((e) => e.dynamicTotalStakers),
 			labels: statistics.map((e) => DateTime.fromSeconds(e.timestamp).toFormat(timeFormat)),
 		};
-
-		if (currentStakersStatistic) {
-			calculated.labels.push(DateTime.fromSeconds(currentStakersStatistic.timestamp).toFormat(timeFormat));
-			calculated.values.push(currentStakersStatistic.dynamicTotalStakers);
-		}
-		return calculated;
-	}, [currentStakersStatistic, statistics]);
+	}, [statistics]);
 	const totalRevenue = useMemo(() => {
-		const calculated = {
+		return {
 			values: statistics.map((e) => e.dynamicTotalRevenue),
 			labels: statistics.map((e) => DateTime.fromSeconds(e.timestamp).toFormat(timeFormat)),
 		};
-
-		if (currentRevenueStatistic) {
-			calculated.labels.push(DateTime.fromSeconds(currentRevenueStatistic.timestamp).toFormat(timeFormat));
-			calculated.values.push(currentRevenueStatistic.dynamicTotalRevenue);
-		}
-		return calculated;
-	}, [currentRevenueStatistic, statistics]);
+	}, [statistics]);
 
 	return (
 		<div className={'flex flex-col h-full'}>
