@@ -1,6 +1,7 @@
 import { valueToNumber } from '@betfinio/abi';
-import { BetValue } from 'betfinio_app/BetValue';
-import cx from 'clsx';
+import { cn } from '@betfinio/components';
+import { BetValue } from '@betfinio/components/shared';
+
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -20,16 +21,16 @@ const SingleIngo: FC<SingleIngoProps> = ({ className = '', label, amount, subtit
 	return (
 		<div className={'relative'}>
 			<div
-				className={cx(
-					'bg-primaryLighter border border-gray-800 rounded-md mx-auto col-span-1 w-full bg-top py-4 md:px-3 bg-no-repeat  flex flex-col items-center text-center justify-center gap-1',
+				className={cn(
+					'bg-card border border-border rounded-md mx-auto col-span-1 w-full bg-top py-4 md:px-3 bg-no-repeat  flex flex-col items-center text-center justify-center gap-1',
 					{ 'blur-sm brightness-50': isSoon },
 					className,
 				)}
 			>
 				<span className={'text-xs lg:text-base font-semibold'}>{isSoon ? 'Coming soon' : label}</span>
-				<div className={'flex flex-row items-center justify-center gap-1 text-sm md:text-normal text-yellow-500'}>
+				<div className={'flex flex-row items-center justify-center gap-1 text-sm md:text-normal text-secondary-foreground'}>
 					<div
-						className={cx('font-medium text-sm flex justify-center flex-col items-center', {
+						className={cn('font-medium text-sm flex justify-center flex-col items-center', {
 							'animate-pulse blur-sm': isLoading,
 						})}
 					>
@@ -51,11 +52,11 @@ const SingleIngo: FC<SingleIngoProps> = ({ className = '', label, amount, subtit
 							<BetValue value={valueToNumber(amount as bigint)} precision={2} withIcon />
 						)}
 						{percent && '%'}
-						{subtitle && <div className={'text-gray-400 text-xs mt-1'}>{subtitle}</div>}
+						{subtitle && <div className={'text-tertiary-foreground text-xs mt-1'}>{subtitle}</div>}
 					</div>
 				</div>
 			</div>
-			{isSoon && <div className={'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-yellow-400 font-bold'}>Soon</div>}
+			{isSoon && <div className={'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-secondary-foreground font-bold'}>Soon</div>}
 		</div>
 	);
 };

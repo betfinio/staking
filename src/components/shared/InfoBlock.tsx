@@ -7,7 +7,7 @@ import { useProfit as useProfitC, useStaked as useStakedC } from '@/src/lib/quer
 import { useClaimed, useStaked as useStakedD } from '@/src/lib/query/dynamic';
 import type { StakingType } from '@/src/lib/types.ts';
 import { valueToNumber } from '@betfinio/abi';
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from 'betfinio_app/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@betfinio/components/ui';
 import { useTotalStaked as useTotalStakedC } from 'betfinio_app/lib/query/conservative';
 import { useTotalStaked as useTotalStakedD } from 'betfinio_app/lib/query/dynamic';
 import type { FC } from 'react';

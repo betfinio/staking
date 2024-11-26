@@ -1,15 +1,14 @@
 import Chart from '@/src/components/shared/Chart';
 import { getConservativeCycle } from '@/src/utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@betfinio/components/ui';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@betfinio/components/ui';
 import type { Timeframe } from 'betfinio_app/lib/types';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'betfinio_app/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
 import { useRevenueStatisticsCurrent, useStakedStatisticsCurrent, useStakersStatisticsCurrent, useStakingStatistics } from 'betfinio_statistics/query';
 import { DateTime } from 'luxon';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 const { cycleStart } = getConservativeCycle();
 
-const secondsInWeek = 60 * 60 * 24 * 7;
 const Charts = () => {
 	const { t } = useTranslation('staking');
 	const [timeframe, setTimeframe] = useState<Timeframe>('day');
@@ -57,7 +56,7 @@ const Charts = () => {
 
 		if (currentRevenueStatistic) {
 			calculated.labels.push(DateTime.fromMillis(currentRevenueStatistic.timestamp * 1000).toFormat(timeFormat));
-			calculated.values.push(currentRevenueStatistic.conservativeTotalrevenue);
+			calculated.values.push(currentRevenueStatistic.conservativeTotalRevenue);
 		}
 		return calculated;
 	}, [currentRevenueStatistic, statistics]);

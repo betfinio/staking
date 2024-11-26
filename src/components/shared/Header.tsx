@@ -1,7 +1,7 @@
 import Analytics from '@/src/components/shared/Analytics.tsx';
 import Switcher from '@/src/components/shared/Switcher';
 import type { StakingType } from '@/src/lib/types.ts';
-import { Button } from 'betfinio_app/button';
+import { Button } from '@betfinio/components/ui';
 import { CircleAlert, CircleHelp } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,13 +19,11 @@ const Header: FC<HeaderProps> = ({ type }) => {
 		document.getElementById('live-chat-ai-button')?.click();
 	};
 	return (
-		<div
-			className={'h-[80px] border border-gray-800 bg-primaryLighter rounded-lg p-4 sm:px-6 flex flex-row items-center justify-between gap-2 xl:gap-8 relative'}
-		>
+		<div className={'h-[80px] border border-border bg-card rounded-lg p-4 sm:px-6 flex flex-row items-center justify-between gap-2 xl:gap-8 relative'}>
 			<Switcher type={type} />
 			<Analytics type={type} />
 			<div className={'flex flex-row items-center gap-4'}>
-				<Button variant={'link'} className={'text-white md:hover:text-yellow-400 md:text-yellow-400 !p-0'} asChild>
+				<Button variant={'link'} className={'text-foreground md:hover:text-secondary-foreground md:text-secondary-foreground !p-0'} asChild>
 					<a target={'_blank'} href={LINK_HOW_TO_STAKE} className={'flex flex-col  items-center justify-center cursor-pointer'} rel="noreferrer">
 						<CircleHelp className={'w-6'} />
 						<span className={'hidden lg:inline text-xs whitespace-nowrap'}>{t('howToStake')}</span>
@@ -34,7 +32,7 @@ const Header: FC<HeaderProps> = ({ type }) => {
 				<Button
 					onClick={handleReport}
 					variant={'link'}
-					className={'text-white md:hover:text-yellow-400 md:text-yellow-400 flex flex-col items-center justify-center p-0'}
+					className={'text-secondary-foreground md:hover:text-secondary-foreground md:text-secondary-foreground flex flex-col items-center justify-center p-0'}
 				>
 					<CircleAlert className={'w-6'} />
 					<span className={'hidden lg:inline text-xs whitespace-nowrap'}>{t('report')}</span>

@@ -3,11 +3,10 @@ import { useDistributeProfit as useDistributeProfitDynamic } from '@/src/lib/que
 import type { ExtendedPoolInfo, StakingType } from '@/src/lib/types';
 import { valueToNumber } from '@betfinio/abi';
 import { truncateEthAddress } from '@betfinio/abi';
-import { createColumnHelper } from '@tanstack/react-table';
-import { BetValue } from 'betfinio_app/BetValue';
-import { DataTable } from 'betfinio_app/DataTable';
-import { Button } from 'betfinio_app/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from 'betfinio_app/dropdown-menu';
+import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
+
+import { BetValue, DataTable } from '@betfinio/components/shared';
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@betfinio/components/ui';
 import { MoreHorizontal } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -38,7 +37,7 @@ const Pools: FC<{
 				className: 'lg:w-[160px]',
 			},
 			cell: (props) => (
-				<a target={'_blank'} href={`${import.meta.env.PUBLIC_ETHSCAN}/address/${props.getValue()}`} className={'text-gray-500'} rel="noreferrer">
+				<a target={'_blank'} href={`${import.meta.env.PUBLIC_ETHSCAN}/address/${props.getValue()}`} className={'text-tertiary-foreground'} rel="noreferrer">
 					{truncateEthAddress(props.getValue())}
 				</a>
 			),
@@ -47,9 +46,9 @@ const Pools: FC<{
 			header: t('table.capacity'),
 			cell: (props) => (
 				<div className={'flex flex-col flex-grow'}>
-					<span className={'text-gray-500 text-sm'}>({props.getValue()}/100)</span>
-					<div className={'relative rounded-full bg-secondaryLight w-full mt-2 md:mt-3  overflow-hidden h-[5px]'}>
-						<div className={'bg-green-600 absolute top-0 left-0 h-[5px]'} style={{ width: `${props.getValue()}%` }} />
+					<span className={'text-tertiary-foreground text-sm'}>({props.getValue()}/100)</span>
+					<div className={'relative rounded-full bg-card w-full mt-2 md:mt-3  overflow-hidden h-[5px]'}>
+						<div className={'bg-success absolute top-0 left-0 h-[5px]'} style={{ width: `${props.getValue()}%` }} />
 					</div>
 				</div>
 			),
@@ -86,9 +85,8 @@ const Pools: FC<{
 				);
 			},
 		}),
-	];
+	] as ColumnDef<ExtendedPoolInfo>[];
 
-	// @ts-ignore
 	return <DataTable columns={columns} data={data} isLoading={isLoading} />;
 };
 

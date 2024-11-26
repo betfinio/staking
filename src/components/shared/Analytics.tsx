@@ -3,10 +3,10 @@ import { useTotalStakers as useTotalStakersD } from '@/src/lib/query/dynamic';
 
 import type { StakingType } from '@/src/lib/types';
 import { valueToNumber } from '@betfinio/abi';
-import { BetValue } from 'betfinio_app/BetValue';
+import { cn } from '@betfinio/components';
+import { BetValue } from '@betfinio/components/shared';
 import { useTotalStaked as useTotalStakedC } from 'betfinio_app/lib/query/conservative';
 import { useTotalProfit as useTotalProfitD, useTotalStaked as useTotalStakedD } from 'betfinio_app/lib/query/dynamic';
-import cx from 'clsx';
 import { UserIcon } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -30,21 +30,21 @@ const Analytics: FC<{ type: StakingType }> = ({ type }) => {
 		<div className={'flex-grow flex-row items-center gap-4 lg:gap-8 justify-end whitespace-nowrap hidden md:flex'}>
 			<div className={'flex flex-col leading-none'}>
 				<span className={'text-sm'}>{t('stat.tvl')}</span>
-				<div className={cx('font-medium flex flex-row gap-1 items-center')}>
+				<div className={cn('font-medium flex flex-row gap-1 items-center')}>
 					<BetValue value={valueToNumber(tvl)} withIcon />
 				</div>
 			</div>
 			<div className={'flex flex-col leading-none'}>
 				<span className={'text-sm'}>{t('stat.stakers')}</span>
-				<div className={cx('font-semibold flex flex-row items-center gap-0')}>
+				<div className={cn('font-semibold flex flex-row items-center gap-0')}>
 					{stakers}
 					<UserIcon className={'w-[14px] h-[14px]'} />
 				</div>
 			</div>
-			<div className={'w-[1px] bg-white h-[36px] hidden md:block'} />
+			<div className={'w-[1px] bg-foreground h-[36px] hidden md:block'} />
 			<div className={'flex flex-col leading-none'}>
 				<span className={'text-sm'}>{t('stat.profit')}</span>
-				<div className={cx('font-medium flex flex-row gap-1 items-center text-yellow-400')}>
+				<div className={cn('font-medium flex flex-row gap-1 items-center text-secondary-foreground')}>
 					<BetValue value={valueToNumber(profit)} withIcon />
 				</div>
 			</div>

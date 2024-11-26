@@ -1,6 +1,6 @@
 import Chart from '@/src/components/shared/Chart';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'betfinio_app/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
+
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Tabs, TabsContent, TabsList, TabsTrigger } from '@betfinio/components/ui';
 import { DateTime } from 'luxon';
 import { useMemo, useState } from 'react';
 
