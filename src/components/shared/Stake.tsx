@@ -18,7 +18,6 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 	const { t } = useTranslation('staking');
 	const [value, setValue] = useState('');
 
-	const { toast: toastT } = useToast();
 	const temp = Number(value.split(',').join(''));
 	const { address = ZeroAddress } = useAccount();
 	const { data: allowance = 0n } = useAllowance(address);
