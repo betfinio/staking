@@ -23,7 +23,7 @@ const Switcher: FC<{ type: StakingType }> = ({ type }) => {
 			</DialogTrigger>
 			<DialogPortal>
 				<DialogOverlay />
-				<DialogContent className={'staking w-fit md:w-fit'}>
+				<DialogContent className={'p-2 '}>
 					<DialogDescription className={'hidden'} />
 					<DialogTitle className={'hidden'} />
 					<SwitcherModal type={type} />

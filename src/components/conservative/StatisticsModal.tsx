@@ -4,7 +4,7 @@ import { valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { Bank, CloseModal } from '@betfinio/components/icons';
 import { BetValue } from '@betfinio/components/shared';
-import { DialogClose } from '@betfinio/components/ui';
+import { DialogClose, Separator } from '@betfinio/components/ui';
 
 import { ShieldCheckIcon } from 'lucide-react';
 import type { FC } from 'react';
@@ -18,15 +18,14 @@ const StatisticsModal: FC = () => {
 	const { data: predictContribution = 0n } = usePredictContribution();
 	const { data: luroContribution = 0n } = useLuroContribution();
 	return (
-		<div className={cn('rounded-lg bg-card z-10 border border-border font-semibold text-foreground w-full mx-auto')}>
+		<div className={cn(' rounded-lg bg-card z-10  font-semibold text-foreground w-fit mx-auto')}>
 			<div className={'py-5 px-7'}>
 				<div className={'flex justify-between items-center'}>
 					<div className={'text-sm '}>{t('conservative.statisticsModal.conservativeStaking')}</div>
-					<div>
-						<DialogClose>
-							<CloseModal className={'cursor-pointer hover:text-destructive transition-all duration-300'} />
-						</DialogClose>
-					</div>
+
+					<DialogClose>
+						<CloseModal className={'cursor-pointer hover:text-destructive transition-all duration-300'} />
+					</DialogClose>
 				</div>
 				<div className={'mt-7 flex items-center justify-center gap-3'}>
 					<Bank className={'text-secondary-foreground'} />
@@ -34,7 +33,8 @@ const StatisticsModal: FC = () => {
 						<BetValue value={valueToNumber(totalProfit)} withIcon />
 					</div>
 				</div>
-				<div className={'h-[2px] opacity-5 bg-foreground my-6'} />
+				<Separator className="my-6" />
+
 				<div className={'mb-3 text-center text-sm'}>{t('conservative.statisticsModal.gamesContributionStatistics')}</div>
 				<SharedGameBlock
 					games={[
@@ -43,7 +43,7 @@ const StatisticsModal: FC = () => {
 						{ amount: 0n, label: t('games.soon') },
 					]}
 				/>
-				<div className={'h-[2px] opacity-5 bg-foreground my-6'} />
+				<Separator className="my-6" />
 				<div className={'text-center text-sm mb-4'}>{t('conservative.statisticsModal.stakingContract')}</div>
 				<div className={'flex items-center justify-center gap-2 '}>
 					<ShieldCheckIcon className={'text-success w-4 h-4'} />
