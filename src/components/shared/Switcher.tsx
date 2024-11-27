@@ -1,7 +1,7 @@
 import type { StakingType } from '@/src/lib/types.ts';
 import { cn } from '@betfinio/components';
+import { Bank, Menu, MoneyHand } from '@betfinio/components/icons';
 import { Dialog, DialogContent, DialogDescription, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger } from '@betfinio/components/ui';
-import { Bank, Menu, MoneyHand } from '@betfinio/ui/dist/icons';
 import { Link } from '@tanstack/react-router';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';

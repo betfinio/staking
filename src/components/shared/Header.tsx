@@ -2,10 +2,10 @@ import Analytics from '@/src/components/shared/Analytics.tsx';
 import Switcher from '@/src/components/shared/Switcher';
 import type { StakingType } from '@/src/lib/types.ts';
 import { Button } from '@betfinio/components/ui';
+import { useChatbot } from 'betfinio_app/chatbot';
 import { CircleAlert, CircleHelp } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-
 const LINK_HOW_TO_STAKE =
 	'https://betfin.gitbook.io/betfin-public/v/staking-manual/staking-user-manual/conservative-staking-manual/example-of-conservative-staking';
 
@@ -15,9 +15,7 @@ export interface HeaderProps {
 
 const Header: FC<HeaderProps> = ({ type }) => {
 	const { t } = useTranslation('staking', { keyPrefix: 'help' });
-	const handleReport = () => {
-		document.getElementById('live-chat-ai-button')?.click();
-	};
+	const { toggle } = useChatbot();
 	return (
 		<div className={'h-[80px] border border-border bg-card rounded-lg p-4 sm:px-6 flex flex-row items-center justify-between gap-2 xl:gap-8 relative'}>
 			<Switcher type={type} />
@@ -30,7 +28,7 @@ const Header: FC<HeaderProps> = ({ type }) => {
 					</a>
 				</Button>
 				<Button
-					onClick={handleReport}
+					onClick={toggle}
 					variant={'link'}
 					className={'text-secondary-foreground md:hover:text-secondary-foreground md:text-secondary-foreground flex flex-col items-center justify-center p-0'}
 				>

@@ -1,9 +1,8 @@
 import { useStaked, useTotalBets, useTotalVolume } from '@/src/lib/query/dynamic';
 import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
-import { Bet, Blackjack, CoinLarge, Coins } from '@betfinio/components/icons';
+import { Bet, Blackjack, CoinLarge, Coins, ConservativeStaking } from '@betfinio/components/icons';
 import { BetValue } from '@betfinio/components/shared';
-import ConservativeStaking from '@betfinio/ui/dist/icons/ConservativeStaking';
 import { useTotalProfit, useTotalStaked } from 'betfinio_app/lib/query/dynamic';
 import { animate } from 'framer-motion';
 import { CalculatorIcon } from 'lucide-react';

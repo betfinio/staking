@@ -1,8 +1,8 @@
 import Chart from '@/src/components/shared/Chart';
+import type { Timeframe } from '@/src/lib/types';
 import { getConservativeCycle } from '@/src/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@betfinio/components/ui';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@betfinio/components/ui';
-import type { Timeframe } from 'betfinio_app/lib/types';
 import { useRevenueStatisticsCurrent, useStakedStatisticsCurrent, useStakersStatisticsCurrent, useStakingStatistics } from 'betfinio_statistics/query';
 import { DateTime } from 'luxon';
 import { useMemo, useState } from 'react';

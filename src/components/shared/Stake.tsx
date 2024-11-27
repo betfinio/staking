@@ -3,12 +3,12 @@ import { useStake as useStakeD } from '@/src/lib/query/dynamic';
 import type { StakingType } from '@/src/lib/types.ts';
 import { ZeroAddress } from '@betfinio/abi';
 import { valueToNumber } from '@betfinio/abi';
-import { toast } from '@betfinio/components/hooks';
+import { cn } from '@betfinio/components';
+import { toast, useToast } from '@betfinio/components/hooks';
 import { Button } from '@betfinio/components/ui';
-import Lock from '@betfinio/ui/dist/icons/Lock';
 import { useAllowanceModal } from 'betfinio_app/allowance';
 import { useAllowance, useBalance } from 'betfinio_app/lib/query/token';
-import { Loader } from 'lucide-react';
+import { Loader, Lock } from 'lucide-react';
 import { type FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NumericFormat } from 'react-number-format';
@@ -17,6 +17,8 @@ import { useAccount, useConfig } from 'wagmi';
 const Stake: FC<{ type: StakingType }> = ({ type }) => {
 	const { t } = useTranslation('staking');
 	const [value, setValue] = useState('');
+
+	const { toast: toastT } = useToast();
 	const temp = Number(value.split(',').join(''));
 	const { address = ZeroAddress } = useAccount();
 	const { data: allowance = 0n } = useAllowance(address);
@@ -92,7 +94,7 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 			<div className={'w-full items-center flex flex-row justify-between gap-3 relative'}>
 				<div
 					className={
-						'w-full  px-4 font-semibold border border-border rounded-lg md:rounded-xl text-sm sm:text-base text-tertiary-foreground bg-background flex items-center gap-2'
+						'w-full  h-full px-4 font-semibold border border-border rounded-lg md:rounded-xl text-sm sm:text-base text-tertiary-foreground bg-background flex items-center gap-2'
 					}
 				>
 					<Lock className={' w-5 h-5 md:w-6 md:h-6'} />
@@ -103,7 +105,7 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 						min={0}
 						value={value}
 						onChange={(e) => setValue(e.target.value)}
-						className={'bg-transparent w-full outline-0 py-2 h-[52px] grow'}
+						className={'bg-transparent w-full outline-0 py-2 h-full grow'}
 						allowNegative={false}
 						max={maxAllowed}
 						decimalScale={0}
@@ -118,8 +120,21 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 						MAX
 					</div>
 				</div>
-				<Button onClick={handleStake} disabled={temp === 0} variant={'success'} className="px-4 py-3 h-auto  flex text-base ">
-					{loadingD || loadingC ? <Loader className={'h-4 w-4 animate-spin'} /> : t('conservative.stake')}
+				<Button
+					onClick={handleStake}
+					disabled={temp === 0 || loadingD || loadingC}
+					variant={'success'}
+					className="px-4 py-3   flex text-base relative"
+					size="freeSize"
+				>
+					<span
+						className={cn({
+							invisible: loadingD || loadingC,
+						})}
+					>
+						{t('conservative.stake')}
+					</span>
+					{(loadingD || loadingC) && <Loader className={'h-4 w-4 animate-spin absolute inset-0 m-auto'} />}
 				</Button>
 			</div>
 		</div>

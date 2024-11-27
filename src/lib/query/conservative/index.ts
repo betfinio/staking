@@ -18,14 +18,14 @@ import {
 	fetchTotalStakers,
 	fetchTotalVolume,
 } from '@/src/lib/api/conservative';
-import type { Earning, ExtendedPoolInfo } from '@/src/lib/types';
+import type { Earning, ExtendedPoolInfo, Timeframe } from '@/src/lib/types';
 import { ConservativeStakingContract, ConservativeStakingPoolContract, GameContract, PartnerContract } from '@betfinio/abi';
 import { toast } from '@betfinio/components/hooks';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { WriteContractErrorType } from '@wagmi/core';
 import { type WriteContractReturnType, writeContract } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
-import type { Stake, Stat, Timeframe } from 'betfinio_app/lib/types';
+import type { Stake, Stat } from 'betfinio_app/lib/types';
 import { useSupabase } from 'betfinio_app/supabase';
 import { useTranslation } from 'react-i18next';
 import type { Address } from 'viem';

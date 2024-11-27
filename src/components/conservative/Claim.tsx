@@ -53,8 +53,22 @@ const Claim: FC<ClaimProps> = ({ className }) => {
 					{t('conservative.pending')}
 				</div>
 			</div>
-			<Button onClick={handleClaim} disabled={staked === 0n || claimable === 0n} variant={'destructive'} className="px-4 py-3 h-auto flex">
-				{loading ? <Loader className={'h-5 w-5 animate-spin'} /> : t('conservative.unstake')}
+
+			<Button
+				onClick={handleClaim}
+				disabled={staked === 0n || claimable === 0n || loading}
+				variant={'destructive'}
+				className="px-4 py-3   flex text-base relative"
+				size="freeSize"
+			>
+				<span
+					className={cn({
+						invisible: loading,
+					})}
+				>
+					{t('conservative.unstake')}
+				</span>
+				{loading && <Loader className={'h-4 w-4 animate-spin absolute inset-0 m-auto'} />}
 			</Button>
 		</div>
 	);
