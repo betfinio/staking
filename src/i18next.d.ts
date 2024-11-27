@@ -6,3 +6,5 @@ declare module 'i18next' {
 		resources: (typeof resources)['en'];
 	}
 }
+
+export type IKeysOfErrors = keyof typeof resources.cs.shared.errors;

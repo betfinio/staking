@@ -1,10 +1,10 @@
 import Chart from '@/src/components/shared/Chart';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'betfinio_app/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
+
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Tabs, TabsContent, TabsList, TabsTrigger } from '@betfinio/components/ui';
 import { DateTime } from 'luxon';
 import { useMemo, useState } from 'react';
 
-import type { Timeframe } from 'betfinio_app/lib/types';
+import type { Timeframe } from '@/src/lib/types';
 import { useStakingStatistics } from 'betfinio_statistics/query';
 import { getDynamicCycles } from 'betfinio_statistics/utils';
 import { useTranslation } from 'react-i18next';

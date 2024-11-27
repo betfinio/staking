@@ -1,8 +1,8 @@
-import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
+import { ArcElement, Chart as ChartJS, type ChartOptions, Legend, Tooltip } from 'chart.js';
 import type { FC } from 'react';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
-import cx from 'clsx';
+import { cn } from '@betfinio/components';
 import millify from 'millify';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -32,7 +32,7 @@ const Chart: FC<{
 				},
 			},
 		},
-	};
+	} as ChartOptions<'line'>;
 
 	const data = {
 		labels,
@@ -44,14 +44,7 @@ const Chart: FC<{
 			},
 		],
 	};
-	return (
-		<Line
-			// @ts-ignore
-			options={options}
-			data={data}
-			className={cx(className)}
-		/>
-	);
+	return <Line options={options} data={data} className={cn(className)} />;
 };
 
 export default Chart;

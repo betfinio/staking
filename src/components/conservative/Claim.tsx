@@ -1,10 +1,11 @@
 import { useClaim, useClaimable, useStaked } from '@/src/lib/query/conservative';
 import { ZeroAddress } from '@betfinio/abi';
 import { valueToNumber } from '@betfinio/abi';
-import { BetValue } from 'betfinio_app/BetValue';
+import { cn } from '@betfinio/components';
+import { BetValue } from '@betfinio/components/shared';
+import { Button } from '@betfinio/components/ui';
 import { useTotalStaked } from 'betfinio_app/lib/query/conservative';
 import { useBalance } from 'betfinio_app/lib/query/token';
-import cx from 'clsx';
 import { Loader } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -27,13 +28,13 @@ const Claim: FC<ClaimProps> = ({ className }) => {
 
 	return (
 		<div
-			className={cx(
-				'md:mx-0 bg-primaryLighter border border-gray-800 bg-cover bg-no-repeat rounded-lg p-3 md:p-7 lg:p-8 flex flex-row justify-between md:items-center',
+			className={cn(
+				'md:mx-0 bg-card border border-border bg-cover bg-no-repeat rounded-lg p-3 md:p-7 lg:p-8 flex flex-row justify-between md:items-center',
 				className,
 			)}
 		>
 			<div
-				className={cx({
+				className={cn({
 					'animate-pulse blur-sm': isStakedLoading || isClaimableLoading,
 				})}
 			>
@@ -45,23 +46,30 @@ const Claim: FC<ClaimProps> = ({ className }) => {
 						<BetValue value={valueToNumber(claimable)} withIcon />
 					</div>
 				)}
-				<div className={'text-gray-400 text-xs mt-2 flex gap-1'}>
-					<div className={'text-yellow-400 font-medium flex flex-row items-center gap-1'}>
+				<div className={'text-tertiary-foreground text-xs mt-2 flex gap-1'}>
+					<div className={'text-secondary-foreground font-medium flex flex-row items-center gap-1'}>
 						<BetValue value={(valueToNumber(balance) / 100) * share} precision={2} withIcon />
 					</div>
 					{t('conservative.pending')}
 				</div>
 			</div>
-			<button
-				type={'button'}
+
+			<Button
 				onClick={handleClaim}
-				disabled={staked === 0n || claimable === 0n}
-				className={
-					'rounded-lg h-[52px] px-6 py-3 w-[90px] flex flex-row justify-center items-center text-sm md:text-lg font-medium bg-red-roulette  disabled:bg-gray-800 disabled:cursor-not-allowed'
-				}
+				disabled={staked === 0n || claimable === 0n || loading}
+				variant={'destructive'}
+				className="px-4 py-3   flex text-base relative"
+				size="freeSize"
 			>
-				{loading ? <Loader className={'h-5 w-5 animate-spin'} /> : t('conservative.unstake')}
-			</button>
+				<span
+					className={cn({
+						invisible: loading,
+					})}
+				>
+					{t('conservative.unstake')}
+				</span>
+				{loading && <Loader className={'h-4 w-4 animate-spin absolute inset-0 m-auto'} />}
+			</Button>
 		</div>
 	);
 };

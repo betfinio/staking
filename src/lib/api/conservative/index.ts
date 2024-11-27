@@ -1,11 +1,11 @@
 import logger from '@/src/config/logger';
-import type { Earning, ExtendedPoolInfo } from '@/src/lib/types.ts';
+import type { Earning, ExtendedPoolInfo, Timeframe } from '@/src/lib/types.ts';
 import { BetsMemoryContract, ConservativeStakingContract, ConservativeStakingPoolContract, ZeroAddress, arrayFrom, valueToNumber } from '@betfinio/abi';
 import { multicall, readContract } from '@wagmi/core';
 import { fetchTotalStaked } from 'betfinio_app/lib/api/conservative';
 import { fetchBalance } from 'betfinio_app/lib/api/token';
 import { getBlockByTimestamp } from 'betfinio_app/lib/gql';
-import type { Claim, Options, Stake, Stat, Timeframe } from 'betfinio_app/lib/types';
+import type { Claim, Options, Stake, Stat } from 'betfinio_app/lib/types';
 import type { SupabaseClient } from 'betfinio_app/supabase';
 import { DateTime } from 'luxon';
 import type { Address } from 'viem';
