@@ -30,7 +30,7 @@ const Header: FC<HeaderProps> = ({ type }) => {
 				<Button
 					onClick={toggle}
 					variant={'link'}
-					className={'text-secondary-foreground md:hover:text-secondary-foreground md:text-secondary-foreground flex flex-col items-center justify-center p-0'}
+					className={'text-foreground md:hover:text-secondary-foreground md:text-secondary-foreground flex flex-col items-center justify-center p-0'}
 				>
 					<CircleAlert className={'w-6'} />
 					<span className={'hidden lg:inline text-xs whitespace-nowrap'}>{t('report')}</span>

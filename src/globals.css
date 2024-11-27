@@ -6,10 +6,3 @@ html,
 body {
 	@apply bg-background text-foreground;
 }
-
-/*@layer components {*/
-/*	.ADAPTIVE {*/
-/*		@apply !bg-opacity-20 bg-red-900 sm:bg-green-600 md:bg-blue-600 lg:bg-yellow-600 xl:bg-pink-600 relative;*/
-/*		@apply after:content-["XS"] sm:after:content-["SM"] md:after:content-["MD"] lg:after:content-["LG"] xl:after:content-["XL"]*/
-/*	}*/
-/*}*/
