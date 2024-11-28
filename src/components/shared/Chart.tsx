@@ -12,7 +12,6 @@ const Chart: FC<{
 	className?: string;
 	label?: string;
 	color?: string;
-
 	timeFormat: string;
 	margin?: LineProps['margin'];
 }> = ({ labels = initialLabels, color = '#22c55e', values, className = '', label = 'value', margin, timeFormat }) => {
@@ -29,7 +28,7 @@ const Chart: FC<{
 	}, [labels, values]);
 
 	return (
-		<div className={cn(className, 'aspect-video max-w-full h-full ')}>
+		<div className={cn(className, 'aspect-video max-w-full h-full overflow-hidden')}>
 			<ResponsiveLine
 				enableGridX={false}
 				enableGridY={false}
