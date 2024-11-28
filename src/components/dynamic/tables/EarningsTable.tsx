@@ -1,5 +1,5 @@
 import Earnings from '@/src/components/shared/tables/Earnings.tsx';
-import { useEarnings, useStakes } from '@/src/lib/query/dynamic';
+import { useEarnings } from '@/src/lib/query/dynamic';
 import { ZeroAddress } from '@betfinio/abi';
 import { useAccount } from 'wagmi';
 

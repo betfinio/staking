@@ -1,3 +1,4 @@
+import type { IKeysOfErrors } from '@/src/i18next';
 import {
 	fetchActivePools,
 	fetchClaimed,
@@ -14,6 +15,7 @@ import {
 import type { StakeParams } from '@/src/lib/query/conservative';
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types.ts';
 import { DynamicStakingPoolContract, PartnerContract } from '@betfinio/abi';
+import { toast } from '@betfinio/components/hooks';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { type WriteContractErrorType, type WriteContractReturnType, writeContract } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
@@ -21,7 +23,6 @@ import { fetchTotalStaked } from 'betfinio_app/lib/api/dynamic';
 import { getBlockByTimestamp } from 'betfinio_app/lib/gql';
 import type { Stake } from 'betfinio_app/lib/types';
 import { useSupabase } from 'betfinio_app/supabase';
-import { toast } from 'betfinio_app/use-toast';
 import { useTranslation } from 'react-i18next';
 import type { Address } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
@@ -149,10 +150,11 @@ export const useStake = () => {
 				description: t(error),
 				variant: 'destructive',
 			});
+			// @ts-ignore
 			return t(e.message);
 		},
 		onSuccess: async (data) => {
-			const { update } = toast({
+			const { update, id } = toast({
 				title: 'Stake is in progress',
 				description: 'Transaction is being processed',
 				variant: 'loading',
@@ -162,6 +164,7 @@ export const useStake = () => {
 			await waitForTransactionReceipt(config.getClient(), { hash: data, confirmations: 3 });
 			//await queryClient.invalidateQueries({queryKey:['staking', 'dynamic']})
 			update({
+				id,
 				title: 'Staked successful',
 				variant: 'default',
 				description: 'Transaction has been executed',
@@ -200,10 +203,10 @@ export const useDistributeProfit = () => {
 				description: t(error),
 				variant: 'destructive',
 			});
-			return t(e.message);
+			return t(e.message as IKeysOfErrors);
 		},
 		onSuccess: async (data) => {
-			const { update } = toast({
+			const { update, id } = toast({
 				title: 'Distribution is in progress',
 				description: 'Transaction is being processed',
 				variant: 'loading',
@@ -212,6 +215,7 @@ export const useDistributeProfit = () => {
 			});
 			await waitForTransactionReceipt(config.getClient(), { hash: data });
 			update({
+				id,
 				title: 'Distributed successfully',
 				variant: 'default',
 				description: 'Transaction has been executed',

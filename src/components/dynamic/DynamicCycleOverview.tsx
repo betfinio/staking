@@ -1,10 +1,10 @@
 import SharedGameBlock from '@/src/components/shared/SharedGameBlock.tsx';
 import { useTotalStakedDiff, useUnrealizedProfit } from '@/src/lib/query/dynamic';
 import { valueToNumber } from '@betfinio/abi';
-import { BetValue } from 'betfinio_app/BetValue';
+import { cn } from '@betfinio/components';
+import { BetValue } from '@betfinio/components/shared';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@betfinio/components/ui';
 import { useTotalStaked } from 'betfinio_app/lib/query/dynamic';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from 'betfinio_app/tooltip';
-import cx from 'clsx';
 import { motion } from 'framer-motion';
 import { CircleHelp } from 'lucide-react';
 import { DateTime } from 'luxon';
@@ -32,27 +32,29 @@ export const CycleOverview: FC = () => {
 
 	return (
 		<TooltipProvider delayDuration={0}>
-			<div className={'col-span-2 md:col-span-1 p-3 md:p-5 relative  bg-primaryLighter border border-gray-800 rounded-lg flex justify-between flex-col gap-4'}>
+			<div className={'col-span-2 md:col-span-1 p-3 md:p-5 relative  bg-card border border-border rounded-lg flex justify-between flex-col gap-4'}>
 				<Tooltip>
 					<TooltipTrigger className={'absolute  top-3 right-3'}>
-						<CircleHelp className={'w-5 h-5 text-yellow-400 cursor-pointer'} />
+						<CircleHelp className={'w-5 h-5 text-secondary-foreground cursor-pointer'} />
 					</TooltipTrigger>
-					<TooltipContent className={'bg-black px-4 py-2 rounded-md border border-yellow-400 text-white w-[350px]'}>
-						<div className={'text-sm [&_b]:font-semibold [&_b]:text-yellow-400'} dangerouslySetInnerHTML={{ __html: t('dynamic.cycleOverview.toolTip') }} />
+					<TooltipContent
+						className={'staking bg-card px-4 py-2 rounded-md border border-border text-foreground  [&_b]:font-semibold [&_b]:text-secondary-foreground'}
+					>
+						<div className={'text-sm w-[350px] '} dangerouslySetInnerHTML={{ __html: t('dynamic.cycleOverview.toolTip') }} />
 					</TooltipContent>
 				</Tooltip>
 				<h1 className={'text-left font-normal text-sm lg:text-base md:font-semibold flex flex-row gap-1'}>
 					{t('dynamic.cycleOverview.dynamicCycle')} <div className={'underline cursor-pointer'}>#{cycleId}</div> {t('dynamic.cycleOverview.overview')}
 				</h1>
 				<div>
-					<div className={'flex justify-between text-[#6A6F84] text-xs font-semibold'}>
+					<div className={'flex justify-between text-tertiary-foreground text-xs font-semibold'}>
 						<span>{t('dynamic.cycleOverview.cycleStart')}</span>
 						<span>{t('dynamic.cycleOverview.cycleEnd')}</span>
 					</div>
 					<div className={'my-[4px]'}>
 						<CycleProgress start={cycleStart} end={cycleEnd} />
 					</div>
-					<div className={'flex justify-between text-[#6A6F84] text-xs'}>
+					<div className={'flex justify-between text-tertiary-foreground  text-xs'}>
 						<span>
 							{DateTime.fromMillis(cycleStart).toFormat('DD', {
 								locale: currentLocale === 'cz' ? 'cs' : currentLocale,
@@ -72,14 +74,14 @@ export const CycleOverview: FC = () => {
 								amount: newStaked[0],
 								label: t('dynamic.newStakes.newStakes'),
 								isLoading: isNewStakedFetching,
-								className: 'border border-yellow-400',
+								className: 'border border-secondary-foreground',
 								subtitle: `+${newStaked[1]} ${t('stakers')}`,
 							},
 							{
 								amount: profit,
 								label: t('conservative.gameProfit.cycleRevenue'),
 								isLoading: isProfitFetching,
-								className: 'border border-green-400',
+								className: 'border border-success',
 								subtitle: `(${profit >= 0 ? '+' : '-'}${percentage.toFixed(2)}%)`,
 							},
 							{
@@ -109,20 +111,20 @@ export const CycleProgress: FC<{ start: number; end: number }> = ({ start, end }
 	const progress = (Math.round(Date.now() - start) / (end - start)) * 100;
 	return (
 		<div>
-			<div className={'h-[20px] w-full bg-primary'}>
+			<div className={'h-[20px] w-full bg-background'}>
 				<motion.div
 					initial={{ width: 0 }}
 					animate={{ width: `${progress}%` }}
 					transition={{ duration: 0.5, ease: 'easeInOut' }}
-					className={'bg-green-500  rounded-[4px] h-full relative'}
+					className={'bg-success  rounded-[4px] h-full relative'}
 				>
 					<motion.p
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						transition={{ delay: 1 }}
-						className={cx(
+						className={cn(
 							'absolute top-1/2 -translate-y-1/2 text-[10px] font-bold whitespace-nowrap',
-							progress > 50 ? 'right-0 pr-2 text-primary' : 'right-0 translate-x-[100%] pl-2',
+							progress > 50 ? 'right-0 pr-2 text-background' : 'right-0 translate-x-[100%] pl-2',
 						)}
 					>
 						{days >= 1 ? `${days}D ${hours}H ${minutes}M` : `${hours}H ${minutes}M`}
@@ -140,10 +142,10 @@ const NewStakes: FC = () => {
 	return (
 		<Tooltip>
 			<TooltipTrigger>
-				<div className={'shrink-0 border border-[#FFC800] py-4 px-3 rounded-md bg-primary text-sm text-[#6A6F84]'}>
+				<div className={'shrink-0 border border-secondary-foreground py-4 px-3 rounded-md bg-background text-sm text-tertiary-foreground'}>
 					<div className={'font-semibold text-center leading-[10px]'}>{t('newStakes.newStakes')}</div>
 					<div className={'mt-5'}>
-						<div className={'flex justify-center text-[#FFC800]'}>
+						<div className={'flex justify-center text-secondary-foreground'}>
 							+<BetValue value={valueToNumber(newStaked[0])} withIcon={true} />
 						</div>
 						<div className={'text-center '}>
@@ -152,7 +154,7 @@ const NewStakes: FC = () => {
 					</div>
 				</div>
 			</TooltipTrigger>
-			<TooltipContent className={'bg-black text-white p-2 text-sm border-yellow-400 border rounded-md'}>
+			<TooltipContent className={'bg-card text-foreground p-2 text-sm border-border border rounded-md'}>
 				{t('newStakes.volumeStakedDuringCurrentCycle')}
 			</TooltipContent>
 		</Tooltip>
@@ -169,10 +171,10 @@ const GamesProfit = () => {
 	return (
 		<Tooltip>
 			<TooltipTrigger>
-				<div className={'border border-green-500 py-4 px-3 rounded-md bg-primary text-sm text-[#6A6F84]'}>
+				<div className={'border border-success py-4 px-3 rounded-md bg-background text-sm text-tertiary-foreground'}>
 					<p className={'font-semibold text-center leading-[10px]'}>{t('gameProfit.cycleRevenue')}</p>
 					<div className={'mt-5'}>
-						<div className={'flex justify-center font-bold text-green-500'}>
+						<div className={'flex justify-center font-bold text-success'}>
 							{profit >= 0 ? '+' : ''}
 							<BetValue value={valueToNumber(profit)} withIcon={true} />
 						</div>
@@ -183,7 +185,7 @@ const GamesProfit = () => {
 					</div>
 				</div>
 			</TooltipTrigger>
-			<TooltipContent className={'bg-black text-white p-2 text-sm border-yellow-400 border rounded-md'}>
+			<TooltipContent className={'bg-card text-foreground p-2 text-sm border-border border rounded-md'}>
 				{t('gameProfit.volumeToDistributeBetweenStakers')}
 			</TooltipContent>
 		</Tooltip>
@@ -194,7 +196,7 @@ const EndingStakes = () => {
 	const { t } = useTranslation('staking');
 	// todo
 	return (
-		<div className={'border border-red-roulette py-4 px-3 rounded-md bg-primary text-sm text-[#6A6F84]'}>
+		<div className={'border border-destructive py-4 px-3 rounded-md bg-background text-sm text-tertiary-foreground'}>
 			<div className={'font-semibold text-center leading-[10px]'}>{t('conservative.endingStakers.endingStakes')}</div>
 			<div className={'mt-5'}>
 				<div className={'flex justify-center text-red-roulette'}>

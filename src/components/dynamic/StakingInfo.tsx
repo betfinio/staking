@@ -1,10 +1,9 @@
 import { useStaked, useTotalBets, useTotalVolume } from '@/src/lib/query/dynamic';
 import { ZeroAddress, valueToNumber } from '@betfinio/abi';
-import { Bet, Blackjack, CoinLarge, Coins } from '@betfinio/ui/dist/icons';
-import ConservativeStaking from '@betfinio/ui/dist/icons/ConservativeStaking';
-import { BetValue } from 'betfinio_app/BetValue';
+import { cn } from '@betfinio/components';
+import { Bet, Blackjack, CoinLarge, Coins, ConservativeStaking } from '@betfinio/components/icons';
+import { BetValue } from '@betfinio/components/shared';
 import { useTotalProfit, useTotalStaked } from 'betfinio_app/lib/query/dynamic';
-import cx from 'clsx';
 import { animate } from 'framer-motion';
 import { CalculatorIcon } from 'lucide-react';
 import { type FC, useEffect, useMemo, useRef, useState } from 'react';
@@ -63,39 +62,39 @@ const StakingInfo: FC = () => {
 	const cycleId = Math.floor((Date.now() - 1000 * 60 * 60 * 36) / 1000 / 60 / 60 / 24 / 28);
 
 	return (
-		<div className={'cursor-pointer bg-primaryLighter border border-gray-800 rounded-lg'}>
+		<div className={'cursor-pointer bg-card border border-border rounded-lg'}>
 			<div className={'font-semibold text-center text-sm lg:text-base whitespace-nowrap lg:text-left p-4 hidden md:flex flex-row items-center justify-between'}>
 				{t('dynamic.stats.dynamicGamesStats')}
 				<div className={''}>{t('dynamic.stats.yourRevenues')}:</div>
 			</div>
 			<div className={'rounded-lg flex justify-between font-semibold p-3'}>
 				<div className={'flex items-center justify-center flex-row gap-3 h-full text-sm lg:text-base'}>
-					<CoinLarge className={'hidden md:block text-yellow-400 w-20 h-20'} />
+					<CoinLarge className={'hidden md:block text-secondary-foreground w-20 h-20'} />
 					<div className={'flex flex-col gap-[18px] md:gap-4 lg:text-sm xl:text-base justify-between items-start h-full'}>
-						<div className={cx(' flex flex-row items-center gap-2')}>
-							<CalculatorIcon className={'w-6 h-6 md:w-5 md:h-5 text-yellow-400'} />1 {t('dynamic.stats.game')}
+						<div className={cn(' flex flex-row items-center gap-2')}>
+							<CalculatorIcon className={'w-6 h-6 md:w-5 md:h-5 text-secondary-foreground'} />1 {t('dynamic.stats.game')}
 						</div>
-						<div className={cx('flex ml-1 flex-row items-center gap-2 font-semibold')}>
-							<Blackjack className={'w-6 h-6 md:w-4 md:h-4 text-yellow-400'} />
+						<div className={cn('flex ml-1 flex-row items-center gap-2 font-semibold')}>
+							<Blackjack className={'w-6 h-6 md:w-4 md:h-4 text-secondary-foreground'} />
 							{t('total.bets', { count: totalBets })}
 						</div>
-						<div className={cx('flex flex-row items-center gap-2')}>
-							<Coins className={'w-6 h-6 md:w-5 md:h-5 text-yellow-400'} />
+						<div className={cn('flex flex-row items-center gap-2')}>
+							<Coins className={'w-6 h-6 md:w-5 md:h-5 text-secondary-foreground'} />
 							<BetValue value={valueToNumber(totalVolume)} precision={2} withIcon /> {t('dynamic.stats.volume')}
 						</div>
 					</div>
 				</div>
 				<div className={'text-center flex flex-col justify-center '}>
 					<ConservativeStaking
-						className={cx('mx-auto w-12 text-yellow-400 duration-300 ', {
-							'!animate-pulse text-green-400 ': isTotalProfitFetching || glow,
+						className={cn('mx-auto w-12 text-secondary-foreground duration-300 ', {
+							'!animate-pulse text-success ': isTotalProfitFetching || glow,
 						})}
 					/>
-					<div className={cx('mt-3 flex flex-row items-center gap-1 text-sm xl:text-base mx-auto', { 'text-green-400': isTotalProfitFetching || glow })}>
+					<div className={cn('mt-3 flex flex-row items-center gap-1 text-sm xl:text-base mx-auto', { 'text-success': isTotalProfitFetching || glow })}>
 						<Counter from={from} to={to} />
-						<Bet className={'w-4 h-4 text-accent-secondary-foreground'} />
+						<Bet className={'w-4 h-4 text-secondary-foreground'} />
 					</div>
-					<div className={'text-gray-500 text-xs'}>
+					<div className={'text-tertiary-foreground text-xs'}>
 						{t('dynamic.stats.inCycle')} #{cycleId}
 					</div>
 				</div>

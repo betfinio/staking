@@ -1,9 +1,9 @@
 import { usePoolReward } from '@/src/lib/query/conservative';
 import { valueToNumber } from '@betfinio/abi';
-import { Bet } from '@betfinio/ui/dist/icons';
+import { Bet } from '@betfinio/components/icons';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@betfinio/components/ui';
 import type { CellContext } from '@tanstack/react-table';
 import type { Stake } from 'betfinio_app/lib/types';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from 'betfinio_app/tooltip';
 import { useTranslation } from 'react-i18next';
 
 export const RewardCell = (props: CellContext<Stake, bigint | undefined>) => {
@@ -15,15 +15,15 @@ export const RewardCell = (props: CellContext<Stake, bigint | undefined>) => {
 	return (
 		<TooltipProvider delayDuration={0}>
 			<Tooltip>
-				<div className={'text-green-400 font-bold'}>
+				<div className={'text-succes font-bold'}>
 					<TooltipTrigger>
 						<span>{percentage.toFixed(2)}%</span>
 					</TooltipTrigger>
 				</div>
-				<TooltipContent className={'text-white bg-black'}>
+				<TooltipContent className={'text-foreground bg-card'}>
 					{t('claimedRewards')}
 					{/* <BetValue value={rewardDiff}/> */}
-					<div className={'text-yellow-400 font-bold flex items-center gap-1 justify-center'}>
+					<div className={'text-secondary-foreground font-bold flex items-center gap-1 justify-center'}>
 						{valueToNumber(reward).toLocaleString()} <Bet />
 					</div>
 				</TooltipContent>
