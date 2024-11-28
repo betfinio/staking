@@ -2,12 +2,11 @@ import Chart from '@/src/components/shared/Chart';
 import type { Timeframe } from '@/src/lib/types';
 import { getConservativeCycle } from '@/src/utils';
 import { cn } from '@betfinio/components';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@betfinio/components/ui';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@betfinio/components/ui';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Tabs, TabsContent, TabsList, TabsTrigger } from '@betfinio/components/ui';
 import { useRevenueStatisticsCurrent, useStakedStatisticsCurrent, useStakersStatisticsCurrent, useStakingStatistics } from 'betfinio_statistics/query';
-import { DateTime } from 'luxon';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 const { cycleStart } = getConservativeCycle();
 const margin = { top: 20, right: 20, bottom: 80, left: 60 };
 
@@ -90,7 +89,7 @@ const Charts = () => {
 					</div>
 				</TabsList>
 
-				<TabsContent value={'staked'} className={'h-full'}>
+				<TabsContent value={'staked'} className={'grow'}>
 					<Chart
 						margin={margin}
 						label={t('conservative.chart.totalStaked')}
@@ -102,7 +101,7 @@ const Charts = () => {
 						{...totalStaked}
 					/>
 				</TabsContent>
-				<TabsContent value={'stakers'} className={'h-full'}>
+				<TabsContent value={'stakers'} className={'grow'}>
 					<Chart
 						margin={margin}
 						className={cn({
@@ -114,7 +113,7 @@ const Charts = () => {
 						{...totalStakers}
 					/>
 				</TabsContent>
-				<TabsContent value={'revenues'} className={'h-full'}>
+				<TabsContent value={'revenues'} className={'grow'}>
 					<Chart
 						margin={margin}
 						className={cn({
