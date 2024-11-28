@@ -8,7 +8,7 @@ export const Route = createRootRoute({
 	component: () => (
 		<Root id={'staking'} instance={instance}>
 			<Toaster />
-			<VersionValidation repository={'app'} branch={import.meta.env.PUBLIC_BRANCH} current={import.meta.env.PUBLIC_DEPLOYED} />
+			<VersionValidation repository={'staking'} branch={import.meta.env.PUBLIC_BRANCH} current={import.meta.env.PUBLIC_DEPLOYED} />
 		</Root>
 	),
 });
