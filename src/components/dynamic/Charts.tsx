@@ -1,41 +1,46 @@
 import Chart from '@/src/components/shared/Chart';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'betfinio_app/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
-import { DateTime } from 'luxon';
+
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Tabs, TabsContent, TabsList, TabsTrigger } from '@betfinio/components/ui';
 import { useMemo, useState } from 'react';
 
-import type { Timeframe } from 'betfinio_app/lib/types';
+import type { Timeframe } from '@/src/lib/types';
+import { cn } from '@betfinio/components';
 import { useStakingStatistics } from 'betfinio_statistics/query';
 import { getDynamicCycles } from 'betfinio_statistics/utils';
 import { useTranslation } from 'react-i18next';
 
 const { cycleStart } = getDynamicCycles();
+const margin = { top: 20, right: 20, bottom: 40, left: 60 };
 
 const Charts = () => {
 	const { t } = useTranslation('staking');
 	const [timeframe, setTimeframe] = useState<Timeframe>('day');
 
-	const { data: statistics = [] } = useStakingStatistics(timeframe, 'dynamic', cycleStart);
+	const { data: statistics = [], isLoading } = useStakingStatistics(timeframe, 'dynamic', cycleStart);
 	const handleChange = (val: Timeframe) => {
 		setTimeframe(val);
 	};
+
+	const slicedStatistics = useMemo(() => {
+		return statistics.slice(-20);
+	}, [statistics]);
 	const timeFormat = timeframe === 'hour' ? 'HH:mm' : 'dd.MM';
 	const totalStaked = useMemo(() => {
 		return {
-			values: statistics.map((e) => e.dynamicTotalStaked),
-			labels: statistics.map((e) => DateTime.fromSeconds(e.timestamp).toFormat(timeFormat)),
+			values: slicedStatistics.map((e) => e.dynamicTotalStaked),
+			labels: slicedStatistics.map((e) => e.timestamp),
 		};
 	}, [statistics]);
 	const totalStakers = useMemo(() => {
 		return {
-			values: statistics.map((e) => e.dynamicTotalStakers),
-			labels: statistics.map((e) => DateTime.fromSeconds(e.timestamp).toFormat(timeFormat)),
+			values: slicedStatistics.map((e) => e.dynamicTotalStakers),
+			labels: slicedStatistics.map((e) => e.timestamp),
 		};
 	}, [statistics]);
 	const totalRevenue = useMemo(() => {
 		return {
-			values: statistics.map((e) => e.dynamicTotalRevenue),
-			labels: statistics.map((e) => DateTime.fromSeconds(e.timestamp).toFormat(timeFormat)),
+			values: slicedStatistics.map((e) => e.dynamicTotalRevenue),
+			labels: slicedStatistics.map((e) => e.timestamp),
 		};
 	}, [statistics]);
 
@@ -62,13 +67,40 @@ const Charts = () => {
 				</TabsList>
 
 				<TabsContent value={'staked'} className={'grow'}>
-					<Chart label={t('dynamic.chart.totalStaked')} className={'h-full'} color={'#facc15'} {...totalStaked} />
+					<Chart
+						margin={margin}
+						timeFormat={timeFormat}
+						label={t('dynamic.chart.totalStaked')}
+						className={cn('h-full', {
+							blur: isLoading,
+						})}
+						color={'hsl(var(--chart-1))'}
+						{...totalStaked}
+					/>
 				</TabsContent>
 				<TabsContent value={'stakers'} className={'grow'}>
-					<Chart label={t('dynamic.chart.totalStakers')} color={'#6A6A9F'} {...totalStakers} />
+					<Chart
+						margin={margin}
+						timeFormat={timeFormat}
+						label={t('dynamic.chart.totalStakers')}
+						className={cn({
+							blur: isLoading,
+						})}
+						color={'hsl(var(--chart-2))'}
+						{...totalStakers}
+					/>
 				</TabsContent>
 				<TabsContent value={'revenues'} className={'grow'}>
-					<Chart label={t('dynamic.chart.totalRevenue')} {...totalRevenue} />
+					<Chart
+						margin={margin}
+						timeFormat={timeFormat}
+						label={t('dynamic.chart.totalRevenue')}
+						className={cn({
+							blur: isLoading,
+						})}
+						color={'hsl(var(--success))'}
+						{...totalRevenue}
+					/>
 				</TabsContent>
 			</Tabs>
 		</div>

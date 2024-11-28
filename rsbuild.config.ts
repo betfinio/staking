@@ -62,10 +62,6 @@ export default defineConfig({
 							singleton: true,
 							requiredVersion: dependencies['@tanstack/react-table'],
 						},
-						'lucide-react': {
-							singleton: true,
-							requiredVersion: dependencies['lucide-react'],
-						},
 						i18next: {
 							singleton: true,
 							requiredVersion: dependencies.i18next,
@@ -73,18 +69,6 @@ export default defineConfig({
 						'react-i18next': {
 							singleton: true,
 							requiredVersion: dependencies['react-i18next'],
-						},
-						'tailwindcss-animate': {
-							singleton: true,
-							requiredVersion: dependencies['tailwindcss-animate'],
-						},
-						tailwindcss: {
-							singleton: true,
-							requiredVersion: dependencies.tailwindcss,
-						},
-						'@supabase/supabase-js': {
-							singleton: true,
-							requiredVersion: dependencies['@supabase/supabase-js'],
 						},
 						wagmi: {
 							singleton: true,

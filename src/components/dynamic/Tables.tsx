@@ -1,6 +1,6 @@
 import EarningsTable from '@/src/components/dynamic/tables/EarningsTable.tsx';
 import PoolsTable from '@/src/components/dynamic/tables/PoolsTable.tsx';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@betfinio/components/ui';
 import { useTranslation } from 'react-i18next';
 import StakesTable from './tables/Stakes/StakesTable';
 

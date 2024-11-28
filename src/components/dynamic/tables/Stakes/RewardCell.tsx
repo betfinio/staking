@@ -1,9 +1,9 @@
 import { useStakeReward } from '@/src/lib/query/dynamic';
 import { ZeroAddress, valueToNumber } from '@betfinio/abi';
-import { Bet } from '@betfinio/ui/dist/icons';
+import { Bet } from '@betfinio/components/icons';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@betfinio/components/ui';
 import type { CellContext } from '@tanstack/react-table';
 import type { Stake } from 'betfinio_app/lib/types';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from 'betfinio_app/tooltip';
 import { Loader } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { Address } from 'viem';
@@ -27,14 +27,14 @@ export const RewardCell = (props: CellContext<Stake, bigint | undefined>) => {
 	return (
 		<TooltipProvider delayDuration={0}>
 			<Tooltip>
-				<div className={'text-green-400 font-bold'}>
+				<div className={'text-success font-bold'}>
 					<TooltipTrigger>
 						<span>{percentage.toFixed(2)}%</span>
 					</TooltipTrigger>
 				</div>
-				<TooltipContent className={'text-white bg-black'}>
+				<TooltipContent className={'text-card-foreground bg-card'}>
 					{t('table.claimedRewards')}:{/* <BetValue value={rewardDiff}/> */}
-					<div className={'text-yellow-400 font-bold flex items-center gap-1 justify-center'}>
+					<div className={'text-secondary-foreground font-bold flex items-center gap-1 justify-center'}>
 						{valueToNumber(rewardDiff).toLocaleString()} <Bet />
 					</div>
 				</TooltipContent>
