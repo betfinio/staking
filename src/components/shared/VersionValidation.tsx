@@ -1,12 +1,13 @@
 import logger from '@/src/config/logger.ts';
 import { toast } from '@betfinio/components/hooks';
 import { Button } from '@betfinio/components/ui';
+import { useLatestVersion } from 'betfinio_app/github';
 import { type FC, useEffect } from 'react';
 
 interface VersionValidationProps {
 	repository: string;
-	branch: string;
-	current: string;
+	branch?: string;
+	current?: string;
 }
 export const VersionValidation: FC<VersionValidationProps> = ({ branch, repository, current }) => {
 	const { data: version } = useLatestVersion(repository, branch);

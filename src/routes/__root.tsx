@@ -1,3 +1,4 @@
+import { VersionValidation } from '@/src/components/shared/VersionValidation.tsx';
 import instance from '@/src/i18n.ts';
 import { Toaster } from '@betfinio/components/ui';
 import { createRootRoute } from '@tanstack/react-router';
