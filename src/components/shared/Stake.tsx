@@ -3,11 +3,12 @@ import { useStake as useStakeD } from '@/src/lib/query/dynamic';
 import type { StakingType } from '@/src/lib/types.ts';
 import { ZeroAddress } from '@betfinio/abi';
 import { valueToNumber } from '@betfinio/abi';
-import Lock from '@betfinio/ui/dist/icons/Lock';
+import { cn } from '@betfinio/components';
+import { toast, useToast } from '@betfinio/components/hooks';
+import { Button } from '@betfinio/components/ui';
 import { useAllowanceModal } from 'betfinio_app/allowance';
 import { useAllowance, useBalance } from 'betfinio_app/lib/query/token';
-import { toast } from 'betfinio_app/use-toast';
-import { Loader } from 'lucide-react';
+import { Loader, Lock } from 'lucide-react';
 import { type FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NumericFormat } from 'react-number-format';
@@ -16,6 +17,7 @@ import { useAccount, useConfig } from 'wagmi';
 const Stake: FC<{ type: StakingType }> = ({ type }) => {
 	const { t } = useTranslation('staking');
 	const [value, setValue] = useState('');
+
 	const temp = Number(value.split(',').join(''));
 	const { address = ZeroAddress } = useAccount();
 	const { data: allowance = 0n } = useAllowance(address);
@@ -76,7 +78,7 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 		} else {
 			toast({
 				description: t('toast.insufficientBalanceToStake'),
-				type: 'destructive',
+				variant: 'destructive',
 			});
 		}
 	};
@@ -87,11 +89,11 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 	return (
 		<div className={'flex w-full  p-3 md:p-8 md:py-6 bg-unstake-background bg-no-repeat bg-cover rounded-lg flex-col justify-between items relative'}>
 			<h2 className={'text-xl font-semibold opacity-90'}>{t('conservative.stakeBet')}</h2>
-			<span className={'text-sm my-1 text-gray-500'}>{t('conservative.stakingPeriod')}</span>
-			<div className={'w-full flex flex-row justify-between gap-3 relative'}>
+			<span className={'text-sm my-1 text-tertiary-foreground'}>{t('conservative.stakingPeriod')}</span>
+			<div className={'w-full items-center flex flex-row justify-between gap-3 relative'}>
 				<div
 					className={
-						'w-full px-4 font-semibold border border-gray-800 rounded-lg md:rounded-xl text-sm sm:text-base text-[#6A6F84] bg-primary flex items-center gap-2'
+						'w-full  h-full px-4 font-semibold border border-border rounded-lg md:rounded-xl text-sm sm:text-base text-tertiary-foreground bg-background flex items-center gap-2'
 					}
 				>
 					<Lock className={' w-5 h-5 md:w-6 md:h-6'} />
@@ -102,14 +104,14 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 						min={0}
 						value={value}
 						onChange={(e) => setValue(e.target.value)}
-						className={'bg-transparent w-full outline-0 py-2 h-[52px] grow'}
+						className={'bg-transparent w-full outline-0 py-2 h-full grow'}
 						allowNegative={false}
 						max={maxAllowed}
 						decimalScale={0}
 						thousandSeparator=","
 					/>
 					<div
-						className={'text-xs cursor-pointer text-yellow-400'}
+						className={'text-xs cursor-pointer text-secondary-foreground'}
 						onClick={() => {
 							setValue(Math.floor(valueToNumber(balance)).toFixed(0));
 						}}
@@ -117,16 +119,22 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 						MAX
 					</div>
 				</div>
-				<button
-					type={'button'}
+				<Button
 					onClick={handleStake}
-					disabled={temp === 0}
-					className={
-						'rounded-lg px-6 p-2 md:py-4 min-w-[90px] flex flex-row justify-center items-center text-sm md:text-base h-[52px] font-semibold bg-green-500  disabled:bg-gray-800 disabled:cursor-not-allowed'
-					}
+					disabled={temp === 0 || loadingD || loadingC}
+					variant={'success'}
+					className="px-4 py-3   flex text-base relative"
+					size="freeSize"
 				>
-					{loadingD || loadingC ? <Loader className={'h-4 w-4 animate-spin'} /> : t('conservative.stake')}
-				</button>
+					<span
+						className={cn({
+							invisible: loadingD || loadingC,
+						})}
+					>
+						{t('conservative.stake')}
+					</span>
+					{(loadingD || loadingC) && <Loader className={'h-4 w-4 animate-spin absolute inset-0 m-auto'} />}
+				</Button>
 			</div>
 		</div>
 	);

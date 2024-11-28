@@ -1,12 +1,11 @@
 import SharedGameBlock from '@/src/components/shared/SharedGameBlock.tsx';
-import { usePredictContribution } from '@/src/lib/query/conservative';
 import { valueToNumber } from '@betfinio/abi';
-import { Bank, CloseModal } from '@betfinio/ui/dist/icons';
-import { Link } from '@tanstack/react-router';
-import { BetValue } from 'betfinio_app/BetValue';
-import { DialogClose } from 'betfinio_app/dialog';
+import { cn } from '@betfinio/components';
+import { Bank, CloseModal } from '@betfinio/components/icons';
+import { BetValue } from '@betfinio/components/shared';
+import { DialogClose } from '@betfinio/components/ui';
+
 import { useTotalProfit } from 'betfinio_app/lib/query/dynamic';
-import cx from 'clsx';
 import { ShieldCheckIcon } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,23 +16,23 @@ const StatisticsModal: FC = () => {
 	const { t } = useTranslation('staking');
 	const { data: totalProfit = 0n } = useTotalProfit();
 	return (
-		<div className={cx('rounded-lg bg-primaryLighter z-10 border border-gray-800 font-semibold text-white w-full mx-auto')}>
+		<div className={cn('rounded-lg bg-card z-10 border border-border font-semibold text-foreground w-full mx-auto')}>
 			<div className={'py-5 px-7'}>
 				<div className={'flex justify-between items-center'}>
 					<p className={'text-sm '}>{t('dynamic.statisticsModal.dynamicStaking')}</p>
 					<div>
 						<DialogClose>
-							<CloseModal className={'cursor-pointer hover:text-[#DD375F] transition-all duration-300'} />
+							<CloseModal className={'cursor-pointer hover:text-destructive transition-all duration-300'} />
 						</DialogClose>
 					</div>
 				</div>
 				<div className={'mt-7 flex items-center justify-center gap-3'}>
-					<Bank className={'text-[#FFC800]'} />
+					<Bank className={'text-secondary-foreground'} />
 					<div className={'text-2xl flex flex-row items-center gap-2'}>
 						<BetValue value={valueToNumber(totalProfit)} withIcon />
 					</div>
 				</div>
-				<div className={'h-[2px] opacity-5 bg-white my-6'} />
+				<div className={'h-[2px] opacity-5 bg-foreground my-6'} />
 				<p className={'mb-3 text-center text-sm'}>{t('dynamic.statisticsModal.gamesContributionStatistics')}</p>
 				<SharedGameBlock
 					games={[
@@ -42,11 +41,11 @@ const StatisticsModal: FC = () => {
 						{ amount: 123n * 10n ** 18n, label: t('games.soon') },
 					]}
 				/>
-				<div className={'h-[2px] opacity-5 bg-white my-6'} />
+				<div className={'h-[2px] opacity-5 bg-foreground my-6'} />
 
 				<p className={'text-center text-sm mb-4'}>{t('dynamic.statisticsModal.stakingContract')}</p>
 				<div className={'flex items-center justify-center gap-2 '}>
-					<ShieldCheckIcon className={'text-[#38BB7F] w-4 h-4'} />
+					<ShieldCheckIcon className={'text-success w-4 h-4'} />
 					<a
 						href={`${import.meta.env.PUBLIC_ETHSCAN}/address/${DYNAMIC_STAKING_ADDRESS}`}
 						target={'_blank'}
