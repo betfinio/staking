@@ -10,7 +10,7 @@ import { getDynamicCycles } from 'betfinio_statistics/utils';
 import { useTranslation } from 'react-i18next';
 
 const { cycleStart } = getDynamicCycles();
-const margin = { top: 20, right: 20, bottom: 40, left: 60 };
+const margin = { top: 20, right: 20, bottom: 40, left: 40 };
 
 const Charts = () => {
 	const { t } = useTranslation('staking');
