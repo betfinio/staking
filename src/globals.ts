@@ -9,6 +9,7 @@ export const PUBLIC_BETS_MEMORY_ADDRESS: Address = import.meta.env.PUBLIC_BETS_M
 export const PUBLIC_DYNAMIC_STAKING_ADDRESS: Address = import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS;
 export const PUBLIC_PREDICT_ADDRESS: Address = import.meta.env.PUBLIC_PREDICT_ADDRESS;
 export const PUBLIC_LUCKY_ROUND_ADDRESS: Address = import.meta.env.PUBLIC_LUCKY_ROUND_ADDRESS;
+export const PUBLIC_ROULETTE_ADDRESS: Address = import.meta.env.PUBLIC_ROULETTE_ADDRESS;
 export const PUBLIC_ENVIRONMENT = import.meta.env.PUBLIC_ENVIRONMENT;
 export const PUBLIC_APP_URL = import.meta.env.PUBLIC_APP_URL;
 export const PUBLIC_STAKING_GRAPH_URL = import.meta.env.PUBLIC_STAKING_GRAPH_URL;

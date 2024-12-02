@@ -1,3 +1,4 @@
+import { PUBLIC_BTCUSDT_GAME_ADDRESS, PUBLIC_CONSERVATIVE_STAKING_ADDRESS, PUBLIC_PARTNER_ADDRESS } from '@/src/globals';
 import {
 	fetchCalculationsStat,
 	fetchClaimable,
@@ -92,14 +93,14 @@ export const useTotalBets = () => {
 	const config = useConfig();
 	useWatchContractEvent({
 		abi: GameContract.abi,
-		address: import.meta.env.PUBLIC_BTCUSDT_GAME_ADDRESS as Address,
+		address: PUBLIC_BTCUSDT_GAME_ADDRESS,
 		eventName: 'BetCreated',
 		onLogs: async () => {
 			await queryClient.invalidateQueries({
 				queryKey: ['staking', 'conservative', 'totalBets'],
 			});
 			await queryClient.invalidateQueries({
-				queryKey: ['balance', import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address],
+				queryKey: ['balance', PUBLIC_CONSERVATIVE_STAKING_ADDRESS],
 			});
 		},
 	});
@@ -259,15 +260,15 @@ export const useClaim = () => {
 export const stake = async ({ amount, config }: StakeParams): Promise<WriteContractReturnType> => {
 	return await writeContract(config, {
 		abi: PartnerContract.abi,
-		address: import.meta.env.PUBLIC_PARTNER_ADDRESS as Address,
+		address: PUBLIC_PARTNER_ADDRESS,
 		functionName: 'stake',
-		args: [import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address, amount],
+		args: [PUBLIC_CONSERVATIVE_STAKING_ADDRESS, amount],
 	});
 };
 export const claimAll = async ({ config }: { config: Config }): Promise<WriteContractReturnType> => {
 	return await writeContract(config, {
 		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
+		address: PUBLIC_CONSERVATIVE_STAKING_ADDRESS,
 		functionName: 'claimAll',
 	});
 };

@@ -1,3 +1,4 @@
+import { PUBLIC_DYNAMIC_STAKING_ADDRESS, PUBLIC_PARTNER_ADDRESS } from '@/src/globals';
 import type { IKeysOfErrors } from '@/src/i18next';
 import {
 	fetchActivePools,
@@ -177,9 +178,9 @@ export const useStake = () => {
 export const stake = async ({ amount, config }: StakeParams): Promise<WriteContractReturnType> => {
 	return await writeContract(config, {
 		abi: PartnerContract.abi,
-		address: import.meta.env.PUBLIC_PARTNER_ADDRESS,
+		address: PUBLIC_PARTNER_ADDRESS,
 		functionName: 'stake',
-		args: [import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS, amount],
+		args: [PUBLIC_DYNAMIC_STAKING_ADDRESS, amount],
 	});
 };
 

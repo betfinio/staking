@@ -1,4 +1,5 @@
 import logger from '@/src/config/logger';
+import { PUBLIC_BETS_MEMORY_ADDRESS, PUBLIC_DYNAMIC_STAKING_ADDRESS, PUBLIC_ROULETTE_ADDRESS, PUBLIC_TOKEN_ADDRESS } from '@/src/globals';
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types.ts';
 import { BetsMemoryContract, DynamicStakingContract, DynamicStakingPoolContract, TokenContract, arrayFrom } from '@betfinio/abi';
 import { multicall, readContract } from '@wagmi/core';
@@ -28,7 +29,7 @@ export const fetchPool = async (pool: Address, config: Config): Promise<Extended
 			},
 			{
 				abi: TokenContract.abi,
-				address: import.meta.env.PUBLIC_TOKEN_ADDRESS,
+				address: PUBLIC_TOKEN_ADDRESS,
 				functionName: 'balanceOf',
 				args: [pool],
 			},
@@ -49,9 +50,9 @@ export const fetchTotalVolume = async (config: Config): Promise<bigint> => {
 	logger.start('[dynamic]', 'fetching total volume dynamic');
 	return (await readContract(config, {
 		abi: BetsMemoryContract.abi,
-		address: import.meta.env.PUBLIC_BETS_MEMORY_ADDRESS,
+		address: PUBLIC_BETS_MEMORY_ADDRESS,
 		functionName: 'gamesVolume',
-		args: [import.meta.env.PUBLIC_ROULETTE_ADDRESS],
+		args: [PUBLIC_ROULETTE_ADDRESS],
 	})) as bigint;
 };
 
@@ -61,13 +62,13 @@ export const fetchUnrealizedProfit = async (config: Config): Promise<bigint> => 
 		contracts: [
 			{
 				abi: TokenContract.abi,
-				address: import.meta.env.PUBLIC_TOKEN_ADDRESS,
+				address: PUBLIC_TOKEN_ADDRESS,
 				functionName: 'balanceOf',
-				args: [import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS],
+				args: [PUBLIC_DYNAMIC_STAKING_ADDRESS],
 			},
 			{
 				abi: DynamicStakingContract.abi,
-				address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
+				address: PUBLIC_DYNAMIC_STAKING_ADDRESS,
 				functionName: 'realStaked',
 			},
 		],
@@ -114,13 +115,13 @@ export const fetchActivePools = async (config: Config): Promise<ExtendedPoolInfo
 	logger.start('[dynamic]', 'fetching active pools dynamic');
 	const activePoolsCount = (await readContract(config, {
 		abi: DynamicStakingContract.abi,
-		address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
+		address: PUBLIC_DYNAMIC_STAKING_ADDRESS,
 		functionName: 'getActivePoolCount',
 	})) as number;
 	const pools = await multicall(config, {
 		contracts: arrayFrom(Number(activePoolsCount)).map((i) => ({
 			abi: DynamicStakingContract.abi,
-			address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
+			address: PUBLIC_DYNAMIC_STAKING_ADDRESS,
 			functionName: 'pools',
 			args: [i],
 		})),
@@ -134,7 +135,7 @@ export const fetchStaked = async (address: Address | undefined, config: Config):
 	}
 	const data = await readContract(config, {
 		abi: DynamicStakingContract.abi,
-		address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
+		address: PUBLIC_DYNAMIC_STAKING_ADDRESS,
 		functionName: 'staked',
 		args: [address],
 	});
@@ -143,9 +144,9 @@ export const fetchStaked = async (address: Address | undefined, config: Config):
 export const fetchTotalBets = async (config: Config): Promise<number> => {
 	const bets = (await readContract(config, {
 		abi: BetsMemoryContract.abi,
-		address: import.meta.env.PUBLIC_BETS_MEMORY_ADDRESS,
+		address: PUBLIC_BETS_MEMORY_ADDRESS,
 		functionName: 'betsCountByStaking',
-		args: [import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS],
+		args: [PUBLIC_DYNAMIC_STAKING_ADDRESS],
 	})) as number;
 	return Number(bets);
 };
@@ -155,7 +156,7 @@ export const fetchClaimed = async (address: Address | undefined, config: Config)
 	}
 	const data = await readContract(config, {
 		abi: DynamicStakingContract.abi,
-		address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
+		address: PUBLIC_DYNAMIC_STAKING_ADDRESS,
 		functionName: 'getClaimed',
 		args: [address],
 	});
@@ -165,7 +166,7 @@ export const fetchClaimed = async (address: Address | undefined, config: Config)
 export const fetchTotalStakers = async (config: Config, block?: bigint): Promise<number> => {
 	const data = await readContract(config, {
 		abi: DynamicStakingContract.abi,
-		address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
+		address: PUBLIC_DYNAMIC_STAKING_ADDRESS,
 		functionName: 'totalStakers',
 		blockNumber: block || undefined,
 	});

@@ -1,4 +1,11 @@
 import logger from '@/src/config/logger';
+import {
+	PUBLIC_BETS_MEMORY_ADDRESS,
+	PUBLIC_CONSERVATIVE_STAKING_ADDRESS,
+	PUBLIC_LUCKY_ROUND_ADDRESS,
+	PUBLIC_PREDICT_ADDRESS,
+	PUBLIC_ROULETTE_ADDRESS,
+} from '@/src/globals';
 import type { Earning, ExtendedPoolInfo, Timeframe } from '@/src/lib/types.ts';
 import { BetsMemoryContract, ConservativeStakingContract, ConservativeStakingPoolContract, ZeroAddress, arrayFrom, valueToNumber } from '@betfinio/abi';
 import { multicall, readContract } from '@wagmi/core';
@@ -40,15 +47,15 @@ export const fetchTotalVolume = async (config: Config): Promise<bigint> => {
 	logger.start('[conservative]', 'fetching total volume conservative');
 	const predict = (await readContract(config, {
 		abi: BetsMemoryContract.abi,
-		address: import.meta.env.PUBLIC_BETS_MEMORY_ADDRESS as Address,
+		address: PUBLIC_BETS_MEMORY_ADDRESS,
 		functionName: 'gamesVolume',
-		args: [import.meta.env.PUBLIC_PREDICT_ADDRESS as Address],
+		args: [PUBLIC_PREDICT_ADDRESS],
 	})) as bigint;
 	const luro = (await readContract(config, {
 		abi: BetsMemoryContract.abi,
-		address: import.meta.env.PUBLIC_BETS_MEMORY_ADDRESS as Address,
+		address: PUBLIC_BETS_MEMORY_ADDRESS,
 		functionName: 'gamesVolume',
-		args: [import.meta.env.PUBLIC_LUCKY_ROUND_ADDRESS as Address],
+		args: [PUBLIC_LUCKY_ROUND_ADDRESS],
 	})) as bigint;
 	return luro + predict;
 };
@@ -57,7 +64,7 @@ export const fetchConservativePools = async (config: Config): Promise<ExtendedPo
 	logger.start('[conservative]', 'fetching pools conservative');
 	const count = (await readContract(config, {
 		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
+		address: PUBLIC_CONSERVATIVE_STAKING_ADDRESS,
 		functionName: 'getActivePoolCount',
 	})) as number;
 	if (count === 0) {
@@ -66,7 +73,7 @@ export const fetchConservativePools = async (config: Config): Promise<ExtendedPo
 	const pools = await multicall(config, {
 		contracts: arrayFrom(Number(count)).map((i) => ({
 			abi: ConservativeStakingContract.abi,
-			address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
+			address: PUBLIC_CONSERVATIVE_STAKING_ADDRESS,
 			functionName: 'pools',
 			args: [i],
 		})),
@@ -104,7 +111,7 @@ export const fetchProfit = async (address: Address | undefined, config: Config):
 	if (!address) return 0n;
 	return (await readContract(config, {
 		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
+		address: PUBLIC_CONSERVATIVE_STAKING_ADDRESS,
 		functionName: 'getProfit',
 		args: [address],
 	})) as bigint;
@@ -115,7 +122,7 @@ export const fetchClaimable = async (address: Address, config: Config): Promise<
 	logger.start('[conservative]', 'fetching claimable conservative', address);
 	return (await readContract(config, {
 		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
+		address: PUBLIC_CONSERVATIVE_STAKING_ADDRESS,
 		functionName: 'getClaimable',
 		args: [address],
 	})) as bigint;
@@ -125,9 +132,9 @@ export const fetchTotalBets = async (config: Config): Promise<number> => {
 	logger.start('[conservative]', 'fetching total bets conservative');
 	const bets = (await readContract(config, {
 		abi: BetsMemoryContract.abi,
-		address: import.meta.env.PUBLIC_BETS_MEMORY_ADDRESS as Address,
+		address: PUBLIC_BETS_MEMORY_ADDRESS,
 		functionName: 'betsCountByStaking',
-		args: [import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address],
+		args: [PUBLIC_CONSERVATIVE_STAKING_ADDRESS],
 	})) as number;
 	return Number(bets);
 };
@@ -137,7 +144,7 @@ export const fetchStaked = async (address: Address | undefined, config: Config):
 	if (!address) return 0n;
 	return (await readContract(config, {
 		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
+		address: PUBLIC_CONSERVATIVE_STAKING_ADDRESS,
 		functionName: 'staked',
 		args: [address],
 	})) as bigint;
@@ -159,7 +166,7 @@ export const fetchTotalStakedDiff = async (start: number, supabase: SupabaseClie
 
 export const fetchTotalProfitDiff = async (config: Config): Promise<bigint[]> => {
 	try {
-		const profitNow = await fetchBalance(import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address, { config });
+		const profitNow = await fetchBalance(PUBLIC_CONSERVATIVE_STAKING_ADDRESS, { config });
 		const totalProfit = await fetchTotalProfit(config);
 		return [profitNow, totalProfit];
 	} catch (e) {
@@ -171,7 +178,7 @@ export const fetchTotalStakers = async (config: Config, block?: bigint): Promise
 	logger.start('[conservative]', 'fetching total stakers conservative');
 	const data = await readContract(config, {
 		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
+		address: PUBLIC_CONSERVATIVE_STAKING_ADDRESS,
 		functionName: 'totalStakers',
 		blockNumber: block || undefined,
 	});
@@ -181,7 +188,7 @@ export const fetchTotalStakers = async (config: Config, block?: bigint): Promise
 export const fetchStakersPools = async (address: Address, config: Config): Promise<Address[]> => {
 	const poolsCount = await readContract(config, {
 		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
+		address: PUBLIC_CONSERVATIVE_STAKING_ADDRESS,
 		functionName: 'getStakedPoolsCount',
 		args: [address],
 	});
@@ -189,7 +196,7 @@ export const fetchStakersPools = async (address: Address, config: Config): Promi
 		arrayFrom(Number(poolsCount)).map((i) =>
 			readContract(config, {
 				abi: ConservativeStakingContract.abi,
-				address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
+				address: PUBLIC_CONSERVATIVE_STAKING_ADDRESS,
 				functionName: 'stakedPools',
 				args: [address, i],
 			}),
@@ -200,7 +207,7 @@ export const fetchTotalProfit = async (config: Config, block?: bigint): Promise<
 	logger.start('[conservative]', 'fetching total profit conservative');
 	return (await readContract(config, {
 		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
+		address: PUBLIC_CONSERVATIVE_STAKING_ADDRESS,
 		functionName: 'totalProfit',
 		blockNumber: block || undefined,
 	})) as bigint;
@@ -211,9 +218,9 @@ export async function fetchPredictContribution(config: Config): Promise<bigint> 
 	return (
 		(((await readContract(config, {
 			abi: BetsMemoryContract.abi,
-			address: import.meta.env.PUBLIC_BETS_MEMORY_ADDRESS as Address,
+			address: PUBLIC_BETS_MEMORY_ADDRESS,
 			functionName: 'gamesVolume',
-			args: [import.meta.env.PUBLIC_PREDICT_ADDRESS as Address],
+			args: [PUBLIC_PREDICT_ADDRESS],
 		})) as bigint) /
 			100_00n) *
 		3_60n
@@ -225,9 +232,22 @@ export async function fetchLuroContribution(config: Config): Promise<bigint> {
 	return (
 		(((await readContract(config, {
 			abi: BetsMemoryContract.abi,
-			address: import.meta.env.PUBLIC_BETS_MEMORY_ADDRESS as Address,
+			address: PUBLIC_BETS_MEMORY_ADDRESS,
 			functionName: 'gamesVolume',
-			args: [import.meta.env.PUBLIC_LUCKY_ROUND_ADDRESS as Address],
+			args: [PUBLIC_LUCKY_ROUND_ADDRESS],
+		})) as bigint) /
+			100_00n) *
+		3_60n
+	);
+}
+export async function fetchRouletteContribution(config: Config): Promise<bigint> {
+	logger.start('[dynamic]', 'fetching roulette contribution dynamic');
+	return (
+		(((await readContract(config, {
+			abi: BetsMemoryContract.abi,
+			address: PUBLIC_BETS_MEMORY_ADDRESS,
+			functionName: 'gamesVolume',
+			args: [PUBLIC_ROULETTE_ADDRESS],
 		})) as bigint) /
 			100_00n) *
 		3_60n
@@ -268,7 +288,7 @@ const fetchOneStat = async (time: string | null, supabase: SupabaseClient | unde
 	const data = await supabase
 		.from('staking_statistics')
 		.select('timestamp::timestamp, revenues::text')
-		.eq('staking', import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS.toLowerCase())
+		.eq('staking', PUBLIC_CONSERVATIVE_STAKING_ADDRESS.toLowerCase())
 		.gt('timestamp', time)
 		.order('timestamp', { ascending: true })
 		.limit(1);

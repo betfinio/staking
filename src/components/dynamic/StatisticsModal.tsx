@@ -1,4 +1,5 @@
 import SharedGameBlock from '@/src/components/shared/SharedGameBlock.tsx';
+import { PUBLIC_DYNAMIC_STAKING_ADDRESS, PUBLIC_ETHSCAN } from '@/src/globals';
 import { valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { Bank, CloseModal } from '@betfinio/components/icons';
@@ -9,8 +10,6 @@ import { useTotalProfit } from 'betfinio_app/lib/query/dynamic';
 import { ShieldCheckIcon } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-
-const DYNAMIC_STAKING_ADDRESS = import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS;
 
 const StatisticsModal: FC = () => {
 	const { t } = useTranslation('staking');
@@ -47,12 +46,12 @@ const StatisticsModal: FC = () => {
 				<div className={'flex items-center justify-center gap-2 '}>
 					<ShieldCheckIcon className={'text-success w-4 h-4'} />
 					<a
-						href={`${import.meta.env.PUBLIC_ETHSCAN}/address/${DYNAMIC_STAKING_ADDRESS}`}
+						href={`${PUBLIC_ETHSCAN}/address/${PUBLIC_DYNAMIC_STAKING_ADDRESS}`}
 						target={'_blank'}
 						className={'font-normal text-xs md:text-base underline'}
 						rel="noreferrer"
 					>
-						{DYNAMIC_STAKING_ADDRESS}
+						{PUBLIC_DYNAMIC_STAKING_ADDRESS}
 					</a>
 				</div>
 			</div>
