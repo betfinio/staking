@@ -3,7 +3,6 @@ import type { Address } from 'viem';
 export const PUBLIC_ETHSCAN = import.meta.env.PUBLIC_ETHSCAN;
 export const PUBLIC_TOKEN_ADDRESS: Address = import.meta.env.PUBLIC_TOKEN_ADDRESS;
 export const PUBLIC_CONSERVATIVE_STAKING_ADDRESS: Address = import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS;
-export const PUBLIC_BTCUSDT_GAME_ADDRESS: Address = import.meta.env.PUBLIC_BTCUSDT_GAME_ADDRESS;
 export const PUBLIC_PARTNER_ADDRESS: Address = import.meta.env.PUBLIC_PARTNER_ADDRESS;
 export const PUBLIC_BETS_MEMORY_ADDRESS: Address = import.meta.env.PUBLIC_BETS_MEMORY_ADDRESS;
 export const PUBLIC_DYNAMIC_STAKING_ADDRESS: Address = import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS;
