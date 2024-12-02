@@ -116,7 +116,7 @@ const Stake: FC<{ type: StakingType }> = ({ type }) => {
 							setValue(Math.floor(valueToNumber(balance)).toFixed(0));
 						}}
 					>
-						MAX1
+						MAX
 					</div>
 				</div>
 				<Button

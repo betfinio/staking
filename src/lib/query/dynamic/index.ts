@@ -4,6 +4,7 @@ import {
 	fetchActivePools,
 	fetchClaimed,
 	fetchEarnings,
+	fetchRouletteContribution,
 	fetchStakeReward,
 	fetchStakeStatus,
 	fetchStaked,
@@ -15,7 +16,7 @@ import {
 } from '@/src/lib/api/dynamic';
 import type { StakeParams } from '@/src/lib/query/conservative';
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types.ts';
-import { DynamicStakingPoolABI, DynamicStakingPoolContract, PartnerABI, PartnerContract } from '@betfinio/abi';
+import { DynamicStakingPoolABI, PartnerABI } from '@betfinio/abi';
 import { toast } from '@betfinio/components/hooks';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { type WriteContractErrorType, type WriteContractReturnType, writeContract } from '@wagmi/core';
@@ -132,6 +133,14 @@ export const useStakes = (address: Address) => {
 		queryFn: () => fetchStakes(address),
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
+	});
+};
+
+export const useRouletteContribution = () => {
+	const config = useConfig();
+	return useQuery<bigint>({
+		queryKey: ['staking', 'dynamic', 'rouletteContribution'],
+		queryFn: () => fetchRouletteContribution(config),
 	});
 };
 

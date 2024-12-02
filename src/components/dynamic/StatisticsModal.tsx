@@ -1,5 +1,6 @@
 import SharedGameBlock from '@/src/components/shared/SharedGameBlock.tsx';
 import { PUBLIC_DYNAMIC_STAKING_ADDRESS, PUBLIC_ETHSCAN } from '@/src/globals';
+import { useRouletteContribution } from '@/src/lib/query/dynamic';
 import { valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { Bank, CloseModal } from '@betfinio/components/icons';
@@ -14,6 +15,9 @@ import { useTranslation } from 'react-i18next';
 const StatisticsModal: FC = () => {
 	const { t } = useTranslation('staking');
 	const { data: totalProfit = 0n } = useTotalProfit();
+
+	const { data: roulletteContribution = 0n } = useRouletteContribution();
+
 	return (
 		<div className={cn('rounded-lg bg-card z-10 border border-border font-semibold text-foreground w-full mx-auto')}>
 			<div className={'py-5 px-7'}>
@@ -35,7 +39,7 @@ const StatisticsModal: FC = () => {
 				<p className={'mb-3 text-center text-sm'}>{t('dynamic.statisticsModal.gamesContributionStatistics')}</p>
 				<SharedGameBlock
 					games={[
-						{ amount: 0n, label: t('games.roulette') },
+						{ amount: roulletteContribution, label: t('games.roulette') },
 						{ amount: 123n * 10n ** 18n, label: t('games.soon') },
 						{ amount: 123n * 10n ** 18n, label: t('games.soon') },
 					]}

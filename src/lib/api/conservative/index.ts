@@ -1,11 +1,5 @@
 import logger from '@/src/config/logger';
-import {
-	PUBLIC_BETS_MEMORY_ADDRESS,
-	PUBLIC_CONSERVATIVE_STAKING_ADDRESS,
-	PUBLIC_LUCKY_ROUND_ADDRESS,
-	PUBLIC_PREDICT_ADDRESS,
-	PUBLIC_ROULETTE_ADDRESS,
-} from '@/src/globals';
+import { PUBLIC_BETS_MEMORY_ADDRESS, PUBLIC_CONSERVATIVE_STAKING_ADDRESS, PUBLIC_LUCKY_ROUND_ADDRESS, PUBLIC_PREDICT_ADDRESS } from '@/src/globals';
 import type { Earning, ExtendedPoolInfo, Timeframe } from '@/src/lib/types.ts';
 import { BetsMemoryABI, ConservativeStakingABI, ConservativeStakingPoolABI, ZeroAddress, arrayFrom, valueToNumber } from '@betfinio/abi';
 import { multicall, readContract } from '@wagmi/core';
@@ -15,7 +9,7 @@ import { getBlockByTimestamp } from 'betfinio_app/lib/gql';
 import type { Claim, Options, Stake, Stat } from 'betfinio_app/lib/types';
 import type { SupabaseClient } from 'betfinio_app/supabase';
 import { DateTime } from 'luxon';
-import { type Address, zeroAddress } from 'viem';
+import type { Address } from 'viem';
 import type { Config } from 'wagmi';
 import { requestConservativeClaims, requestConservativeStakes } from '../../gql/conservative';
 
@@ -244,19 +238,6 @@ export async function fetchLuroContribution(config: Config): Promise<bigint> {
 			address: PUBLIC_BETS_MEMORY_ADDRESS,
 			functionName: 'gamesVolume',
 			args: [PUBLIC_LUCKY_ROUND_ADDRESS],
-		})) /
-			100_00n) *
-		3_60n
-	);
-}
-export async function fetchRouletteContribution(config: Config) {
-	logger.start('[dynamic]', 'fetching roulette contribution dynamic');
-	return (
-		((await readContract(config, {
-			abi: BetsMemoryABI,
-			address: PUBLIC_BETS_MEMORY_ADDRESS,
-			functionName: 'gamesVolume',
-			args: [PUBLIC_ROULETTE_ADDRESS],
 		})) /
 			100_00n) *
 		3_60n

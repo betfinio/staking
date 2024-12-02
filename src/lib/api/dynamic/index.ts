@@ -218,3 +218,17 @@ export const fetchStakeStatus = async (pool: Address, config: Config) => {
 		functionName: 'ended',
 	});
 };
+
+export async function fetchRouletteContribution(config: Config) {
+	logger.start('[dynamic]', 'fetching roulette contribution dynamic');
+	return (
+		((await readContract(config, {
+			abi: BetsMemoryABI,
+			address: PUBLIC_BETS_MEMORY_ADDRESS,
+			functionName: 'gamesVolume',
+			args: [PUBLIC_ROULETTE_ADDRESS],
+		})) /
+			100_00n) *
+		3_60n
+	);
+}
