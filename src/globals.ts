@@ -14,3 +14,5 @@ export const PUBLIC_APP_URL = import.meta.env.PUBLIC_APP_URL;
 export const PUBLIC_STAKING_GRAPH_URL = import.meta.env.PUBLIC_STAKING_GRAPH_URL;
 export const PUBLIC_STATISTICS_URL = import.meta.env.PUBLIC_STATISTICS_URL;
 export const PUBLIC_STATISTICS_MAIN_URL = import.meta.env.PUBLIC_STATISTICS_MAIN_URL;
+export const PUBLIC_BRANCH = import.meta.env.PUBLIC_BRANCH;
+export const PUBLIC_DEPLOYED = import.meta.env.PUBLIC_DEPLOYED;
