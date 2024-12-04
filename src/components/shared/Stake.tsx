@@ -4,7 +4,7 @@ import type { StakingType } from '@/src/lib/types.ts';
 import { ZeroAddress } from '@betfinio/abi';
 import { valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
-import { toast, useToast } from '@betfinio/components/hooks';
+import { toast } from '@betfinio/components/hooks';
 import { Button } from '@betfinio/components/ui';
 import { useAllowanceModal } from 'betfinio_app/allowance';
 import { useAllowance, useBalance } from 'betfinio_app/lib/query/token';
