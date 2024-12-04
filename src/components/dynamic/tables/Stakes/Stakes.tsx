@@ -1,6 +1,7 @@
 import { truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
+import { PUBLIC_ETHSCAN } from '@/src/globals';
 import { BetValue, DataTable } from '@betfinio/components/shared';
 import type { Stake } from 'betfinio_app/lib/types';
 import { DateTime } from 'luxon';
@@ -31,7 +32,7 @@ const Stakes: FC<{ data: Stake[]; isLoading: boolean }> = ({ data, isLoading }) 
 				className: 'hidden md:table-cell',
 			},
 			cell: (props) => (
-				<a target={'_blank'} href={`${import.meta.env.PUBLIC_ETHSCAN}/address/${props.getValue()}`} rel="noreferrer">
+				<a target={'_blank'} href={`${PUBLIC_ETHSCAN}/address/${props.getValue()}`} rel="noreferrer">
 					{truncateEthAddress(props.getValue())}
 				</a>
 			),

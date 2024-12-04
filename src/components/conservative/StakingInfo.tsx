@@ -1,3 +1,4 @@
+import { PUBLIC_CONSERVATIVE_STAKING_ADDRESS } from '@/src/globals';
 import { useStaked, useTotalBets, useTotalVolume } from '@/src/lib/query/conservative';
 import { ZeroAddress } from '@betfinio/abi';
 import { valueToNumber } from '@betfinio/abi';
@@ -38,11 +39,7 @@ const StakingInfo: FC = () => {
 	const { address = ZeroAddress } = useAccount();
 	const { data: totalVolume = 0n } = useTotalVolume();
 	const { data: totalBets = 0 } = useTotalBets();
-	const {
-		data: currentBalance = 0n,
-		isFetching: isTotalProfitFetching,
-		isLoading: isTotalProfitLoading,
-	} = useBalance(import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS);
+	const { data: currentBalance = 0n, isFetching: isTotalProfitFetching, isLoading: isTotalProfitLoading } = useBalance(PUBLIC_CONSERVATIVE_STAKING_ADDRESS);
 	const { data: totalStaked = 0n } = useTotalStaked();
 	const { data: playerStaked = 0n } = useStaked(address);
 	const share = valueToNumber(playerStaked) / valueToNumber(totalStaked || 1n);

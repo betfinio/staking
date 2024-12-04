@@ -1,4 +1,5 @@
 import SharedGameBlock from '@/src/components/shared/SharedGameBlock.tsx';
+import { PUBLIC_CONSERVATIVE_STAKING_ADDRESS, PUBLIC_ETHSCAN } from '@/src/globals';
 import { useLuroContribution, usePredictContribution, useTotalProfit } from '@/src/lib/query/conservative';
 import { valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
@@ -9,8 +10,6 @@ import { DialogClose, Separator } from '@betfinio/components/ui';
 import { ShieldCheckIcon } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-
-const CONSERVATIVE_STAKING_ADDRESS = import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS;
 
 const StatisticsModal: FC = () => {
 	const { t } = useTranslation('staking');
@@ -48,12 +47,12 @@ const StatisticsModal: FC = () => {
 				<div className={'flex items-center justify-center gap-2 '}>
 					<ShieldCheckIcon className={'text-success w-4 h-4'} />
 					<a
-						href={`${import.meta.env.PUBLIC_ETHSCAN}/address/${CONSERVATIVE_STAKING_ADDRESS}`}
+						href={`${PUBLIC_ETHSCAN}/address/${PUBLIC_CONSERVATIVE_STAKING_ADDRESS}`}
 						target={'_blank'}
 						className={'font-normal text-xs md:text-base underline'}
 						rel="noreferrer"
 					>
-						{CONSERVATIVE_STAKING_ADDRESS}
+						{PUBLIC_CONSERVATIVE_STAKING_ADDRESS}
 					</a>
 				</div>
 			</div>
