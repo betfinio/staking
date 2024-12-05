@@ -1,8 +1,10 @@
+import { PUBLIC_DYNAMIC_STAKING_ADDRESS, PUBLIC_PARTNER_ADDRESS } from '@/src/globals';
 import type { IKeysOfErrors } from '@/src/i18next';
 import {
 	fetchActivePools,
 	fetchClaimed,
 	fetchEarnings,
+	fetchRouletteContribution,
 	fetchStakeReward,
 	fetchStakeStatus,
 	fetchStaked,
@@ -14,7 +16,7 @@ import {
 } from '@/src/lib/api/dynamic';
 import type { StakeParams } from '@/src/lib/query/conservative';
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types.ts';
-import { DynamicStakingPoolContract, PartnerContract } from '@betfinio/abi';
+import { DynamicStakingPoolABI, PartnerABI } from '@betfinio/abi';
 import { toast } from '@betfinio/components/hooks';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { type WriteContractErrorType, type WriteContractReturnType, writeContract } from '@wagmi/core';
@@ -134,6 +136,14 @@ export const useStakes = (address: Address) => {
 	});
 };
 
+export const useRouletteContribution = () => {
+	const config = useConfig();
+	return useQuery<bigint>({
+		queryKey: ['staking', 'dynamic', 'rouletteContribution'],
+		queryFn: () => fetchRouletteContribution(config),
+	});
+};
+
 // mutations
 
 export const useStake = () => {
@@ -176,10 +186,10 @@ export const useStake = () => {
 
 export const stake = async ({ amount, config }: StakeParams): Promise<WriteContractReturnType> => {
 	return await writeContract(config, {
-		abi: PartnerContract.abi,
-		address: import.meta.env.PUBLIC_PARTNER_ADDRESS,
+		abi: PartnerABI,
+		address: PUBLIC_PARTNER_ADDRESS,
 		functionName: 'stake',
-		args: [import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS, amount],
+		args: [PUBLIC_DYNAMIC_STAKING_ADDRESS, amount],
 	});
 };
 
@@ -191,7 +201,7 @@ export const useDistributeProfit = () => {
 		mutationKey: ['staking', 'dynamic', 'distributeProfit'],
 		mutationFn: async (pool: Address) => {
 			return await writeContract(config, {
-				abi: DynamicStakingPoolContract.abi,
+				abi: DynamicStakingPoolABI,
 				address: pool,
 				functionName: 'distributeProfit',
 			});

@@ -1,3 +1,4 @@
+import { PUBLIC_CONSERVATIVE_STAKING_ADDRESS, PUBLIC_PARTNER_ADDRESS } from '@/src/globals';
 import {
 	fetchCalculationsStat,
 	fetchClaimable,
@@ -19,7 +20,7 @@ import {
 	fetchTotalVolume,
 } from '@/src/lib/api/conservative';
 import type { Earning, ExtendedPoolInfo, Timeframe } from '@/src/lib/types';
-import { ConservativeStakingContract, ConservativeStakingPoolContract, GameContract, PartnerContract } from '@betfinio/abi';
+import { ConservativeStakingABI, ConservativeStakingPoolABI, PartnerABI } from '@betfinio/abi';
 import { toast } from '@betfinio/components/hooks';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { WriteContractErrorType } from '@wagmi/core';
@@ -88,21 +89,8 @@ export const useTotalProfitDiff = () => {
 };
 
 export const useTotalBets = () => {
-	const queryClient = useQueryClient();
 	const config = useConfig();
-	useWatchContractEvent({
-		abi: GameContract.abi,
-		address: import.meta.env.PUBLIC_BTCUSDT_GAME_ADDRESS as Address,
-		eventName: 'BetCreated',
-		onLogs: async () => {
-			await queryClient.invalidateQueries({
-				queryKey: ['staking', 'conservative', 'totalBets'],
-			});
-			await queryClient.invalidateQueries({
-				queryKey: ['balance', import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address],
-			});
-		},
-	});
+
 	return useQuery<number>({
 		queryKey: ['staking', 'conservative', 'totalBets'],
 		queryFn: () => fetchTotalBets(config),
@@ -258,16 +246,16 @@ export const useClaim = () => {
 
 export const stake = async ({ amount, config }: StakeParams): Promise<WriteContractReturnType> => {
 	return await writeContract(config, {
-		abi: PartnerContract.abi,
-		address: import.meta.env.PUBLIC_PARTNER_ADDRESS as Address,
+		abi: PartnerABI,
+		address: PUBLIC_PARTNER_ADDRESS,
 		functionName: 'stake',
-		args: [import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address, amount],
+		args: [PUBLIC_CONSERVATIVE_STAKING_ADDRESS, amount],
 	});
 };
 export const claimAll = async ({ config }: { config: Config }): Promise<WriteContractReturnType> => {
 	return await writeContract(config, {
-		abi: ConservativeStakingContract.abi,
-		address: import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS as Address,
+		abi: ConservativeStakingABI,
+		address: PUBLIC_CONSERVATIVE_STAKING_ADDRESS,
 		functionName: 'claimAll',
 	});
 };
@@ -289,7 +277,7 @@ export const useDistributeProfit = () => {
 		mutationKey: ['staking', 'conservative', 'distributeProfit'],
 		mutationFn: async (pool: Address) => {
 			return await writeContract(config, {
-				abi: ConservativeStakingPoolContract.abi,
+				abi: ConservativeStakingPoolABI,
 				address: pool,
 				functionName: 'distributeProfit',
 			});
