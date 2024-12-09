@@ -1,3 +1,4 @@
+import { PUBLIC_ETHSCAN } from '@/src/globals';
 import { valueToNumber } from '@betfinio/abi';
 import { truncateEthAddress } from '@betfinio/abi';
 import { BetValue, DataTable } from '@betfinio/components/shared';
@@ -27,7 +28,7 @@ const Claims: FC<{ data: Claim[]; isLoading: boolean }> = ({ data, isLoading }) 
 		columnHelper.accessor('transaction', {
 			header: t('transaction'),
 			cell: (props) => (
-				<a target={'_blank'} href={`${import.meta.env.PUBLIC_ETHSCAN}/tx/${props.getValue()}`} rel="noreferrer">
+				<a target={'_blank'} href={`${PUBLIC_ETHSCAN}/tx/${props.getValue()}`} rel="noreferrer">
 					{truncateEthAddress(props.getValue())}
 				</a>
 			),

@@ -1,5 +1,6 @@
 import SharedGameBlock from '@/src/components/shared/SharedGameBlock.tsx';
-import { useLuroContribution, usePredictContribution, useTotalProfit } from '@/src/lib/query/conservative';
+import { PUBLIC_CONSERVATIVE_STAKING_ADDRESS, PUBLIC_ETHSCAN } from '@/src/globals';
+import { useLuroContribution, usePredictContribution, useStonesContribution, useTotalProfit } from '@/src/lib/query/conservative';
 import { valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { Bank, CloseModal } from '@betfinio/components/icons';
@@ -10,13 +11,12 @@ import { ShieldCheckIcon } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const CONSERVATIVE_STAKING_ADDRESS = import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS;
-
 const StatisticsModal: FC = () => {
 	const { t } = useTranslation('staking');
 	const { data: totalProfit } = useTotalProfit();
 	const { data: predictContribution = 0n } = usePredictContribution();
 	const { data: luroContribution = 0n } = useLuroContribution();
+	const { data: stonesContribution = 0n } = useStonesContribution();
 	return (
 		<div className={cn(' rounded-lg bg-card z-10  font-semibold text-foreground w-fit mx-auto')}>
 			<div className={'py-5 px-7'}>
@@ -40,7 +40,7 @@ const StatisticsModal: FC = () => {
 					games={[
 						{ amount: predictContribution, label: t('games.predict') },
 						{ amount: luroContribution, label: t('games.luro') },
-						{ amount: 0n, label: t('games.soon') },
+						{ amount: stonesContribution, label: t('games.stones') },
 					]}
 				/>
 				<Separator className="my-6" />
@@ -48,12 +48,12 @@ const StatisticsModal: FC = () => {
 				<div className={'flex items-center justify-center gap-2 '}>
 					<ShieldCheckIcon className={'text-success w-4 h-4'} />
 					<a
-						href={`${import.meta.env.PUBLIC_ETHSCAN}/address/${CONSERVATIVE_STAKING_ADDRESS}`}
+						href={`${PUBLIC_ETHSCAN}/address/${PUBLIC_CONSERVATIVE_STAKING_ADDRESS}`}
 						target={'_blank'}
 						className={'font-normal text-xs md:text-base underline'}
 						rel="noreferrer"
 					>
-						{CONSERVATIVE_STAKING_ADDRESS}
+						{PUBLIC_CONSERVATIVE_STAKING_ADDRESS}
 					</a>
 				</div>
 			</div>

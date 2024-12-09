@@ -1,6 +1,7 @@
 import logger from '@/src/config/logger';
+import { PUBLIC_BETS_MEMORY_ADDRESS, PUBLIC_DYNAMIC_STAKING_ADDRESS, PUBLIC_ROULETTE_ADDRESS, PUBLIC_TOKEN_ADDRESS } from '@/src/globals';
 import type { Earning, ExtendedPoolInfo } from '@/src/lib/types.ts';
-import { BetsMemoryContract, DynamicStakingContract, DynamicStakingPoolContract, TokenContract, arrayFrom } from '@betfinio/abi';
+import { BetsMemoryABI, DynamicStakingABI, DynamicStakingPoolABI, TokenABI, arrayFrom } from '@betfinio/abi';
 import { multicall, readContract } from '@wagmi/core';
 import type { Options, Stake } from 'betfinio_app/lib/types';
 import type { Address } from 'viem';
@@ -12,23 +13,23 @@ export const fetchPool = async (pool: Address, config: Config): Promise<Extended
 	const data = await multicall(config, {
 		contracts: [
 			{
-				abi: DynamicStakingPoolContract.abi,
+				abi: DynamicStakingPoolABI,
 				address: pool,
 				functionName: 'totalStaked',
 			},
 			{
-				abi: DynamicStakingPoolContract.abi,
+				abi: DynamicStakingPoolABI,
 				address: pool,
 				functionName: 'getStakersCount',
 			},
 			{
-				abi: DynamicStakingPoolContract.abi,
+				abi: DynamicStakingPoolABI,
 				address: pool,
 				functionName: 'realStaked',
 			},
 			{
-				abi: TokenContract.abi,
-				address: import.meta.env.PUBLIC_TOKEN_ADDRESS,
+				abi: TokenABI,
+				address: PUBLIC_TOKEN_ADDRESS,
 				functionName: 'balanceOf',
 				args: [pool],
 			},
@@ -45,29 +46,29 @@ export const fetchPool = async (pool: Address, config: Config): Promise<Extended
 	} as ExtendedPoolInfo;
 };
 
-export const fetchTotalVolume = async (config: Config): Promise<bigint> => {
+export const fetchTotalVolume = async (config: Config) => {
 	logger.start('[dynamic]', 'fetching total volume dynamic');
-	return (await readContract(config, {
-		abi: BetsMemoryContract.abi,
-		address: import.meta.env.PUBLIC_BETS_MEMORY_ADDRESS,
+	return await readContract(config, {
+		abi: BetsMemoryABI,
+		address: PUBLIC_BETS_MEMORY_ADDRESS,
 		functionName: 'gamesVolume',
-		args: [import.meta.env.PUBLIC_ROULETTE_ADDRESS],
-	})) as bigint;
+		args: [PUBLIC_ROULETTE_ADDRESS],
+	});
 };
 
-export const fetchUnrealizedProfit = async (config: Config): Promise<bigint> => {
+export const fetchUnrealizedProfit = async (config: Config) => {
 	logger.start('[dynamic]', 'fetching unrealized profit dynamic');
 	const result = await multicall(config, {
 		contracts: [
 			{
-				abi: TokenContract.abi,
-				address: import.meta.env.PUBLIC_TOKEN_ADDRESS,
+				abi: TokenABI,
+				address: PUBLIC_TOKEN_ADDRESS,
 				functionName: 'balanceOf',
-				args: [import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS],
+				args: [PUBLIC_DYNAMIC_STAKING_ADDRESS],
 			},
 			{
-				abi: DynamicStakingContract.abi,
-				address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
+				abi: DynamicStakingABI,
+				address: PUBLIC_DYNAMIC_STAKING_ADDRESS,
 				functionName: 'realStaked',
 			},
 		],
@@ -112,60 +113,69 @@ export const fetchStakes = async (address: Address): Promise<Stake[]> => {
 
 export const fetchActivePools = async (config: Config): Promise<ExtendedPoolInfo[]> => {
 	logger.start('[dynamic]', 'fetching active pools dynamic');
-	const activePoolsCount = (await readContract(config, {
-		abi: DynamicStakingContract.abi,
-		address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
+	const activePoolsCount = await readContract(config, {
+		abi: DynamicStakingABI,
+		address: PUBLIC_DYNAMIC_STAKING_ADDRESS,
 		functionName: 'getActivePoolCount',
-	})) as number;
+	});
 	const pools = await multicall(config, {
-		contracts: arrayFrom(Number(activePoolsCount)).map((i) => ({
-			abi: DynamicStakingContract.abi,
-			address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
-			functionName: 'pools',
-			args: [i],
-		})),
+		contracts: arrayFrom(Number(activePoolsCount)).map(
+			(
+				i,
+			): {
+				abi: typeof DynamicStakingABI;
+				address: Address;
+				functionName: 'pools';
+				args: [number];
+			} => ({
+				abi: DynamicStakingABI,
+				address: PUBLIC_DYNAMIC_STAKING_ADDRESS,
+				functionName: 'pools',
+				args: [i],
+			}),
+		),
 	});
 	return await Promise.all(pools.reverse().map((pool) => fetchPool(pool.result as Address, config)));
 };
 
-export const fetchStaked = async (address: Address | undefined, config: Config): Promise<bigint> => {
+export const fetchStaked = async (address: Address | undefined, config: Config) => {
 	if (!address) {
 		return 0n;
 	}
 	const data = await readContract(config, {
-		abi: DynamicStakingContract.abi,
-		address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
+		abi: DynamicStakingABI,
+		address: PUBLIC_DYNAMIC_STAKING_ADDRESS,
 		functionName: 'staked',
 		args: [address],
 	});
-	return data as bigint;
+	return data;
 };
-export const fetchTotalBets = async (config: Config): Promise<number> => {
-	const bets = (await readContract(config, {
-		abi: BetsMemoryContract.abi,
-		address: import.meta.env.PUBLIC_BETS_MEMORY_ADDRESS,
+export const fetchTotalBets = async (config: Config) => {
+	const bets = await readContract(config, {
+		abi: BetsMemoryABI,
+		address: PUBLIC_BETS_MEMORY_ADDRESS,
 		functionName: 'betsCountByStaking',
-		args: [import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS],
-	})) as number;
+		args: [PUBLIC_DYNAMIC_STAKING_ADDRESS],
+	});
 	return Number(bets);
 };
-export const fetchClaimed = async (address: Address | undefined, config: Config): Promise<bigint> => {
+export const fetchClaimed = async (address: Address | undefined, config: Config) => {
 	if (!address) {
 		return 0n;
 	}
 	const data = await readContract(config, {
-		abi: DynamicStakingContract.abi,
-		address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
+		abi: DynamicStakingABI,
+		address: PUBLIC_DYNAMIC_STAKING_ADDRESS,
 		functionName: 'getClaimed',
 		args: [address],
 	});
-	return data as bigint;
+	return data;
 };
 
-export const fetchTotalStakers = async (config: Config, block?: bigint): Promise<number> => {
+export const fetchTotalStakers = async (config: Config, block?: bigint) => {
 	const data = await readContract(config, {
-		abi: DynamicStakingContract.abi,
-		address: import.meta.env.PUBLIC_DYNAMIC_STAKING_ADDRESS,
+		abi: DynamicStakingABI,
+		address: PUBLIC_DYNAMIC_STAKING_ADDRESS,
 		functionName: 'totalStakers',
 		blockNumber: block || undefined,
 	});
@@ -194,17 +204,31 @@ export const fetchEarnings = async (address: Address, options: Options): Promise
 };
 
 export const fetchStakeReward = async (address: Address, pool: Address, config: Config) => {
-	return (await readContract(config, {
-		abi: DynamicStakingPoolContract.abi,
+	return await readContract(config, {
+		abi: DynamicStakingPoolABI,
 		address: pool,
 		functionName: 'getClaimed',
 		args: [address],
-	})) as bigint;
+	});
 };
 export const fetchStakeStatus = async (pool: Address, config: Config) => {
-	return (await readContract(config, {
-		abi: DynamicStakingPoolContract.abi,
+	return await readContract(config, {
+		abi: DynamicStakingPoolABI,
 		address: pool,
 		functionName: 'ended',
-	})) as boolean;
+	});
 };
+
+export async function fetchRouletteContribution(config: Config) {
+	logger.start('[dynamic]', 'fetching roulette contribution dynamic');
+	return (
+		((await readContract(config, {
+			abi: BetsMemoryABI,
+			address: PUBLIC_BETS_MEMORY_ADDRESS,
+			functionName: 'gamesVolume',
+			args: [PUBLIC_ROULETTE_ADDRESS],
+		})) /
+			100_00n) *
+		3_60n
+	);
+}

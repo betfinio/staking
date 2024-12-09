@@ -1,3 +1,4 @@
+import { PUBLIC_CONSERVATIVE_STAKING_ADDRESS } from '@/src/globals';
 import { useClaim, useClaimable, useStaked } from '@/src/lib/query/conservative';
 import { ZeroAddress } from '@betfinio/abi';
 import { valueToNumber } from '@betfinio/abi';
@@ -20,7 +21,7 @@ const Claim: FC<ClaimProps> = ({ className }) => {
 	const { address = ZeroAddress } = useAccount();
 	const { data: staked = 0n, isLoading: isStakedLoading } = useStaked(address);
 	const { data: claimable = 0n, isLoading: isClaimableLoading } = useClaimable(address);
-	const { data: balance = 0n } = useBalance(import.meta.env.PUBLIC_CONSERVATIVE_STAKING_ADDRESS);
+	const { data: balance = 0n } = useBalance(PUBLIC_CONSERVATIVE_STAKING_ADDRESS);
 	const { mutate, isPending: loading } = useClaim();
 	const { data: totalStaked = 0n } = useTotalStaked();
 	const share = (valueToNumber(staked) / (valueToNumber(totalStaked) || 1)) * 100;
