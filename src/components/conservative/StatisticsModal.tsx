@@ -1,6 +1,6 @@
 import SharedGameBlock from '@/src/components/shared/SharedGameBlock.tsx';
 import { PUBLIC_CONSERVATIVE_STAKING_ADDRESS, PUBLIC_ETHSCAN } from '@/src/globals';
-import { useLuroContribution, usePredictContribution, useTotalProfit } from '@/src/lib/query/conservative';
+import { useLuroContribution, usePredictContribution, useStonesContribution, useTotalProfit } from '@/src/lib/query/conservative';
 import { valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { Bank, CloseModal } from '@betfinio/components/icons';
@@ -16,6 +16,7 @@ const StatisticsModal: FC = () => {
 	const { data: totalProfit } = useTotalProfit();
 	const { data: predictContribution = 0n } = usePredictContribution();
 	const { data: luroContribution = 0n } = useLuroContribution();
+	const { data: stonesContribution = 0n } = useStonesContribution();
 	return (
 		<div className={cn(' rounded-lg bg-card z-10  font-semibold text-foreground w-fit mx-auto')}>
 			<div className={'py-5 px-7'}>
@@ -39,7 +40,7 @@ const StatisticsModal: FC = () => {
 					games={[
 						{ amount: predictContribution, label: t('games.predict') },
 						{ amount: luroContribution, label: t('games.luro') },
-						{ amount: 0n, label: t('games.soon') },
+						{ amount: stonesContribution, label: t('games.stones') },
 					]}
 				/>
 				<Separator className="my-6" />
