@@ -12,6 +12,7 @@ import {
 	fetchStakeStatus,
 	fetchStaked,
 	fetchStakes,
+	fetchStonesContribution,
 	fetchTotalBets,
 	fetchTotalProfit,
 	fetchTotalProfitDiff,
@@ -45,6 +46,13 @@ export const useLuroContribution = () => {
 	return useQuery<bigint>({
 		queryKey: ['staking', 'conservative', 'luroContribution'],
 		queryFn: () => fetchLuroContribution(config),
+	});
+};
+export const useStonesContribution = () => {
+	const config = useConfig();
+	return useQuery<bigint>({
+		queryKey: ['staking', 'conservative', 'stonesContribution'],
+		queryFn: () => fetchStonesContribution(config),
 	});
 };
 export const useTotalStakers = () => {

@@ -1,5 +1,11 @@
 import logger from '@/src/config/logger';
-import { PUBLIC_BETS_MEMORY_ADDRESS, PUBLIC_CONSERVATIVE_STAKING_ADDRESS, PUBLIC_LUCKY_ROUND_ADDRESS, PUBLIC_PREDICT_ADDRESS } from '@/src/globals';
+import {
+	PUBLIC_BETS_MEMORY_ADDRESS,
+	PUBLIC_CONSERVATIVE_STAKING_ADDRESS,
+	PUBLIC_LUCKY_ROUND_ADDRESS,
+	PUBLIC_PREDICT_ADDRESS,
+	PUBLIC_STONES_ADDRESS,
+} from '@/src/globals';
 import type { Earning, ExtendedPoolInfo, Timeframe } from '@/src/lib/types.ts';
 import { BetsMemoryABI, ConservativeStakingABI, ConservativeStakingPoolABI, ZeroAddress, arrayFrom, valueToNumber } from '@betfinio/abi';
 import { multicall, readContract } from '@wagmi/core';
@@ -231,13 +237,26 @@ export async function fetchPredictContribution(config: Config) {
 }
 
 export async function fetchLuroContribution(config: Config): Promise<bigint> {
-	logger.start('[conservative]', 'fetching predict contribution conservative');
+	logger.start('[conservative]', 'fetching luro contribution conservative');
 	return (
 		((await readContract(config, {
 			abi: BetsMemoryABI,
 			address: PUBLIC_BETS_MEMORY_ADDRESS,
 			functionName: 'gamesVolume',
 			args: [PUBLIC_LUCKY_ROUND_ADDRESS],
+		})) /
+			100_00n) *
+		3_60n
+	);
+}
+export async function fetchStonesContribution(config: Config): Promise<bigint> {
+	logger.start('[conservative]', 'fetching stones contribution conservative');
+	return (
+		((await readContract(config, {
+			abi: BetsMemoryABI,
+			address: PUBLIC_BETS_MEMORY_ADDRESS,
+			functionName: 'gamesVolume',
+			args: [PUBLIC_STONES_ADDRESS],
 		})) /
 			100_00n) *
 		3_60n

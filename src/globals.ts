@@ -16,3 +16,4 @@ export const PUBLIC_STATISTICS_URL = import.meta.env.PUBLIC_STATISTICS_URL;
 export const PUBLIC_STATISTICS_MAIN_URL = import.meta.env.PUBLIC_STATISTICS_MAIN_URL;
 export const PUBLIC_BRANCH = import.meta.env.PUBLIC_BRANCH;
 export const PUBLIC_DEPLOYED = import.meta.env.PUBLIC_DEPLOYED;
+export const PUBLIC_STONES_ADDRESS: Address = import.meta.env.PUBLIC_STONES_ADDRESS;
