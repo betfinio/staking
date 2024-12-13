@@ -5,6 +5,7 @@ import { valueToNumber } from '@betfinio/abi';
 import { truncateEthAddress } from '@betfinio/abi';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
+import { PUBLIC_ETHSCAN } from '@/src/globals';
 import { BetValue, DataTable } from '@betfinio/components/shared';
 import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@betfinio/components/ui';
 import { MoreHorizontal } from 'lucide-react';
@@ -37,7 +38,7 @@ const Pools: FC<{
 				className: 'lg:w-[160px]',
 			},
 			cell: (props) => (
-				<a target={'_blank'} href={`${import.meta.env.PUBLIC_ETHSCAN}/address/${props.getValue()}`} className={'text-tertiary-foreground'} rel="noreferrer">
+				<a target={'_blank'} href={`${PUBLIC_ETHSCAN}/address/${props.getValue()}`} className={'text-tertiary-foreground'} rel="noreferrer">
 					{truncateEthAddress(props.getValue())}
 				</a>
 			),

@@ -1,3 +1,4 @@
+import { PUBLIC_ETHSCAN } from '@/src/globals';
 import type { Earning } from '@/src/lib/types';
 import { valueToNumber } from '@betfinio/abi';
 import { truncateEthAddress } from '@betfinio/abi';
@@ -7,8 +8,6 @@ import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { DateTime } from 'luxon';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-
-const ETHSCAN = import.meta.env.PUBLIC_ETHSCAN;
 
 const columnHelper = createColumnHelper<Earning>();
 
@@ -30,7 +29,7 @@ const Earnings: FC<{ data: Earning[]; isLoading: boolean }> = ({ data, isLoading
 		columnHelper.accessor('transaction', {
 			header: t('transaction'),
 			cell: (props) => (
-				<a className={' text-xs md:text-sm'} href={`${ETHSCAN}/tx/${props.getValue()}`}>
+				<a className={' text-xs md:text-sm'} href={`${PUBLIC_ETHSCAN}/tx/${props.getValue()}`}>
 					{truncateEthAddress(props.getValue())}
 				</a>
 			),
@@ -41,7 +40,7 @@ const Earnings: FC<{ data: Earning[]; isLoading: boolean }> = ({ data, isLoading
 				className: 'hidden md:table-cell',
 			},
 			cell: (props) => (
-				<a className={' text-xs md:text-sm'} href={`${ETHSCAN}/address/${props.getValue()}`}>
+				<a className={' text-xs md:text-sm'} href={`${PUBLIC_ETHSCAN}/address/${props.getValue()}`}>
 					{truncateEthAddress(props.getValue())}
 				</a>
 			),
